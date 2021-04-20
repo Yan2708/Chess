@@ -12,7 +12,17 @@ public abstract class Piece implements IPiece
 
 
 
-    public abstract boolean estPossible(int colonne, int ligne);
+    public Piece(int ligne, int colonne, Couleur c) {
+        this.ligne = ligne;
+        this.colonne = colonne;
+        couleur=c;
+    }
+
+    public Couleur getCouleur(){
+        return this.couleur;
+    }
+
+    public abstract boolean estPossible(int ligne, int colonne);
 
     public abstract String getSymbole();
 
