@@ -2,7 +2,8 @@ package echequier;
 
 public interface IPiece {
 
-    public abstract boolean estPossible(int colonne, int ligne);
+    boolean estPossible(int colonne, int ligne);
 
-    String getSymbole() ;
+    String dessiner();
+
 }

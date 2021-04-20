@@ -8,14 +8,16 @@ public abstract class Piece implements IPiece
 {
     private int colonne, ligne;
     private Couleur couleur;
+    private PieceType type;
+
+
 
     public abstract boolean estPossible(int colonne, int ligne);
 
     public abstract String getSymbole();
 
-    public boolean isWhite(){
-        //pas besoin de methode isBlack
-        return couleur == Couleur.BLANC;
+    public String dessiner(){
+        return (couleur == Couleur.BLANC) ? getSymbole() : getSymbole().toLowerCase() ;
     }
 
     public int getColonne(){
@@ -24,6 +26,12 @@ public abstract class Piece implements IPiece
 
     public int getLigne(){
         return ligne;
+    }
+
+    public PieceType getPieceType(){return type;}
+
+    public void setType(PieceType p) {
+        type=p;
     }
 
 //    public boolean estSensible(){
