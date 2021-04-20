@@ -2,7 +2,18 @@ package pieces;
 
 import echequier.IPiece;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
+
+//enum Couleur {
+//    NOIR (true), BLANCHE(false);
+//    private final boolean valeur;
+//    Couleur(boolean val) {
+//        this.valeur = val;
+//    }
+//    boolean getValeur(){
+//        return this.valeur;
+//    }
+//}
 
 public abstract class Piece implements IPiece
 {
