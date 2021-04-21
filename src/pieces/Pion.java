@@ -4,7 +4,6 @@ import static java.lang.Math.abs;
 
 public class Pion extends Piece{
 
-
     private boolean aBouge;
 
     public boolean isABouge() {
@@ -25,13 +24,13 @@ public class Pion extends Piece{
     public boolean estPossible(int ligne, int colonne) {
         int varX = abs(this.getLigne()-ligne);
         int varY = abs(this.getColonne()-colonne);
-        if ((aBouge && varY > 1) || (varY == 0 && varX == 0)){
+        if ((aBouge && varX > 1) || (varX == 0 && varY == 0)){
               return false;
         }
-        else if (varY <= 2 && varX == 0){
+        else if (varX <= 2 && varY == 0){
             return true;
         }
-        return (varY == 1) || ((varX == 1 || varX == -1) && (varY == 1));
+        return varX == 1;
     }
 
     @Override

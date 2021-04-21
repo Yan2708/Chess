@@ -1,7 +1,6 @@
 package echequier;
 
 
-
 public class Echequier {
     private static final int LIGNE = 8, COLONNE = 8;
 
@@ -108,6 +107,4 @@ public class Echequier {
         sb.append(LETTRE);
         return sb.toString();
     }
-
-
 }

@@ -1,15 +1,5 @@
 package pieces;
 
-//enum Couleur {
-//    NOIR (true), BLANCHE(false);
-//    private final boolean valeur;
-//    Couleur(boolean val) {
-//        this.valeur = val;
-//    }
-//    boolean getValeur(){
-//        return this.valeur;
-//    }
-//}
 
 import echequier.IPiece;
 
