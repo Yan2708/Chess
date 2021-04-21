@@ -28,7 +28,7 @@ public class Echequier {
         for(int i = 0; i < str.length(); i++) {
             Character c = str.charAt(i);
             if(Character.isDigit(c)){
-                for(int y = 0; y < Integer.parseInt(c.toString()); y++)
+                for(int y = 0; y < (int) c; y++)
                     sb.append("V");
                 continue;
             }
