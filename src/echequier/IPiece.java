@@ -2,8 +2,10 @@ package echequier;
 
 public interface IPiece {
 
-    boolean estPossible(int colonne, int ligne);
+    boolean estPossible(int ligne, int colonne);
 
+    int getColonne();
+    int getLigne();
     String dessiner();
 
 }

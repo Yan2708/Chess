@@ -1,9 +1,5 @@
 package pieces;
 
-import echequier.IPiece;
-
-//import java.util.ArrayList;
-
 //enum Couleur {
 //    NOIR (true), BLANCHE(false);
 //    private final boolean valeur;
@@ -15,6 +11,8 @@ import echequier.IPiece;
 //    }
 //}
 
+import echequier.IPiece;
+
 public abstract class Piece implements IPiece
 {
     private int colonne, ligne;
@@ -24,13 +22,12 @@ public abstract class Piece implements IPiece
 
 
     public Piece(int ligne, int colonne, Couleur c) {
-        this.ligne = ligne;
-        this.colonne = colonne;
+        newPos(ligne,colonne);
         couleur=c;
     }
 
-    public Couleur getCouleur(){
-        return this.couleur;
+    public String getCouleur(){
+        return this.couleur.toString();
     }
 
     public abstract boolean estPossible(int ligne, int colonne);
@@ -54,6 +51,10 @@ public abstract class Piece implements IPiece
     public void setType(PieceType p) {
         type=p;
     }
+
+
+
+
 
 //    public boolean estSensible(){
 //        return false;

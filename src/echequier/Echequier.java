@@ -1,7 +1,6 @@
 package echequier;
 
 
-import java.util.ArrayList;
 
 public class Echequier {
     private static final int LIGNE = 8, COLONNE = 8;
@@ -19,7 +18,7 @@ public class Echequier {
             String sequence = (s.matches(".*\\d.*")) ? ReformatFenSequence(s) : s;
 
             for (int col = 0, cpt = 0; col < COLONNE; col++, cpt++)
-                echequier[lig][col] = fabrique.getPiece(sequence.charAt(cpt), col, lig);
+                echequier[lig][col] = fabrique.getPiece(sequence.charAt(cpt), lig, col);
 
         }
     }
@@ -38,10 +37,55 @@ public class Echequier {
         return sb.toString();
     }
 
-    public IPiece[][] getEchequier(){
-        return echequier;
+
+    public boolean estVide(int x, int y){
+        return echequier[x][y].getPieceType().equals("VIDE");
     }
 
+    //ajouter une erreur dans le cas ou le coup est injouable
+    public void deplacer(int xFin, int yFin, IPiece p){
+        if(p.estPossible(xFin,yFin) && voieLibre(p, xFin, yFin) && !nonValide(p, xFin, yFin)){
+            //swap
+            //echequier[p.getColonne()][p.getLigne()]=null;
+            echequier[xFin][yFin] = p;
+            p.newPos(xFin, yFin);
+        }
+    }
+
+    private int getLongueur(int xStart, int yStart, int xFinal, int yFinal){
+        return (int)Math.sqrt((Math.pow(xFinal - xStart, 2) + Math.pow(yFinal - yStart, 2)));
+    }
+
+    private int[] getCoefDirecteur(int xStart, int yStart, int xFinal, int yFinal){
+        int[] vecteur = {(yFinal - yStart), (xFinal - xStart)};
+        return vecteur;
+    }
+
+    private boolean voieLibre(IPiece p, int ligne, int colonne){
+        if(p.getPieceType().equals("CAVALIER"))
+            return true;
+
+        int xS = p.getLigne();
+        int yS = p.getColonne();
+        int longueur = getLongueur(xS, yS, ligne, colonne);
+        int[] vecteur = getCoefDirecteur(xS, yS, ligne, colonne);
+
+        for(int i = 0; i < longueur - 1 ; i++, xS *= vecteur[1], yS *= vecteur[0])
+            if(!p.estPossible(xS,yS) || !estVide(xS,yS))
+                return false;
+
+        return true;
+    }
+
+    private boolean nonValide(IPiece p, int ligne, int colonne){
+        IPiece pA = echequier[ligne][colonne];
+        return ((pA.getCouleur().equals(p.getCouleur())) || (pA.getPieceType().equals("ROI")));
+    }
+
+    //TEMPORAIRE
+    public IPiece getPiece(int x, int y){
+        return echequier[x][y];
+    }
 
 
     @Override
