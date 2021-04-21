@@ -4,10 +4,8 @@ import static pieces.PieceType.CAVALIER;
 
 public class Cavalier extends Piece{
 
-    private static final PieceType type = CAVALIER;
-
     public Cavalier(int colonne, int ligne, Couleur c) {
-        super(ligne, colonne,c, type);
+        super(ligne, colonne,c, CAVALIER);
     }
 
     @Override

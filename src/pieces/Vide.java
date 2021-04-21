@@ -4,10 +4,8 @@ import static pieces.PieceType.VIDE;
 
 public class Vide extends Piece{
 
-    private static final PieceType type = VIDE;
-
     public Vide(int ligne, int colonne, Couleur c) {
-        super(colonne, ligne, c, type);
+        super(colonne, ligne, c, VIDE);
     }
     @Override
     public boolean estPossible(int ligne, int colonne) {

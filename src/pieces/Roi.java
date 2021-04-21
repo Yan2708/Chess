@@ -5,10 +5,8 @@ import static pieces.PieceType.ROI;
 
 public class Roi extends Piece{
 
-    private static final PieceType type = ROI;
-
     public Roi(int ligne, int colonne, Couleur c) {
-        super(ligne, colonne,c, type);
+        super(ligne, colonne,c, ROI);
     }
 
     @Override

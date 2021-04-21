@@ -6,8 +6,6 @@ import static pieces.PieceType.PION;
 
 public class Pion extends Piece{
 
-    private static final PieceType type = PION;
-
     private boolean FirstMove;
 
     public void setFirstMove(boolean aBouge) {
@@ -15,7 +13,7 @@ public class Pion extends Piece{
     }
 
     public Pion(int ligne, int colonne, Couleur c) {
-        super(ligne, colonne,c, type);
+        super(ligne, colonne,c, PION);
         FirstMove = false;
     }
 

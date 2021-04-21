@@ -6,10 +6,8 @@ import static pieces.PieceType.TOUR;
 
 public class Tour extends Piece{
 
-    private static final PieceType type = TOUR;
-
     public Tour(int ligne, int colonne, Couleur c) {
-        super(ligne, colonne,c, type);
+        super(ligne, colonne,c, TOUR);
     }
     @Override
     public boolean estPossible(int ligne, int colonne) {
