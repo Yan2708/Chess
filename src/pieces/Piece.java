@@ -26,6 +26,11 @@ public abstract class Piece implements IPiece
         couleur=c;
     }
 
+    public void newPos(int ligne, int colonne){
+        this.ligne = ligne;
+        this.colonne = colonne;
+    }
+
     public String getCouleur(){
         return this.couleur.toString();
     }
@@ -46,7 +51,7 @@ public abstract class Piece implements IPiece
         return ligne;
     }
 
-    public PieceType getPieceType(){return type;}
+    public String getPieceType(){return type.toString();}
 
     public void setType(PieceType p) {
         type=p;
