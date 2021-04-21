@@ -1,11 +1,15 @@
 package pieces;
 
 import static java.lang.Math.abs;
+import static pieces.PieceType.TOUR;
+
 
 public class Tour extends Piece{
+
+    private static final PieceType type = TOUR;
+
     public Tour(int ligne, int colonne, Couleur c) {
-        super(ligne, colonne,c);
-        setType(PieceType.TOUR);
+        super(ligne, colonne,c, type);
     }
     @Override
     public boolean estPossible(int ligne, int colonne) {

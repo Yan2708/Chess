@@ -3,8 +3,6 @@ package echequier;
 import org.junit.jupiter.api.Test;
 import pieces.FabriquePiece;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class EchequierTest {
 
     @Test

@@ -2,18 +2,22 @@ package echequier;
 
 
 public class Echequier {
+
+
+
+
     private static final int LIGNE = 8, COLONNE = 8;
 
     private static final String BasicFen = "tcfdrfct/pppppppp/8/8/8/8/PPPPPPPP/TCFDRFCT";
 
     private IPiece[][] echequier;
 
-    public Echequier(IFabriquePiece fabrique) {
+    public Echequier(IFabriquePiece fabrique, String fen) {
         echequier = new IPiece[LIGNE][COLONNE ];
-        String[] fen = BasicFen.split("/");
+        String[] splittedFen = fen.split("/");
 
         for(int lig = 0, idx = 0; lig < LIGNE ; lig++, idx++) {
-            String s = fen[idx];
+            String s = splittedFen[idx];
             String sequence = (s.matches(".*\\d.*")) ? ReformatFenSequence(s) : s;
 
             for (int col = 0, cpt = 0; col < COLONNE; col++, cpt++)
@@ -21,6 +25,11 @@ public class Echequier {
 
         }
     }
+
+    public Echequier(IFabriquePiece fabrique){
+        this(fabrique, BasicFen);
+    }
+
 
     private String ReformatFenSequence(String str){
         StringBuilder sb = new StringBuilder();
@@ -43,9 +52,14 @@ public class Echequier {
 
     //ajouter une erreur dans le cas ou le coup est injouable
     public void deplacer(int xFin, int yFin, IPiece p){
+        int xS = p.getLigne();
+        int yS = p.getColonne();
+
         if(p.estPossible(xFin,yFin) && voieLibre(p, xFin, yFin) && !nonValide(p, xFin, yFin)){
             //swap
             //echequier[p.getColonne()][p.getLigne()]=null;
+
+            echequier[xS][yS] = p.changeToVide(xS, yS);
             echequier[xFin][yFin] = p;
             p.newPos(xFin, yFin);
         }
@@ -56,8 +70,7 @@ public class Echequier {
     }
 
     private int[] getCoefDirecteur(int xStart, int yStart, int xFinal, int yFinal){
-        int[] vecteur = {(yFinal - yStart), (xFinal - xStart)};
-        return vecteur;
+        return new int[]{(yFinal - yStart), (xFinal - xStart)};
     }
 
     private boolean voieLibre(IPiece p, int ligne, int colonne){

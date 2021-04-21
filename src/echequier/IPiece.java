@@ -11,4 +11,5 @@ public interface IPiece {
     String getCouleur();
     String getPieceType();
     void newPos(int ligne, int colonne);
+    IPiece changeToVide(int x,int y);
 }

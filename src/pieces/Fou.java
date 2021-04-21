@@ -1,8 +1,13 @@
 package pieces;
 
+import static pieces.PieceType.FOU;
+
 public class Fou  extends Piece{
+
+    private static final PieceType type = FOU;
+
     public Fou(int ligne, int colonne, Couleur c) {
-        super(ligne, colonne,c);
+        super(ligne, colonne,c, type);
     }
 
     @Override

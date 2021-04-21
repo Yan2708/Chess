@@ -1,15 +1,14 @@
 package pieces;
 
-import echequier.Echequier;
-
 import static java.lang.Math.abs;
 import static pieces.PieceType.ROI;
 
 public class Roi extends Piece{
 
+    private static final PieceType type = ROI;
+
     public Roi(int ligne, int colonne, Couleur c) {
-        super(ligne, colonne,c);
-        setType(ROI);
+        super(ligne, colonne,c, type);
     }
 
     @Override

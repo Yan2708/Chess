@@ -11,14 +11,19 @@ public abstract class Piece implements IPiece
 
 
 
-    public Piece(int ligne, int colonne, Couleur c) {
+    public Piece(int ligne, int colonne, Couleur c, PieceType pT) {
         newPos(ligne,colonne);
         couleur=c;
+        type = pT;
     }
 
     public void newPos(int ligne, int colonne){
         this.ligne = ligne;
         this.colonne = colonne;
+    }
+
+    public IPiece changeToVide(int x,int y){
+        return new Vide(x, y, Couleur.VIDE);
     }
 
     public String getCouleur(){
