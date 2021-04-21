@@ -8,8 +8,10 @@ public class Pion extends Piece{
 
     private boolean FirstMove;
 
-    public void setFirstMove(boolean aBouge) {
-        this.FirstMove = aBouge;
+    @Override
+    public void newPos(int ligne, int colonne){
+        setPos(ligne,colonne);
+        FirstMove=true;
     }
 
     public Pion(int ligne, int colonne, Couleur c) {

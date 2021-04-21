@@ -18,9 +18,14 @@ public abstract class Piece implements IPiece
     }
 
     public void newPos(int ligne, int colonne){
+        setPos(ligne,colonne);
+    }
+
+    public void setPos(int ligne, int colonne){
         this.ligne = ligne;
         this.colonne = colonne;
     }
+
 
     public IPiece changeToVide(int x,int y){
         return new Vide(x, y, Couleur.VIDE);

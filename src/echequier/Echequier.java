@@ -57,11 +57,12 @@ public class Echequier {
 
         if(p.estPossible(xFin,yFin) && voieLibre(p, xFin, yFin) && !nonValide(p, xFin, yFin)){
             //swap
-            //echequier[p.getColonne()][p.getLigne()]=null;
 
             echequier[xS][yS] = p.changeToVide(xS, yS);
             echequier[xFin][yFin] = p;
             p.newPos(xFin, yFin);
+        }else{
+            System.out.println("Coup non valide");
         }
     }
 
