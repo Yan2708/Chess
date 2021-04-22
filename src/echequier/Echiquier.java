@@ -69,7 +69,8 @@ public class Echiquier {
      * */
     private String ReformatFenSequence(String str){
         StringBuilder sb = new StringBuilder();
-        for(char c : str.toCharArray()) {
+        for (int i = 0; i < str.length(); i++) {
+            Character c = str.charAt(i);
             if(Character.isDigit(c)){
                 for(int y = 0; y < (int) c; y++)
                     sb.append("V");
@@ -134,11 +135,13 @@ public class Echiquier {
 
         Coord cS = new Coord(p.getLigne(), p.getColonne());
         Coord pM = getPrimaryMove(cS, c);
+        int longueur = getLongueur(cS, c);
         // on applique le mouvement primaire une premiere fois
         // pour ne pas tester sur la case de la piece
         cS.x += pM.x; cS.y += pM.y;     
 
-        for (int i = 0; i < getLongueur(cS, c); i++, cS.x++, cS.y++) {
+
+        for (int i = 0; i < longueur - 1; i++, cS.x += pM.x, cS.y += pM.y) {
             if(!estVide(cS))
                 return false;
         }
@@ -153,7 +156,7 @@ public class Echiquier {
      * @return                      la longueur entre les 2 points
      * */
     private int getLongueur(Coord cS, Coord cF){
-        return (int)Math.sqrt((Math.pow(cF.x - cS.x, 2) + Math.pow(cF.y - cF.x, 2)));
+        return (int)Math.sqrt((Math.pow(cF.x - cS.x, 2) + Math.pow(cF.y - cS.y, 2)));
     }
 
     /** Renvoie le mouvement primaire entre deux points.

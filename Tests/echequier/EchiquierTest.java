@@ -12,5 +12,7 @@ class EchiquierTest {
         System.out.println(e.toString());
         e.deplacer(0,0,2,0);
         System.out.println(e.toString());
+        e.deplacer(6,0,5,0);
+        System.out.println(e.toString());
     }
 }
