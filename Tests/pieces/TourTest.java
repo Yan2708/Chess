@@ -18,5 +18,6 @@ class TourTest {
 
         assertFalse(tour.estPossible(1,5));
         assertFalse(tour.estPossible(-6,9));
+        assertFalse(tour.estPossible(5,5));
     }
 }

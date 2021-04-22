@@ -5,6 +5,10 @@ public interface IPiece {
 
     boolean estPossible(int ligne, int colonne);
 
+    /** Getter de la colonne de la pièce
+     *
+     * @return          la colonne de la pièce
+     */
     int getColonne();
     int getLigne();
     String dessiner();

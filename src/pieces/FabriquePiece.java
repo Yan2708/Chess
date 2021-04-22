@@ -4,8 +4,10 @@ import echequier.IFabriquePiece;
 import echequier.IPiece;
 
 public class FabriquePiece implements IFabriquePiece {
-    //a voir pour les pieces
 
+    /**
+     * {@inheritDoc}
+     */
     public IPiece getPiece(char type, int x, int y) {
         Couleur c = Character.isUpperCase(type) ? Couleur.BLANC : Couleur.NOIR;
         PieceType pt;

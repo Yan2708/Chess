@@ -3,24 +3,19 @@ package pieces;
 import com.sun.javafx.css.CalculatedValue;
 
 public enum PieceType {
-    VIDE('V'),
-    PION('P'),
-    TOUR('T'),
-    CAVALIER('C'),
-    FOU('F'),
-    DAME('D'),
-    ROI('R');
+    VIDE,
+    PION,
+    TOUR,
+    CAVALIER,
+    FOU,
+    DAME,
+    ROI;
 
-    private char type;
-
-    PieceType(char type){
-        this.type = type;
-    }
-
-    public char getType() {
-        return type;
-    }
-
+    /** Retourne le type de pièce selon la pièce demandée
+     *
+     * @param c         le caractère représentant la pièce
+     * @return          le type de pièce
+     */
     public static PieceType getInstance(char c)  {
         switch(c){
             case 'P': return PION;
@@ -29,7 +24,7 @@ public enum PieceType {
             case 'F': return FOU;
             case 'D': return DAME;
             case 'R': return ROI;
-            default : return VIDE;
+            default : return VIDE; // retourne une pièce vide si le charactère n'est pas reconnu
         }
     }
 }

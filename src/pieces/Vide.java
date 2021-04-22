@@ -4,14 +4,25 @@ import static pieces.PieceType.VIDE;
 
 public class Vide extends Piece{
 
+    /** Constructeur d'une pièce vide
+     *
+     * @see Piece#Piece(int, int, Couleur, PieceType)
+     */
     public Vide(int ligne, int colonne, Couleur c) {
         super(colonne, ligne, c, VIDE);
     }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean estPossible(int ligne, int colonne) {
-        return true;
+        return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getSymbole() {
         return " ";

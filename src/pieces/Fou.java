@@ -1,5 +1,6 @@
 package pieces;
 
+import static java.lang.Math.abs;
 import static pieces.PieceType.FOU;
 
 public class Fou  extends Piece{
@@ -10,7 +11,9 @@ public class Fou  extends Piece{
 
     @Override
     public boolean estPossible(int ligne, int colonne) {
-        return false;
+        int varX = abs(this.getLigne()-ligne);
+        int varY = abs(this.getColonne()-colonne);
+        return (varY >= 1 && varX==varY);
     }
 
     @Override

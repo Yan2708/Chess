@@ -22,6 +22,7 @@ class RoiTest {
         assertFalse(roi.estPossible(0,0));
         assertFalse(roi.estPossible(2,1));
         assertFalse(roi.estPossible(-1,6));
+        assertFalse(roi.estPossible(2,2));
     }
 
 }

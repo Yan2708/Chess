@@ -1,12 +1,12 @@
 package appli;
 
-import echequier.Echequier;
+import echequier.Echiquier;
 import pieces.FabriquePiece;
 
 
 public class Application {
     public static void main(String[] args) {
-        Echequier e = new Echequier(new FabriquePiece());
+        Echiquier e = new Echiquier(new FabriquePiece());
         System.out.println(e.toString());
     }
 }
