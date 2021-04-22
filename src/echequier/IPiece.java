@@ -1,6 +1,5 @@
 package echequier;
 
-
 public interface IPiece {
 
     /** Pour une position donnée, calcule si le déplacement est possible pour la pièce

@@ -16,7 +16,6 @@ class PionTest {
         assertFalse(pion.estPossible(5, 2));
 
         pion.newPos(0,0);
-
         assertFalse(pion.estPossible(0,2));
 //        assertTrue(pion.estPossible(1,1));
 //        assertTrue(pion.estPossible(-1, 1));

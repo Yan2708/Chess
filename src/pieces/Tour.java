@@ -3,7 +3,6 @@ package pieces;
 import static java.lang.Math.abs;
 import static pieces.PieceType.TOUR;
 
-
 public class Tour extends Piece{
     /** Constructeur d'une tour
      *

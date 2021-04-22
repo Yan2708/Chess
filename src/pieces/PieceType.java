@@ -1,7 +1,5 @@
 package pieces;
 
-import com.sun.javafx.css.CalculatedValue;
-
 public enum PieceType {
     VIDE,
     PION,
