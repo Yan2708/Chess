@@ -69,8 +69,7 @@ public class Echiquier {
      * */
     private String ReformatFenSequence(String str){
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < str.length(); i++) {
-            Character c = str.charAt(i);
+        for(char c : str.toCharArray()) {
             if(Character.isDigit(c)){
                 for(int y = 0; y < (int) c; y++)
                     sb.append("V");
