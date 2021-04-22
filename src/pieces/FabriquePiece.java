@@ -28,9 +28,4 @@ public class FabriquePiece implements IFabriquePiece {
             default: return new Vide(x, y, Couleur.VIDE);
         }
     }
-
-
-
-
-
 }

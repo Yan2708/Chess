@@ -41,6 +41,10 @@ public class Echiquier {
 
         for(int lig = 0, idx = 0; lig < LIGNE ; lig++, idx++) {
             String s = splittedFen[idx];
+
+             // Si la sequence possede un nombre il faut la modifier pour quelle soit lisible par la suite
+             // matches(".*\\d.*") permet de check si une chaine de caractère est composée d'au moins un int.
+             // https://stackoverflow.com/a/18590949
             String sequence = (s.matches(".*\\d.*")) ? ReformatFenSequence(s) : s;
 
             for (int col = 0, cpt = 0; col < COLONNE; col++, cpt++)
@@ -57,7 +61,12 @@ public class Echiquier {
         this(fabrique, BasicFen);
     }
 
-
+    /** lorsque la sequence d'un enregistrement fen possede un entier il faut le remplacer par
+     * l'initial "V" pour Piece VIDE, donc "drt3pp" devient "drtVVVpp"
+     *
+     * @param str               la sequence à formater
+     * @return                  la sequence formatée
+     * */
     private String ReformatFenSequence(String str){
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < str.length(); i++) {
@@ -97,6 +106,15 @@ public class Echiquier {
         }else System.out.println("Coup non valide");
     }
 
+    /** Renvoie la pièce aux coordonnées
+     *
+     * @param c             les coordonnées
+     * @return              la pièce
+     * */
+    private IPiece getPiece(Coord c){
+        return echiquier[c.x][c.y];
+    }
+
     /** Vérifie si une case aux coordonnées est vide
      *
      * @param c                 coordonnées de la case
@@ -128,6 +146,34 @@ public class Echiquier {
         return true;
     }
 
+    /** Renvoie la longueur entre 2 points.
+     *  /!\ que pour les diagonales et droites dont la longueur est toujours un entier naturel.
+     *
+     * @param cS                    coordonnées de la case de depart
+     * @param cF                    coordonnées de la case d'arrivé
+     * @return                      la longueur entre les 2 points
+     * */
+    private int getLongueur(Coord cS, Coord cF){
+        return (int)Math.sqrt((Math.pow(cF.x - cS.x, 2) + Math.pow(cF.y - cF.x, 2)));
+    }
+
+    /** Renvoie le mouvement primaire entre deux points.
+     * EST(1,0),NORD_EST(1,1),NORD(0,1),NORD_OUEST(-1,1),OUEST (-1,0),SUD_OUEST(-1,-1),SUD(0,-1),SUD_EST(1,-1)
+     *
+     * @param cS                    coordonnées de la case de depart
+     * @param cF                    coordonnées de la case d'arrivé
+     * @return                      le mouvement primaire dans un tableau
+     * */
+    private Coord getPrimaryMove(Coord cS, Coord cF){
+        int x = (cF.x - cS.x);
+        int y = (cF.y - cS.y);
+        if(Math.abs(x)>1)
+            x=x/Math.abs(x);
+        if(Math.abs(y)>1)
+            y=y/Math.abs(y);
+        return new Coord(x,y);
+    }
+
     /** Vérifie si la l'arrivé d'une piece sur une case est valide.
      *
      * @param c                 coordonnées de la case
@@ -144,19 +190,18 @@ public class Echiquier {
      * */
     @Override
     public String toString() {
-        String SAUT = "    --- --- --- --- --- --- --- ---   \n";
-        String LETTRE = "     a   b   c   d   e   f   g   h    \n";
-        int compteur = COLONNE;
+        String SAUT = "    --- --- --- --- --- --- --- ---   \n"; // delimite les lignes
+        String LETTRE = "     a   b   c   d   e   f   g   h    \n"; // symbolise les colonnes
+        int compteur = COLONNE; // compteur de de ligne
         StringBuilder sb = new StringBuilder(LETTRE + SAUT);
 
         for(IPiece[] ligne : echiquier){
             sb.append(" ").append(compteur).append(" |");
 
             for(IPiece p: ligne)
-                sb.append(" " + p.dessiner() + " |");
+                sb.append(" ").append(p.dessiner()).append(" |");
 
-
-            sb.append(" " + compteur-- + "\n" + SAUT);
+            sb.append(" ").append(compteur--).append("\n").append(SAUT);
         }
 
         sb.append(LETTRE);
