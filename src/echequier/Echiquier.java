@@ -72,7 +72,7 @@ public class Echiquier {
         for (int i = 0; i < str.length(); i++) {
             Character c = str.charAt(i);
             if(Character.isDigit(c)){
-                for(int y = 0; y < (int) c; y++)
+                for(int y = 0; y < c - 48; y++)   // les entier commence à 48 dans la table ascii
                     sb.append("V");
                 continue;
             }
@@ -139,7 +139,6 @@ public class Echiquier {
         // on applique le mouvement primaire une premiere fois
         // pour ne pas tester sur la case de la piece
         cS.x += pM.x; cS.y += pM.y;     
-
 
         for (int i = 0; i < longueur - 1; i++, cS.x += pM.x, cS.y += pM.y) {
             if(!estVide(cS))
