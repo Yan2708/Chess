@@ -10,6 +10,6 @@ class ReglesTest {
     @Test
     void testCheck(){
         Echiquier e = new Echiquier(new FabriquePiece(), "r6T/8/8/8/8/8/8/8");
-        assertTrue(Regle.Check(e,"NOIR"));
+
     }
 }

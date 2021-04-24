@@ -9,38 +9,68 @@ public class Regle {
 
     @SuppressWarnings("serial")
     private static class RoiIntrouvableException extends Exception{ }
+    private static class pasCool extends Exception{ }
+    private static class CoupNonValide extends Exception{ }
+    private static class PasMat extends Exception{ }
 
-    public boolean isCoupValid(Echiquier e, Coord cS, Coord cF) {
-        IPiece p = e.getPiece(cS);
-        return(!(p.estPossible(cF.getX(), cF.getY()) && voieLibre(e, p, cF) && !arriveNonValide(e, p, cF) && !Check(e,p.getCouleur())))
-
-    }
-
-
-
-    public void CheckMate(Echiquier e, String couleur){
-        if(Check(e,couleur)){
-            ArrayList<IPiece> pieces = getPieceFromColor(e, couleur);
-            for(IPiece piece : pieces){
-                isCoupValid(e, )
-            }
-        }
-    }
-
-
-    public static boolean Check(Echiquier e, String couleur){
+    public void joueurChecker(Echiquier e, String couleur) throws RoiIntrouvableException, pasCool {
         Coord cR;
         try {
             cR = locateKing(e, couleur);
         } catch (RoiIntrouvableException ex) {
-           return false;
+            throw new RoiIntrouvableException();
         }
-        
         ArrayList<IPiece> pieces = getPieceFromColor(e, couleur);
-        for(IPiece p : pieces)
+        for(IPiece p : pieces){
+            if(check(e,cR,p)) {
+                IPiece checker = checker(e, cR, p);
+                if(checkMate(e, couleur, cR, checker))
+                    partieFinie();
+            }
+            break;
+
+        }
+    }
+
+    public boolean checkMate(Echiquier e, String couleur,Coord cR, IPiece checker){
+        for (IPiece piece : getPieceFromColor(e,couleur)) {
+            ArrayList<Coord> coords = deplacementsPossibles(piece, Echiquier.getLIGNE(),Echiquier.getLIGNE());
+            for (Coord coord: coords) {
+                try{
+
+                    e.deplacer(piece.getLigne(),piece.getColonne(),coord.getX(),coord.getY());
+                    if(check(e,cR,piece) || che)
+                       throw new CoupNonValide();
+                    else
+                        throw new PasMat();
+                } catch (CoupNonValide CNV) {
+
+                } catch (PasMat pasMat){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public ArrayList<Coord> deplacementsPossibles(IPiece p,int lignes, int colonnes){
+        ArrayList<Coord> a = new ArrayList<Coord>();
+        for(int x=0;x<lignes;x++)
+            for(int y=0;y<colonnes;y++)
+                if(p.estPossible(x,y) && !Echiquier.horsLimite(new Coord(x,y)))
+                    a.add(new Coord(x,y));
+
+        return a;
+    }
+
+    public IPiece checker(Echiquier e, Coord cR, IPiece p) throws pasCool {
             if(p.estPossible(cR.getX(), cR.getY()) && voieLibre(e, p, cR))
-                return true; 
-        return false;
+                return p;
+        throw new pasCool();
+    }
+
+    public static boolean check(Echiquier e, Coord cR, IPiece p){
+        return p.estPossible(cR.getX(), cR.getY()) && voieLibre(e, p, cR);
     }
     
     private static ArrayList<IPiece> getPieceFromColor(Echiquier e, String couleur){
