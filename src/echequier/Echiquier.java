@@ -96,20 +96,23 @@ public class Echiquier {
         IPiece p = getPiece(cS);
         Coord cF = new Coord(xF, yF);
 
-        if(p.estPossible(cF.x, cF.y) && voieLibre(p, cF) && !arriveNonValide(p, cF)){
-            echiquier[cS.x][cS.y] = p.changeToVide(cS.x, cS.y);
-            echiquier[cF.x][cF.y] = p;
-            p.newPos(cF.x, cF.y);
-        }else System.out.println("Coup non valide");
+//        if(p.estPossible(cF.getX(), cF.getY()) &&
+//                voieLibre(p, cF) && !arriveNonValide(p, cF)){
+            echiquier[cS.getX()][cS.getY()] = p.changeToVide(cS.getX(), cS.getX());
+            echiquier[cF.getX()][cF.getY()] = p;
+            p.newPos(cF.getX(), cF.getY());
+       // }else System.out.println("Coup non valide");
     }
+
+
 
     /** Renvoie la pièce aux coordonnées
      *
      * @param c             les coordonnées
      * @return              la pièce
      * */
-    private IPiece getPiece(Coord c){
-        return echiquier[c.x][c.y];
+    public IPiece getPiece(Coord c){
+        return echiquier[c.getY()][c.getX()];
     }
 
     /** Vérifie si une case aux coordonnées est vide
@@ -120,6 +123,13 @@ public class Echiquier {
     public boolean estVide(Coord c){
         return echiquier[c.getX()][c.getY()].getPieceType().equals("VIDE");
     }
+
+
+    private static boolean horsLimite(Coord c){
+        int x = c.getX(), y = c.getY();
+        return (x >= 0 && x < LIGNE) && (y >= 0 && y < COLONNE);
+    }
+
 
     /** Créer une chaîne de caractères comportant l'ensemble de l'échiquier.
      *
