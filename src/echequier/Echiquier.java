@@ -3,18 +3,7 @@ package echequier;
 
 public class Echiquier {
 
-    /**permet de manipuler des coordonnées (x,y)
-     * notation :
-     * cS = cStart ----> coordonnées de depart
-     * cF = cFinal ----> coordonnées d'arrivé */
-    class Coord {
-        private int x, y;
 
-        public Coord(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
 
     /** Un echiquier est constitué de 8 colonnes et 8 lignes soit 64 cases*/
     private static final int LIGNE = 8, COLONNE = 8;
@@ -29,6 +18,14 @@ public class Echiquier {
 
     /** l'échiquier est représenté par un tableau 2d de pieces*/
     private IPiece[][] echiquier;
+
+    /** Getter de l'échiquier
+     *
+     * @return              l'echiquier
+     * */
+    public IPiece[][] getEchiquier(){
+        return echiquier;
+    }
 
     /** constructeur de l'échiquier
      *
@@ -120,69 +117,8 @@ public class Echiquier {
      * @param c                 coordonnées de la case
      * @return                  la case est vide
      * */
-    private boolean estVide(Coord c){
-        return echiquier[c.x][c.y].getPieceType().equals("VIDE");
-    }
-
-    /** Vérifie si le chemin entre 2 points n'a pas d'obstacle (pas l'arrivée)
-     *
-     * @param c                   coordonnées de la case d'arrivé
-     * @param p                   la pièce à deplacer
-     * */
-    private boolean voieLibre(IPiece p, Coord c){
-        if(p.getPieceType().equals("CAVALIER")) // le cavalier n'a pas d'"obstacle" en mouvement
-            return true;
-
-        Coord cS = new Coord(p.getLigne(), p.getColonne());
-        Coord pM = getPrimaryMove(cS, c);
-        int longueur = getLongueur(cS, c);
-        // on applique le mouvement primaire une premiere fois
-        // pour ne pas tester sur la case de la piece
-        cS.x += pM.x; cS.y += pM.y;     
-
-        for (int i = 0; i < longueur - 1; i++, cS.x += pM.x, cS.y += pM.y) {
-            if(!estVide(cS))
-                return false;
-        }
-        return true;
-    }
-
-    /** Renvoie la longueur entre 2 points.
-     *  /!\ que pour les diagonales et droites dont la longueur est toujours un entier naturel.
-     *
-     * @param cS                    coordonnées de la case de depart
-     * @param cF                    coordonnées de la case d'arrivé
-     * @return                      la longueur entre les 2 points
-     * */
-    private int getLongueur(Coord cS, Coord cF){
-        return (int)Math.sqrt((Math.pow(cF.x - cS.x, 2) + Math.pow(cF.y - cS.y, 2)));
-    }
-
-    /** Renvoie le mouvement primaire entre deux points.
-     * EST(1,0),NORD_EST(1,1),NORD(0,1),NORD_OUEST(-1,1),OUEST (-1,0),SUD_OUEST(-1,-1),SUD(0,-1),SUD_EST(1,-1)
-     *
-     * @param cS                    coordonnées de la case de depart
-     * @param cF                    coordonnées de la case d'arrivé
-     * @return                      le mouvement primaire dans un tableau
-     * */
-    private Coord getPrimaryMove(Coord cS, Coord cF){
-        int x = (cF.x - cS.x);
-        int y = (cF.y - cS.y);
-        if(Math.abs(x)>1)
-            x=x/Math.abs(x);
-        if(Math.abs(y)>1)
-            y=y/Math.abs(y);
-        return new Coord(x,y);
-    }
-
-    /** Vérifie si la l'arrivé d'une piece sur une case est valide.
-     *
-     * @param c                 coordonnées de la case
-     * @param p                 la pièce à deplacer
-     * */
-    private boolean arriveNonValide(IPiece p, Coord c){
-        IPiece pA = echiquier[c.x][c.y];
-        return ((pA.getCouleur().equals(p.getCouleur())) || (pA.getPieceType().equals("ROI")));
+    public boolean estVide(Coord c){
+        return echiquier[c.getX()][c.getY()].getPieceType().equals("VIDE");
     }
 
     /** Créer une chaîne de caractères comportant l'ensemble de l'échiquier.
