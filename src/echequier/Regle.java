@@ -9,11 +9,10 @@ public class Regle {
 
     @SuppressWarnings("serial")
     private static class RoiIntrouvableException extends Exception{ }
-    private static class pasCool extends Exception{ }
     private static class CoupNonValide extends Exception{ }
     private static class PasMat extends Exception{ }
 
-    public void joueurChecker(Echiquier e, String couleur) throws RoiIntrouvableException, pasCool {
+    public void joueurChecker(Echiquier e, String couleur) throws RoiIntrouvableException{
         Coord cR;
         try {
             cR = locateKing(e, couleur);
@@ -22,24 +21,22 @@ public class Regle {
         }
         ArrayList<IPiece> pieces = getPieceFromColor(e, couleur);
         for(IPiece p : pieces){
-            if(check(e,cR,p)) {
-                IPiece checker = checker(e, cR, p);
-                if(checkMate(e, couleur, cR, checker))
-                    partieFinie();
+            if(check(e,cR,p) && checkMate(e, couleur, cR)) {
+                    //partieFinie();
             }
             break;
 
         }
     }
 
-    public boolean checkMate(Echiquier e, String couleur,Coord cR, IPiece checker){
+    public static boolean checkMate(Echiquier e, String couleur, Coord cR){
         for (IPiece piece : getPieceFromColor(e,couleur)) {
             ArrayList<Coord> coords = deplacementsPossibles(piece, Echiquier.getLIGNE(),Echiquier.getLIGNE());
             for (Coord coord: coords) {
                 try{
 
                     e.deplacer(piece.getLigne(),piece.getColonne(),coord.getX(),coord.getY());
-                    if(check(e,cR,piece) || che)
+                    if(check(e,cR,piece))
                        throw new CoupNonValide();
                     else
                         throw new PasMat();
@@ -53,7 +50,7 @@ public class Regle {
         return true;
     }
 
-    public ArrayList<Coord> deplacementsPossibles(IPiece p,int lignes, int colonnes){
+    public static ArrayList<Coord> deplacementsPossibles(IPiece p, int lignes, int colonnes){
         ArrayList<Coord> a = new ArrayList<Coord>();
         for(int x=0;x<lignes;x++)
             for(int y=0;y<colonnes;y++)
@@ -63,18 +60,12 @@ public class Regle {
         return a;
     }
 
-    public IPiece checker(Echiquier e, Coord cR, IPiece p) throws pasCool {
-            if(p.estPossible(cR.getX(), cR.getY()) && voieLibre(e, p, cR))
-                return p;
-        throw new pasCool();
-    }
-
     public static boolean check(Echiquier e, Coord cR, IPiece p){
         return p.estPossible(cR.getX(), cR.getY()) && voieLibre(e, p, cR);
     }
     
-    private static ArrayList<IPiece> getPieceFromColor(Echiquier e, String couleur){
-        couleur = (couleur.equals("BLANC")) ? "NOIR" : "BLANC";
+    static ArrayList<IPiece> getPieceFromColor(Echiquier e, String couleur){
+        couleur = (couleur.equals("BLANC")) ? "NOIR" : "BLANC   ";
         ArrayList<IPiece> pieces = new ArrayList<>();
         for(IPiece[] ligne : e.getEchiquier())
             for(IPiece p: ligne){
