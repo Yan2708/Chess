@@ -17,7 +17,7 @@ class ReglesTest {
         for(IPiece p : pieces){
             assertTrue(Regle.check(e,new Coord(0,0),p));
             assertFalse( Regle.checkMate(e, "NOIR", new Coord(0,0)));
-        }
+        }//
         Echiquier ec = new Echiquier(new FabriquePiece(), "r6T/T7/8/8/8/8/8/8");
         for(IPiece p : pieces){
             assertTrue(Regle.check(e,new Coord(0,0),p));
