@@ -93,7 +93,7 @@ public class Regle {
         Coord cS = new Coord(p.getLigne(), p.getColonne());
         double longueur = getLongueur(cS, c);
 
-        if(longueur % 0 == 0)
+        if(longueur % 1 == 0)
             //  si la valeur est decimale le mouvement n'est pas diagonale, horizontale ou verticale
             //  alors on ne verifie pas si la voie est libre entre les deux pieces.
             return true;
