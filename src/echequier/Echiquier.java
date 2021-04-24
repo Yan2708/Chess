@@ -28,7 +28,7 @@ public class Echiquier {
     private static final String BasicFen = "tcfdrfct/pppppppp/8/8/8/8/PPPPPPPP/TCFDRFCT"; //fen generique
 
     /** l'échiquier est représenté par un tableau 2d de pieces*/
-    private IPiece[][] echiquier;
+    private final IPiece[][] echiquier;
 
     /** Getter de l'échiquier
      *
@@ -123,7 +123,7 @@ public class Echiquier {
      * @return              la pièce
      * */
     public IPiece getPiece(Coord c){
-        return echiquier[c.getY()][c.getX()];
+        return echiquier[c.getX()][c.getY()];
     }
 
     /** Vérifie si une case aux coordonnées est vide

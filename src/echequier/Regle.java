@@ -12,26 +12,26 @@ public class Regle {
     private static class CoupNonValide extends Exception{ }
     private static class PasMat extends Exception{ }
 
-    public void joueurChecker(Echiquier e, String couleur) throws RoiIntrouvableException{
-        Coord cR;
-        try {
-            cR = locateKing(e, couleur);
-        } catch (RoiIntrouvableException ex) {
-            throw new RoiIntrouvableException();
-        }
-        ArrayList<IPiece> pieces = getPieceFromColor(e, couleur);
-        for(IPiece p : pieces){
-            if(check(e,cR,p) && checkMate(e, couleur, cR)) {
-                    //partieFinie();
-            }
-            break;
-
-        }
-    }
+//    public void joueurChecker(Echiquier e, String couleur) throws RoiIntrouvableException{
+//        Coord cR;
+//        try {
+//            cR = locateKing(e, couleur);
+//        } catch (RoiIntrouvableException ex) {
+//            throw new RoiIntrouvableException();
+//        }
+//        ArrayList<IPiece> pieces = getPieceFromColor(e, couleur+"autre");
+//        for(IPiece p : pieces){
+//            if(check(e,cR,p) && checkMate(e, couleur, cR)) {
+//                    //partieFinie();
+//            }
+//            break;
+//
+//        }
+//    }
 
     public static boolean checkMate(Echiquier e, String couleur, Coord cR){
         for (IPiece piece : getPieceFromColor(e,couleur)) {
-            ArrayList<Coord> coords = deplacementsPossibles(piece, Echiquier.getLIGNE(),Echiquier.getLIGNE());
+            ArrayList<Coord> coords = deplacementsPossibles(piece, Echiquier.getLIGNE(),Echiquier.getCOLONNE());
             for (Coord coord: coords) {
                 try{
 
@@ -51,7 +51,7 @@ public class Regle {
     }
 
     public static ArrayList<Coord> deplacementsPossibles(IPiece p, int lignes, int colonnes){
-        ArrayList<Coord> a = new ArrayList<Coord>();
+        ArrayList<Coord> a = new ArrayList<>();
         for(int x=0;x<lignes;x++)
             for(int y=0;y<colonnes;y++)
                 if(p.estPossible(x,y) && !Echiquier.horsLimite(new Coord(x,y)))
@@ -65,7 +65,7 @@ public class Regle {
     }
     
     static ArrayList<IPiece> getPieceFromColor(Echiquier e, String couleur){
-        couleur = (couleur.equals("BLANC")) ? "NOIR" : "BLANC   ";
+        couleur = (couleur.equals("BLANC")) ? "NOIR" : "BLANC";
         ArrayList<IPiece> pieces = new ArrayList<>();
         for(IPiece[] ligne : e.getEchiquier())
             for(IPiece p: ligne){

@@ -9,9 +9,9 @@ public abstract class Piece implements IPiece
     //Position de la pièce
     private Coord coordonnees;
     //Couleur de la pièce
-    private Couleur couleur;
+    private final Couleur couleur;
     //Le type de pièce
-    private PieceType type;
+    private final PieceType type;
 
     /** Constructeur d'une pièce
      *
