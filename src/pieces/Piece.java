@@ -1,12 +1,13 @@
 package pieces;
 
 
+import coordonnees.Coord;
 import echequier.IPiece;
 
 public abstract class Piece implements IPiece
 {
     //Position de la pièce
-    private int colonne, ligne;
+    private Coord coordonnees;
     //Couleur de la pièce
     private Couleur couleur;
     //Le type de pièce
@@ -38,8 +39,7 @@ public abstract class Piece implements IPiece
      * @param colonne       la nouvelle coordonnée en y
      */
     public void setPos(int ligne, int colonne){
-        this.ligne = ligne;
-        this.colonne = colonne;
+        coordonnees=new Coord(ligne,colonne);
     }
 
     /**
@@ -78,14 +78,14 @@ public abstract class Piece implements IPiece
      * {@inheritDoc}
      */
     public int getLigne(){
-        return ligne;
+        return coordonnees.getX();
     }
 
     /**
      * {@inheritDoc}
      */
     public int getColonne(){
-        return colonne;
+        return coordonnees.getY();
     }
 
     /**

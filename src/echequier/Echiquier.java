@@ -1,6 +1,8 @@
 package echequier;
 
 
+import coordonnees.Coord;
+
 public class Echiquier {
 
 

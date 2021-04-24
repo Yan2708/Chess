@@ -1,6 +1,8 @@
 package echequier;
 
 
+import coordonnees.Coord;
+
 import java.util.ArrayList;
 
 public class Regle {

@@ -1,4 +1,4 @@
-package echequier;
+package coordonnees;
 
 /**permet de manipuler des coordonnées (x,y)
  * notation :
