@@ -64,16 +64,16 @@ public class Regle {
         Coord cCheck = new Coord(p.getLigne(),p.getColonne());  //position de la piece qui met le roi en echec
 
         for(IPiece pc : pieces){
+            if(pc.getPieceType().equals("ROI")) continue;           // ne doit pas etre le roi
+            if(isPiecePinned(pc, cR, couleurOppose)) continue;      // ne doit pas etre cloué
             Coord cP = new Coord(pc.getLigne(), pc.getColonne());
 
-            if(isCoupValid(cCheck, pc)) //si une piece allié peut prendre la piece attaquante
+            if(isCoupValid(cCheck, pc)) //s'il est possible de prendre la piece attaquante
                 return true;
 
             // si une piece allié peut se positionner entre le roi et la piece attaquante
             for(Coord cF : tile)
-                if(!(pc.getPieceType().equals("ROI")) &&
-                        isCoupValid(cF, pc) &&
-                        !isPiecePinned(pc, cR, couleurOppose))      // la piece ne doit pas etre cloué
+                if(isCoupValid(cF, pc))
                     return true;
         }
         return false;

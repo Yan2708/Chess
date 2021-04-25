@@ -1,7 +1,5 @@
 package echiquier;
 
-import java.util.Objects;
-
 /**permet de manipuler des coordonnées (x,y)
  * notation :
  * cS = cStart ----> coordonnées de depart
@@ -39,7 +37,7 @@ public class Coord {
 
     /** Ajoute les valeurs d'une coordonnée à une autre
      *
-     * @param c
+     * @param c             la coordonnée a ajouter (mouvement primaire)
      */
     public void Add(Coord c){
         this.x += c.x;

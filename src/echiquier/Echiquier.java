@@ -99,7 +99,12 @@ public class Echiquier {
         p.newPos(cF.getX(), cF.getY());
     }
 
-
+    /** Renvoie toutes une liste comportant toutes les pieces de l'echiquier
+     * de couleur demandée
+     *
+     * @param couleur               la couleur demandée
+     * @return                      la liste de pieces
+     */
     public static ArrayList<IPiece> getPieceFromColor(String couleur){
         //couleur = (couleur.equals("BLANC")) ? "NOIR" : "BLANC";
         ArrayList<IPiece> pieces = new ArrayList<>();
