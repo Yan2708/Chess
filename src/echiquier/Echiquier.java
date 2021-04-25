@@ -90,8 +90,6 @@ public class Echiquier {
      * @param yF                la colonne d'arrivée
      * */
     public void deplacer(int xS, int yS, int xF, int yF){
-        // On utilise pas la classe Coord car la methode est public
-        //TODO : ajouter une erreur dans le cas ou le coup est injouable
         Coord cS = new Coord(xS, yS);
         IPiece p = getPiece(cS);
         Coord cF = new Coord(xF, yF);
@@ -148,8 +146,13 @@ public class Echiquier {
         return true;
     }
 
+    /** Renvoie si le chemin est droit ou non
+     *
+     * @param longueur          la longueur
+     * @return                  si la longueur est un chiffre rond ou non
+     */
     public static boolean isStraightPath(double longueur){
-        return longueur % 1 != 0;
+        return longueur % 1 != 0; //si la longueur est à virgule alors le chemin n'est pas horizontal ou vertical
     }
 
     /** Renvoie la longueur entre 2 points.
@@ -199,12 +202,22 @@ public class Echiquier {
         return !(pA.getCouleur().equals(p.getCouleur())) || (pA.getPieceType().equals("ROI"));
     }
 
-
+    /** Renvoie si une coordonnée est en dehors de l'echiquier ou non
+     *
+     * @param c         la coordonnée
+     * @return          si c est en dehors ou non
+     */
     public static boolean horsLimite(Coord c){
         int x = c.getX(), y = c.getY();
         return (x >= 0 && x < LIGNE) && (y >= 0 && y < COLONNE);
     }
 
+    /** Recherche le roi sur l'echiquier
+     *
+     * @param couleur           la couleur du roi (NOIR ou BLANC)
+     * @return                  les coordonnées du roi
+     * @throws RoiIntrouvableException      si le roi n'est pas présent sur l'echiquier
+     */
     public static Coord locateKing(String couleur) throws RoiIntrouvableException {
         for(IPiece[] ligne : echiquier)
             for(IPiece p : ligne)

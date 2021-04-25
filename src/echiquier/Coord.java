@@ -8,32 +8,57 @@ import java.util.Objects;
  * cF = cFinal ----> coordonnées d'arrivé */
 public class Coord {
 
+
     private int x,y;
 
+    /** Constructeur de coordonnée
+     *
+     * @param x la coordonnée en x
+     * @param y la coordonnée en y
+     */
     public Coord(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
+    /** Getter de x
+     *
+     * @return x
+     */
     public int getX() {
         return x;
     }
 
+    /** Getter de y
+     *
+     * @return y
+     */
     public int getY() {
         return y;
     }
 
-
+    /** Ajoute les valeurs d'une coordonnée à une autre
+     *
+     * @param c
+     */
     public void Add(Coord c){
         this.x += c.x;
         this.y += c.y;
     }
 
+    /** Inverse les valeurs de la coordonnée
+     *
+     */
     public void inverse(){
         this.x = -(x);
         this.y = -(y);
     }
 
+    /** Méthode de comparaison d'une coordonnée à un objet
+     *
+     * @param o l'objet avec laquelle on veut comparer
+     * @return si les objets sont identiques
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

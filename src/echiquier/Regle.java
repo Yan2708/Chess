@@ -11,6 +11,15 @@ public class Regle {
         return p.estPossible(c.getX(),c.getY()) && voieLibre(p, c) && isFinishValid(p, c);
     }
 
+    /** Verifie si pour une couleur donnée le roi est en echec et mat.
+     * La premiere partie verifie si un piece alliée au roi peut bloquer l'echec
+     * la seconde partie verifie si le roi peut s'echapper de l'echec.
+     *
+     * @param couleur       la couleur du roi
+     * @param cR            les coordonnées du roi
+     * @param pieces        toutes les pieces de l'enemi
+     * @return              si le roi est en échec et mat
+     */
     public static boolean checkForMate(String couleur, Coord cR, ArrayList<IPiece> pieces){
         ArrayList<IPiece> checkingPieces = getAllCheckingPiece(cR, pieces);
         ArrayList<Coord> checkingTiles = getAllCheckingTiles(cR, pieces);
@@ -83,7 +92,7 @@ public class Regle {
     private static ArrayList<Coord> getAllCheckingTiles(Coord cF, ArrayList<IPiece> pieces){
         ArrayList<Coord> checkingTile = new ArrayList<>();
         for(IPiece p : pieces){
-            checkingTile.addAll(getCheckingTile(new Coord(p.getLigne(), p.getColonne()), cF));
+            checkingTile.addAll(getCheckingTile(new Coord(p.getLigne(), p.getColonne()), cR));
         }
         return checkingTile;
     }
@@ -115,12 +124,13 @@ public class Regle {
                 if(x != 0 || y != 0){
                     Coord cF = new Coord(cR.getX() + x, cR.getY() + y);
 
+                    //  le mouvement doit etre possible et dans l'echiquier
                     if(horsLimite(cF) && isCoupValid(cF, roi))
                         kingsMoves.add(cF);
                 }
             }
         }
-        kingsMoves.removeIf(chekingFile::contains);
+        kingsMoves.removeIf(chekingFile::contains); // on retire toutes les coordonnées où le roi est en echec
         return kingsMoves;
     }
 
