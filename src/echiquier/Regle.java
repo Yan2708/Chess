@@ -6,7 +6,15 @@ import java.util.ArrayList;
 
 public class Regle {
 
-
+    /** Renvoie si le mouvement d'une piece vers une coordonnée est valide.
+     * un coup est valide si : le mouvement est possible pour la piece
+     * le chemin entre la piece et l'arrivé n'a pas d'obstacle
+     * et que la case d'arrivé peut acceuillir la piece.
+     *
+     * @param c     la coordonnée d'arrivée
+     * @param p     la coordonnée de la piece
+     * @return      si le déplacement est possible
+     */
     public static boolean isCoupValid(Coord c, IPiece p){
         return p.estPossible(c.getX(),c.getY()) && voieLibre(p, c) && isFinishValid(p, c);
     }
@@ -40,6 +48,16 @@ public class Regle {
         return true;
     }
 
+    /** Verifie si une piece peut s'interposer entre la piece qui met en echec le roi et le roi.
+     *  Cette piece doit valider 3 conditions :
+     *  elle ne doit pas etre le roi, le coup doit etre valide et la piece ne doit pas etre cloué.
+     *
+     * @param tile          les cases attaquées à defendre
+     * @param couleur       la couleur allié
+     * @param cR            les coordonnées du roi
+     * @param p             la piece mettant le roi en echec
+     * @return              une piece peut etre posée dans le chemin
+     */
     private static boolean piecesInTheWay(ArrayList<Coord> tile, String couleur, Coord cR, IPiece p){
         ArrayList<IPiece> pieces = getPieceFromColor(couleur);  //liste de piece allié
         String couleurOppose = (couleur.equals("BLANC")) ? "NOIR" : "BLANC";
@@ -61,7 +79,15 @@ public class Regle {
         return false;
     }
 
-    private static boolean isPiecePinned(IPiece p, Coord cF, String couleur){
+    /** Verifie si une piece est cloué en verifiant toutes les cases en direction inverse du roi
+     * en partant de la piece.
+     *
+     * @param p         la pièce à verifier
+     * @param cR        les coordonnées du roi
+     * @param couleur   la couleur opposée
+     * @return          si la pièce est clouée
+     */
+    private static boolean isPiecePinned(IPiece p, Coord cR, String couleur){
         Coord cS = new Coord(p.getLigne(), p.getColonne());
 
         if(isStraightPath(getLongueur(cS, cR))) // si le chemin entre la piece est le roi n'est pas verticale
@@ -86,6 +112,12 @@ public class Regle {
         return false;
     }
 
+    /** Renvoie une liste de coordonnées allant d'une position donnée à la limite de l'echiquier.
+     *
+     * @param cS            coord d'arrivé
+     * @param cP            mouvement primaire
+     * @return              les coordonnées
+     */
     private static ArrayList<Coord> getAllTile(Coord cS, Coord cP) {
         ArrayList<Coord> tile = new ArrayList<>();
         Coord cNew = new Coord(cS.getX(), cS.getY());   // coordonnée à qjouter
@@ -100,7 +132,14 @@ public class Regle {
         return tile;
     }
 
-    private static ArrayList<Coord> getAllCheckingTiles(Coord cF, ArrayList<IPiece> pieces){
+    /** Renvoie une liste de coordonnées que composent les cases en travers des pieces qui mettent le roi
+     * en echec et le roi.
+     *
+     * @param cR        coordonnée du roi
+     * @param pieces    les pieces enemies
+     * @return          les coordonnées entre le roi et la piece qui la met en echec
+     */
+    private static ArrayList<Coord> getAllCheckingTiles(Coord cR, ArrayList<IPiece> pieces){
         ArrayList<Coord> checkingTile = new ArrayList<>();
 
         // on recupere toutes les cases dans le cas ou plusieurs pieces attaquent le roi
@@ -110,6 +149,12 @@ public class Regle {
         return checkingTile;
     }
 
+    /** Renvoie une liste de coordonnées de case entre la piece qui met le roi en echec et le roi.
+     *
+     * @param cS        la coordonnée de départ
+     * @param cF        la coordonnée d'arrivée
+     * @return          les coordonnées de la demi-droite entre la piece qui le met en echec et le roi
+     */
     private static ArrayList<Coord> getCheckingTile(Coord cS, Coord cF){
         ArrayList<Coord> checkingTile = new ArrayList<>();
         double longueur = getLongueur(cS, cF);
@@ -128,6 +173,13 @@ public class Regle {
         return checkingTile;
     }
 
+    /** Renvoie une liste de coordonnées de tout les mouvements possibles pour le roi.
+     * on retire au prealable toutes coordonnées dans les chemins que prennent les pieces qui attaquent le roi.
+     *
+     * @param cR        la coordonnée du roi
+     * @param cPiece    les pieces enemies
+     * @return          les coordonnées où le roi peut se rendre
+     */
     private static ArrayList<Coord> getKingsMoves(Coord cR, ArrayList<IPiece> cPiece){
         ArrayList<Coord> kingsMoves = new ArrayList<>();
         IPiece roi = getPiece(cR);
@@ -149,6 +201,13 @@ public class Regle {
         return kingsMoves;
     }
 
+    /** Renvoie un liste de coordonnées definissant le chemin entre un piece attaquant
+     * le roi et la limite de l'echiquier en passant par le roi.
+     *
+     * @param cR        les coordonnées du roi
+     * @param pieces    les  pieces de l'enemi
+     * @return          les coordonnées où le roi est en echec
+     */
     private static ArrayList<Coord> getAllCheckingFiles(Coord cR, ArrayList<IPiece> pieces){
         ArrayList<Coord> coords = new ArrayList<>();
         for(IPiece p : pieces){
@@ -165,7 +224,12 @@ public class Regle {
         return coords;
     }
 
-
+    /** verifie avec les coordonnée du roi si celui-ci est attaquée par les pieces adverses.
+     *
+     * @param cR            les coordonnées du roi
+     * @param pieces        les pièces présente sur l'échiquier
+     * @return              si une pièce(s) menace(s) le roi
+     */
     public static boolean checkIfCheck(Coord cR, ArrayList<IPiece> pieces){
         for(IPiece p : pieces)
             // la coordonnées est attaqué par une piece adverse
@@ -175,6 +239,12 @@ public class Regle {
         return false;
     }
 
+    /** Retourne toutes les pièces mettant en echec le roi
+     *
+     * @param c         les coordonnées du roi
+     * @param pieces    les pièces enemies
+     * @return          une liste des pièces mettant le roi en echec
+     */
     private static ArrayList<IPiece> getAllCheckingPiece(Coord c, ArrayList<IPiece> pieces){
         ArrayList<IPiece> cPiece = new ArrayList<>();
         for(IPiece p : pieces)
@@ -183,6 +253,12 @@ public class Regle {
         return cPiece;
     }
 
+    /** Retourne si le roi est mit en echec par une pièce ou non
+     *
+     * @param c         les coordonnées du roi
+     * @param p         la pièce en question
+     * @return          si le roi est en echec
+     */
     private static boolean isCheck(Coord c, IPiece p){
         // on ne test pas si l'arrivé est valide car on test avec les coordonnées du roi.
         return p.estPossible(c.getX(), c.getY()) && voieLibre(p, c);
