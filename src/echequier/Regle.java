@@ -31,7 +31,7 @@ public class Regle {
 
     public static boolean checkMate(Echiquier e, String couleur, Coord cR){
         for (IPiece piece : getPieceFromColor(e,couleur)) {
-            ArrayList<Coord> coords = deplacementsPossibles(piece, Echiquier.getLIGNE(),Echiquier.getCOLONNE());
+            ArrayList<Coord> coords = deplacementsPossibles(piece, Echiquier.LIGNE,Echiquier.COLONNE);
             for (Coord coord: coords) {
                 try{
 
@@ -54,7 +54,7 @@ public class Regle {
         ArrayList<Coord> a = new ArrayList<>();
         for(int x=0;x<lignes;x++)
             for(int y=0;y<colonnes;y++)
-                if(p.estPossible(x,y) && !Echiquier.horsLimite(new Coord(x,y)))
+                if(p.estPossible(x,y))
                     a.add(new Coord(x,y));
 
         return a;
@@ -65,7 +65,7 @@ public class Regle {
     }
     
     static ArrayList<IPiece> getPieceFromColor(Echiquier e, String couleur){
-        couleur = (couleur.equals("BLANC")) ? "NOIR" : "BLANC";
+        couleur = (couleur.equals("BLANC")) ? "BLANC" : "NOIR";
         ArrayList<IPiece> pieces = new ArrayList<>();
         for(IPiece[] ligne : e.getEchiquier())
             for(IPiece p: ligne){

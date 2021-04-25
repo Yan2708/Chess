@@ -9,15 +9,8 @@ public class Echiquier {
 
 
     /** Un echiquier est constitué de 8 colonnes et 8 lignes soit 64 cases*/
-    private static final int LIGNE = 8, COLONNE = 8;
+    public static final int LIGNE = 8, COLONNE = 8;
 
-    public static int getLIGNE() {
-        return LIGNE;
-    }
-
-    public static int getCOLONNE() {
-        return COLONNE;
-    }
 
     /** La notation Forsyth-Edwards sert à noter la position des pièces sur l'échiquier.
      * pour l'uttiliser on commence par la premiere ligne est on note l'initial de la piece
