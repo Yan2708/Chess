@@ -1,4 +1,4 @@
-package echequier;
+package echiquier;
 
 public interface IPiece {
 

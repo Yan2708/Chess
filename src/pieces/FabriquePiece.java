@@ -1,7 +1,7 @@
 package pieces;
 
-import echequier.IFabriquePiece;
-import echequier.IPiece;
+import echiquier.IFabriquePiece;
+import echiquier.IPiece;
 
 public class FabriquePiece implements IFabriquePiece {
 

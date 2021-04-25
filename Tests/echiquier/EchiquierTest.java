@@ -1,7 +1,9 @@
-package echequier;
+package echiquier;
 
 import org.junit.jupiter.api.Test;
 import pieces.FabriquePiece;
+import static echiquier.Echiquier.*;
+import static echiquier.Regle.*;
 
 class EchiquierTest {
 
@@ -14,5 +16,11 @@ class EchiquierTest {
         System.out.println(e.toString());
         e.deplacer(6,0,5,0);
         System.out.println(e.toString());
+    }
+
+    @Test
+    void testRoiIntrouvable() throws RoiIntrouvableException {
+        Echiquier e = new Echiquier(new FabriquePiece());
+        Coord cR = locateKing("BLANC");
     }
 }

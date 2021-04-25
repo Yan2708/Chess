@@ -1,6 +1,6 @@
 package appli;
 
-import echequier.Echiquier;
+import echiquier.Echiquier;
 import pieces.FabriquePiece;
 
 

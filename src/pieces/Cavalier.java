@@ -9,7 +9,7 @@ public class Cavalier extends Piece{
      *
      * @see Piece#Piece(int, int, Couleur, PieceType)
      */
-    public Cavalier(int colonne, int ligne, Couleur c) {
+    public Cavalier(int ligne, int colonne, Couleur c) {
         super(ligne, colonne,c, CAVALIER);
     }
 

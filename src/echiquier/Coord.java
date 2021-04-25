@@ -1,4 +1,6 @@
-package coordonnees;
+package echiquier;
+
+import java.util.Objects;
 
 /**permet de manipuler des coordonnées (x,y)
  * notation :
@@ -27,4 +29,16 @@ public class Coord {
         this.y += c.y;
     }
 
+    public void inverse(){
+        this.x = -(x);
+        this.y = -(y);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Coord coord = (Coord) o;
+        return x == coord.x && y == coord.y;
+    }
 }
