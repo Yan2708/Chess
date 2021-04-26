@@ -144,9 +144,10 @@ public class Echiquier {
         // pour ne pas tester sur la case de la piece
         cS.Add(pM);
 
-        for (int i = 0; i < longueur - 1; i++, cS.Add(pM)) {
-            if(!estVide(cS))
+        while(!cS.equals(c)) {
+            if (!estVide(cS))
                 return false;
+            cS.Add(pM);
         }
         return true;
     }
@@ -168,7 +169,7 @@ public class Echiquier {
      * @return                      la longueur entre les 2 points
      * */
     public static double getLongueur(Coord cS, Coord cF){
-        return (int)Math.sqrt((Math.pow(cF.getX() - cS.getX(), 2) + Math.pow(cF.getY() - cS.getY(), 2)));
+        return Math.sqrt((Math.pow(cF.getX() - cS.getX(), 2) + Math.pow(cF.getY() - cS.getY(), 2)));
     }
 
     /** Renvoie le mouvement primaire entre deux points.
