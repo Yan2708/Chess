@@ -160,8 +160,8 @@ public class Echiquier {
     public static boolean isStraightPath(Coord cS, Coord cF){
         int difX = abs(cS.getX() - cF.getX());
         int difY = abs(cS.getY() - cF.getY());
-        return (cS.getX() == cF.getX() ||
-                cS.getY() == cF.getY() ||
+        return (difX == 0 ||
+                difY == 0 ||
                 difX == difY);
     }
 
