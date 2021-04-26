@@ -90,7 +90,7 @@ public class Regle {
     private static boolean isPiecePinned(IPiece p, Coord cR, String couleur){
         Coord cS = new Coord(p.getLigne(), p.getColonne());
 
-        if(isStraightPath(getLongueur(cS, cR))) // si le chemin entre la piece est le roi n'est pas verticale
+        if(!isStraightPath(cS, cR))             // si le chemin entre la piece est le roi n'est pas verticale
             return false;                       //  ou horizontale, la piece ne peut pas etre cloué.
 
         if(!voieLibre(p, cR))       // si le chemin entre la piece et le roi
@@ -157,9 +157,8 @@ public class Regle {
      */
     private static ArrayList<Coord> getCheckingTile(Coord cS, Coord cF){
         ArrayList<Coord> checkingTile = new ArrayList<>();
-        double longueur = getLongueur(cS, cF);
 
-        if(isStraightPath(longueur))        //  si le chemin n'est pas verticale ou horizontale
+        if(!isStraightPath(cS, cF))        //  si le chemin n'est pas verticale ou horizontale
             return checkingTile;            //  il y a pas de chemin de case attaqué.
 
         Coord pM = getPrimaryMove(cS, cF);
@@ -167,8 +166,9 @@ public class Regle {
         // pour ne pas tester sur la case de la piece
         cS.Add(pM);
 
-        for (int i = 0; i < longueur - 1; i++, cS.Add(pM)) {
+        while(cS.equals(cF)) {
             checkingTile.add(new Coord(cS.getX(), cS.getY()));
+            cS.Add(pM);
         }
         return checkingTile;
     }
@@ -213,7 +213,7 @@ public class Regle {
         for(IPiece p : pieces){
             Coord cS = new Coord(p.getLigne(), p.getColonne());
 
-            if(isStraightPath(getLongueur(cS, cR)))
+            if(!isStraightPath(cS, cR))
                 continue;
 
             // en partant de la piece attaquante on prend toutes les cases jusqu'aux limites

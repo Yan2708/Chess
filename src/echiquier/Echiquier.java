@@ -3,6 +3,8 @@ package echiquier;
 
 import java.util.ArrayList;
 
+import static java.lang.Math.abs;
+
 public class Echiquier {
 
     /** Un echiquier est constitué de 8 colonnes et 8 lignes soit 64 cases*/
@@ -133,10 +135,7 @@ public class Echiquier {
      * */
     public static boolean voieLibre(IPiece p, Coord c){
         Coord cS = new Coord(p.getLigne(), p.getColonne());
-        double longueur = getLongueur(cS, c);
-        if(isStraightPath(longueur))
-            //  si la valeur est decimale le mouvement n'est pas diagonale, horizontale ou verticale
-            //  alors on ne verifie pas si la voie est libre entre les deux pieces.
+        if(!isStraightPath(cS, c))
             return true;
 
         Coord pM = getPrimaryMove(cS, c);
@@ -154,23 +153,18 @@ public class Echiquier {
 
     /** Renvoie si le chemin est droit ou non
      *
-     * @param longueur          la longueur
-     * @return                  si la longueur est un chiffre rond ou non
+     * @param cS                coordonnées de depart
+     * @param cF                coordonnées d'arrivé
+     * @return                  le chemin est horizontale, verticale ou diagonale
      */
-    public static boolean isStraightPath(double longueur){
-        return longueur % 1 != 0; //si la longueur est à virgule alors le chemin n'est pas horizontal ou vertical
+    public static boolean isStraightPath(Coord cS, Coord cF){
+        int difX = abs(cS.getX() - cF.getX());
+        int difY = abs(cS.getY() - cF.getY());
+        return (cS.getX() == cF.getX() ||
+                cS.getY() == cF.getY() ||
+                difX == difY);
     }
 
-    /** Renvoie la longueur entre 2 points.
-     *  /!\ que pour les diagonales et droites dont la longueur est toujours un entier naturel.
-     *
-     * @param cS                    coordonnées de la case de depart
-     * @param cF                    coordonnées de la case d'arrivé
-     * @return                      la longueur entre les 2 points
-     * */
-    public static double getLongueur(Coord cS, Coord cF){
-        return Math.sqrt((Math.pow(cF.getX() - cS.getX(), 2) + Math.pow(cF.getY() - cS.getY(), 2)));
-    }
 
     /** Renvoie le mouvement primaire entre deux points.
      * EST(1,0),NORD_EST(1,1),NORD(0,1),NORD_OUEST(-1,1),OUEST (-1,0),SUD_OUEST(-1,-1),SUD(0,-1),SUD_EST(1,-1)
@@ -182,10 +176,10 @@ public class Echiquier {
     public static Coord getPrimaryMove(Coord cS, Coord cF){
         int x = (cF.getX() - cS.getX());
         int y = (cF.getY() - cS.getY());
-        if(Math.abs(x)>1)
-            x=x/Math.abs(x);
-        if(Math.abs(y)>1)
-            y=y/Math.abs(y);
+        if(abs(x)>1)
+            x=x/ abs(x);
+        if(abs(y)>1)
+            y=y/ abs(y);
         return new Coord(x,y);
     }
 
@@ -205,7 +199,7 @@ public class Echiquier {
      * */
     public static boolean isFinishValid(IPiece p, Coord c){
         IPiece pA = getPiece(c);
-        return !(pA.getCouleur().equals(p.getCouleur())) || (pA.getPieceType().equals("ROI"));
+        return !pA.getCouleur().equals(p.getCouleur()) && !pA.getPieceType().equals("ROI");
     }
 
     /** Renvoie si une coordonnée est en dehors de l'echiquier ou non
