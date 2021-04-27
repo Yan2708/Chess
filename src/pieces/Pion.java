@@ -40,12 +40,6 @@ public class Pion extends Piece{
         }
         // si le pion se déplace de moins de 2 cases verticalement et aucunement horizontalement
         return varX <= 2 && varY == 0;
-
-        /** Pour plus tard **/
-        //else if (varX <= 2 && varY == 0){
-        //    return true;
-        //}
-        //return varX == 1;
     }
 
     /**

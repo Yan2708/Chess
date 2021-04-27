@@ -86,19 +86,17 @@ public class Echiquier {
      * -    que la voie soit libre (sans obstacle)
      * -    que la case d'arrivé ne soit pas le roi ou un pièce de même couleur
      *
-     * @param xS                la ligne de depart
-     * @param yS                la colonne de depart
-     * @param xF                la ligne d'arrivée
-     * @param yF                la colonne d'arrivée
+     *
      * */
-    public void deplacer(int xS, int yS, int xF, int yF){
-        Coord cS = new Coord(xS, yS);
+    public void deplacer(Coord cS, Coord cF){
         IPiece p = getPiece(cS);
-        Coord cF = new Coord(xF, yF);
-
-        echiquier[cS.getX()][cS.getY()] = p.changeToVide(cS.getX(), cS.getX());
-        echiquier[cF.getX()][cF.getY()] = p;
+        changePiece(cS, p.changeToVide(cS.getX(), cS.getY()));
+        changePiece(cF, p);
         p.newPos(cF.getX(), cF.getY());
+    }
+
+    private void changePiece(Coord c, IPiece p){
+        echiquier[c.getX()][c.getY()] = p;
     }
 
     /** Renvoie toutes une liste comportant toutes les pieces de l'echiquier

@@ -32,6 +32,8 @@ public class Regle {
         ArrayList<IPiece> checkingPieces = getAllCheckingPiece(cR, pieces); //un roi peut etre mis en echec par 2 pieces
         ArrayList<Coord> checkingTiles = getAllCheckingTiles(cR, pieces);
 
+        if(checkingPieces.isEmpty()) return false;
+
         //si une piece met le roi en echec alors il est possible de defendre avec une autre piece.
         if(!(checkingPieces.size() > 1)){
             IPiece p = checkingPieces.get(0);
@@ -87,7 +89,7 @@ public class Regle {
      * @param couleur   la couleur opposée
      * @return          si la pièce est clouée
      */
-    private static boolean isPiecePinned(IPiece p, Coord cR, String couleur){
+    public static boolean isPiecePinned(IPiece p, Coord cR, String couleur){
         Coord cS = new Coord(p.getLigne(), p.getColonne());
 
         if(!isStraightPath(cS, cR))             // si le chemin entre la piece est le roi n'est pas verticale
@@ -139,7 +141,7 @@ public class Regle {
      * @param pieces    les pieces enemies
      * @return          les coordonnées entre le roi et la piece qui la met en echec
      */
-    private static ArrayList<Coord> getAllCheckingTiles(Coord cR, ArrayList<IPiece> pieces){
+    public static ArrayList<Coord> getAllCheckingTiles(Coord cR, ArrayList<IPiece> pieces){
         ArrayList<Coord> checkingTile = new ArrayList<>();
 
         // on recupere toutes les cases dans le cas ou plusieurs pieces attaquent le roi
