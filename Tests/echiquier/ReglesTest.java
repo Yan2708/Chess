@@ -111,4 +111,13 @@ class ReglesTest {
         assertTrue(checkForMate("NOIR",cR, pieces));
     }
 
+    @Test
+    void testCheckMate10() throws RoiIntrouvableException {
+        Echiquier e = new Echiquier(new FabriquePiece(), "tcfdrfct/pppppDpp/8/8/2F5/8/PPPPPPPP/8");
+        System.out.println(e.toString());
+        ArrayList<IPiece> pieces = getPieceFromColor("BLANC");
+        Coord cR = locateKing("NOIR");
+        assertTrue(checkForMate("NOIR",cR, pieces));
+    }
+
 }

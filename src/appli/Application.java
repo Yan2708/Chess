@@ -1,8 +1,14 @@
 package appli;
 
-import echiquier.Echiquier;
-import pieces.FabriquePiece;
+import echiquier.*;
+import pieces.*;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import static echiquier.Echiquier.*;
+import static java.lang.Math.abs;
+import static pieces.Couleur.*;
 
 public class Application {
 
@@ -86,4 +92,7 @@ public class Application {
         System.out.println("Les "+ passif + "S ont perdu");
         sc.close();
     }
+
+
+
 }
