@@ -29,8 +29,9 @@ public class Application {
     }
 
     private static boolean isInputValid(String c){
-        return c.length() == 4                       &&
-                lettres.contains(c.substring(0,1))   &&
+        if(c.length() != 4)
+            return false;
+        return  lettres.contains(c.substring(0,1))   &&
                 chiffres.contains(c.substring(1,2))  &&
                 lettres.contains(c.substring(2,3))   &&
                 chiffres.contains(c.substring(3));
@@ -45,7 +46,7 @@ public class Application {
         return p.getCouleur().equals(couleur) &&
                 !Regle.isPiecePinned(p, cR, couleurOpp) &&
                 Regle.isCoupValid(cF, p)
-                && !Regle.priseEnPassant(p,cF);
+                && !Regle.priseEnDiag(p,cF);
     }
 
     /**Récupère l'entrée de l'uttilisateur, son coup.
@@ -73,11 +74,16 @@ public class Application {
             Coord cR = locateKing(actif);
             ArrayList<Coord> checkingTile = Regle.getAllCheckingTiles(cR, getPieceFromColor(passif));
 
-            while (!isInputValid(usersLine) &&
-                    !isSemanticValid(usersLine, cR, actif, checkingTile) ) {
+            while (!isInputValid(usersLine) ) {
                 System.out.print("#");
                 usersLine = getUsersLine(sc);
+                try{
+                    if(isSemanticValid(usersLine, cR, actif, checkingTile))
+                        break;
+                }catch(StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException ignored){}
+
             }
+
 
             e.deplacer(cS, cF);
             System.out.println(e.toString());
