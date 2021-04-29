@@ -75,13 +75,12 @@ public class Application {
             ArrayList<Coord> checkingTile = Regle.getAllCheckingTiles(cR, getPieceFromColor(passif));
 
             while (!isInputValid(usersLine) ) {
-                System.out.print("#");
-                usersLine = getUsersLine(sc);
                 try{
                     if(isSemanticValid(usersLine, cR, actif, checkingTile))
                         break;
                 }catch(StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException ignored){}
-
+                System.out.print("#");
+                usersLine = getUsersLine(sc);
             }
 
 
