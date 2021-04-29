@@ -29,8 +29,8 @@ public class Application {
     }
 
     private  static void saveCoord(){
-        lastCS=new Coord(cS.getX(), cS.getY());
-        lastCF=new Coord(cF.getX(), cF.getY());
+        lastCS = new Coord(cS.getX(), cS.getY());
+        lastCF = new Coord(cF.getX(), cF.getY());
     }
 
     private static boolean isInputValid(String c){
