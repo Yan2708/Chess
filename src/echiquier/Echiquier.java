@@ -1,6 +1,8 @@
 package echiquier;
 
 
+import pieces.FabriquePiece;
+
 import java.util.ArrayList;
 
 import static java.lang.Math.abs;
@@ -95,8 +97,12 @@ public class Echiquier {
         p.newPos(cF.getX(), cF.getY());
     }
 
-    private void changePiece(Coord c, IPiece p){
+    public static void changePiece(Coord c, IPiece p){
         echiquier[c.getX()][c.getY()] = p;
+    }
+
+    public static void promote(Coord c, FabriquePiece f,char type){
+        changePiece(c,f.getPiece(type,c.getX(),c.getY()));
     }
 
     /** Renvoie toutes une liste comportant toutes les pieces de l'echiquier

@@ -120,4 +120,33 @@ class ReglesTest {
         assertTrue(checkForMate("NOIR",cR, pieces));
     }
 
+    @Test
+    void testPromotion(){
+        Echiquier e = new Echiquier(new FabriquePiece(), "P7/8/8/8/8/8/8/p7");
+        Regle.promotion(new Coord(0,0));
+        assertEquals(getPiece(new Coord(0, 0)).getPieceType(), "DAME");
+        Regle.promotion(new Coord(7,0));
+        assertEquals(getPiece(new Coord(7, 0)).getPieceType(), "DAME");
+        System.out.println(e.toString());
+    }
+
+    @Test
+    void  testPriseEnPassant(){
+        Echiquier e = new Echiquier(new FabriquePiece(), "8/8/8/2PPpP2/8/8/8/8");
+        System.out.println(e.toString());
+        Coord noir = new Coord(3,4);
+        Coord blanc0 = new Coord(3,2);
+        Coord blanc1 = new Coord(3,3);
+        Coord blanc2 = new Coord(3,5);
+        //piece noire
+        assertTrue(Regle.priseEnPassant(new Coord(5,3),blanc1,noir,new Coord(4,3)));
+        assertTrue(Regle.priseEnPassant(new Coord(5,5),blanc2,noir,new Coord(4,5)));
+        assertFalse(Regle.priseEnPassant(new Coord(5,5),blanc2,noir,new Coord(4,4)));
+        //piece blanche
+        assertTrue(Regle.priseEnPassant(new Coord(5,5),blanc2,noir,new Coord(4,5)));
+        //le pion blanc ne bouge que d'une case
+        assertFalse(Regle.priseEnPassant(new Coord(4,5),blanc2,noir,new Coord(4,5)));
+        //test sur la meme couleur
+        assertFalse(Regle.priseEnPassant(new Coord(5,2),blanc0,blanc1,new Coord(2,2)));
+    }
 }

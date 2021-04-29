@@ -4,6 +4,7 @@ import echiquier.*;
 import pieces.*;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 import static echiquier.Echiquier.*;
@@ -14,7 +15,7 @@ public class Application {
 
     private static final String lettres = "ABCDEFGH";
     private static final String chiffres = "12345678";
-    private static Coord cS, cF;
+    private static Coord cS, cF, lastCF, lastCS;
 
 
 
@@ -28,12 +29,17 @@ public class Application {
         cF = new Coord(getIntFromChar(c.charAt(3)), getIntFromChar(c.charAt(2)) - 1);
     }
 
+    private  static void saveCoord(){
+        lastCS=new Coord(cS.getX(), cS.getY());
+        lastCF=new Coord(cF.getX(), cF.getY());
+    }
+
     private static boolean isInputValid(String c){
         if(c.length() != 4)
             return false;
-        return  lettres.contains(c.substring(0,1))   &&
+        return  lettres.contains(c.substring(0,1).toUpperCase())   &&
                 chiffres.contains(c.substring(1,2))  &&
-                lettres.contains(c.substring(2,3))   &&
+                lettres.contains(c.substring(2,3).toUpperCase())   &&
                 chiffres.contains(c.substring(3));
     }
 
@@ -62,7 +68,7 @@ public class Application {
 
     public static void main(String[] args) throws RoiIntrouvableException {
 
-        Echiquier e = new Echiquier(new FabriquePiece());
+        Echiquier e = new Echiquier(new FabriquePiece(),"tcfdrfct/p1pppppp/P7/8/2p5/8/1P1PPPPP/TCFDRFCT");
         String actif = "BLANC";
         String passif = "NOIR";
 
@@ -73,18 +79,21 @@ public class Application {
             String usersLine = getUsersLine(sc);
             Coord cR = locateKing(actif);
             ArrayList<Coord> checkingTile = Regle.getAllCheckingTiles(cR, getPieceFromColor(passif));
-
-            while (!isInputValid(usersLine) ) {
+            while(true){
                 try{
-                    if(isSemanticValid(usersLine, cR, actif, checkingTile))
+                    if(isInputValid(usersLine) && (isSemanticValid(usersLine, cR, actif, checkingTile) ||
+                            Regle.priseEnPassant(lastCS,lastCF,cS,cF)))
                         break;
                 }catch(StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException ignored){}
                 System.out.print("#");
                 usersLine = getUsersLine(sc);
             }
 
-
+            if(Regle.priseEnPassant(lastCS,lastCF,cS,cF))
+                Echiquier.changePiece(lastCF,getPiece(lastCF).changeToVide(lastCF.getX(), lastCF.getY()));
             e.deplacer(cS, cF);
+            Regle.promotion(cF);
+            saveCoord();
             System.out.println(e.toString());
 
             if(Regle.checkForMate(passif, locateKing(passif), getPieceFromColor(actif)))

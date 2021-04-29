@@ -1,5 +1,7 @@
 package echiquier;
 
+import pieces.FabriquePiece;
+
 import static echiquier.Echiquier.*;
 import java.util.ArrayList;
 
@@ -19,16 +21,36 @@ public class Regle {
         return p.estPossible(c.getX(),c.getY()) && voieLibre(p, c) && isFinishValid(p, c);
     }
 
-    public static boolean priseEnPassant(IPiece pion,Coord c){
+    public static boolean priseEnDiag(IPiece pion,Coord c){
         IPiece p= Echiquier.getPiece(c);
-        if(!p.getPieceType().equals("PION"))
+        if(!pion.getPieceType().equals("PION"))
             return false;
         if(pion.getColonne()-p.getColonne()==0)
-            return !pion.getPieceType().equals("VIDE");
+            return !p.getPieceType().equals("VIDE");
         else
-            return pion.getPieceType().equals("VIDE");
+            return p.getPieceType().equals("VIDE");
     }
 
+    public static void promotion(Coord c){
+        IPiece p= Echiquier.getPiece(c);
+        char type = p.getCouleur().equals("NOIR") ? 'd': 'D';
+        if(p.getPieceType().equals("PION") && p.getLigne()%7==0)
+            Echiquier.promote(c,new FabriquePiece(),type);
+    }
+
+    public static boolean priseEnPassant(Coord lastCS, Coord lastCF, Coord cS,Coord cF){
+        IPiece p,current;
+        try{
+            p = Echiquier.getPiece(lastCF);
+            current = Echiquier.getPiece(cS);
+        }catch (NullPointerException e){
+            return false;
+        }
+        int mouvement =current.getCouleur().equals("NOIR")?1:-1;
+        return p.getPieceType().equals(current.getPieceType()) && current.getPieceType().equals("PION") &&
+                Math.abs(lastCF.getX() - lastCS.getX()) == 2 && !p.getCouleur().equals(current.getCouleur()) &&
+                cF.getY() == lastCF.getY() && cF.getX() - lastCF.getX() == mouvement;
+    }
 
     /** Verifie si pour une couleur donnée le roi est en echec et mat.
      * La premiere partie verifie si un piece alliée au roi peut bloquer l'echec

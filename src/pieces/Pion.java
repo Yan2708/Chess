@@ -45,4 +45,5 @@ public class Pion extends Piece{
     public String getSymbole() {
         return "P";
     }
+
 }

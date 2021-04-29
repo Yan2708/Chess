@@ -9,7 +9,7 @@ public class Vide extends Piece{
      * @see Piece#Piece(int, int, Couleur, PieceType)
      */
     public Vide(int ligne, int colonne, Couleur c) {
-        super(colonne, ligne, c, VIDE);
+        super(ligne, colonne, c, VIDE);
     }
 
     /**
