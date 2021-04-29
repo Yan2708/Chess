@@ -44,7 +44,8 @@ public class Application {
         IPiece p = Echiquier.getPiece(cS);
         return p.getCouleur().equals(couleur) &&
                 !Regle.isPiecePinned(p, cR, couleurOpp) &&
-                Regle.isCoupValid(cF, p);
+                Regle.isCoupValid(cF, p)
+                && !Regle.priseEnPassant(p,cF);
     }
 
     /**Récupère l'entrée de l'uttilisateur, son coup.
@@ -60,7 +61,7 @@ public class Application {
 
     public static void main(String[] args) throws RoiIntrouvableException {
 
-        Echiquier e = new Echiquier(new FabriquePiece(),"4r3/8/8/6D1/1F6/8/8/7R");
+        Echiquier e = new Echiquier(new FabriquePiece());
         String actif = "BLANC";
         String passif = "NOIR";
 

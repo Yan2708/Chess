@@ -32,14 +32,10 @@ public class Pion extends Piece{
      */
     @Override
     public boolean estPossible(int ligne, int colonne) {
-        int varX = abs(this.getLigne()-ligne);
-        int varY = abs(this.getColonne()-colonne);
-        // si le pion c'est deja déplacé et avance de plus d'une case verticalement ou si le pion ne bouge pas
-        if ((FirstMove && varX > 1) || (varX == 0 && varY == 0)){
-              return false;
-        }
-        // si le pion se déplace de moins de 2 cases verticalement et aucunement horizontalement
-        return varX <= 2 && varY == 0;
+        int varX = this.getLigne()-ligne;
+        int varY = this.getColonne()-colonne;
+        int mouvement =getCouleur().equals("NOIR")?-1:1;
+        return(varY >= -1 && varY <= 1 && varX == mouvement) || (!FirstMove && varX == 2*mouvement && varY == 0);
     }
 
     /**

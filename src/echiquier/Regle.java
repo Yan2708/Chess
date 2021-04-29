@@ -19,6 +19,17 @@ public class Regle {
         return p.estPossible(c.getX(),c.getY()) && voieLibre(p, c) && isFinishValid(p, c);
     }
 
+    public static boolean priseEnPassant(IPiece pion,Coord c){
+        IPiece p= Echiquier.getPiece(c);
+        if(!p.getPieceType().equals("PION"))
+            return false;
+        if(pion.getColonne()-p.getColonne()==0)
+            return !pion.getPieceType().equals("VIDE");
+        else
+            return pion.getPieceType().equals("VIDE");
+    }
+
+
     /** Verifie si pour une couleur donnée le roi est en echec et mat.
      * La premiere partie verifie si un piece alliée au roi peut bloquer l'echec
      * la seconde partie verifie si le roi peut s'echapper de l'echec.

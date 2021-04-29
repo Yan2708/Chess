@@ -6,20 +6,23 @@ import static echiquier.Echiquier.*;
 
 class EchiquierTest {
 
-//    @Test
-//    void TestEchiquier(){
-//        Echiquier e = new Echiquier(new FabriquePiece());
-//        e.deplacer(1,0,3,0);
-//        System.out.println(e.toString());
-//        e.deplacer(0,0,2,0);
-//        System.out.println(e.toString());
-//        e.deplacer(6,0,5,0);
-//        System.out.println(e.toString());
-//    }
+    @Test
+    void TestEchiquier(){
+        Echiquier e = new Echiquier(new FabriquePiece(),"8/1p6/8/2P5/8/8/8/8");
+        System.out.println(e.toString());
+        e.deplacer(new Coord(1,1),new Coord(3,1));
+//        new Coord(3,2)
+        System.out.println(e.toString());
+        e.deplacer(new Coord(3,1),new Coord(5,1));
+//        new Coord(3,2)
+        System.out.println(e.toString());
+    }
 
     @Test
     void testRoiIntrouvable() throws RoiIntrouvableException {
         Echiquier e = new Echiquier(new FabriquePiece());
         Coord cR = locateKing("BLANC");
     }
+
+
 }
