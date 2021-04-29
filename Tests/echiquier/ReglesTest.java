@@ -149,4 +149,22 @@ class ReglesTest {
         //test sur la meme couleur
         assertFalse(Regle.priseEnPassant(new Coord(5,2),blanc0,blanc1,new Coord(2,2)));
     }
+
+    @Test
+    void testStaleMate() throws RoiIntrouvableException{
+        Echiquier e = new Echiquier(new FabriquePiece(), "RF5t/8/1r6/8/8/8/8/8");
+        System.out.println(e.toString());
+        ArrayList<IPiece> pieces = getPieceFromColor("BLANC");
+        Coord cR = locateKing("BLANC");
+        assertTrue(isStaleMate(pieces,cR, "NOIR"));
+    }
+
+    @Test
+    void testStaleMate2() throws RoiIntrouvableException{
+        Echiquier e = new Echiquier(new FabriquePiece(), "8/8/8/8/8/2r5/1t6/R7");
+        System.out.println(e.toString());
+        ArrayList<IPiece> pieces = getPieceFromColor("BLANC");
+        Coord cR = locateKing("BLANC");
+        assertTrue(isStaleMate(pieces,cR, "NOIR"));
+    }
 }

@@ -4,12 +4,11 @@ import echiquier.*;
 import pieces.*;
 
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Scanner;
 
 import static echiquier.Echiquier.*;
 import static java.lang.Math.abs;
-import static pieces.Couleur.*;
+import static echiquier.Regle.*;
 
 public class Application {
 
@@ -43,11 +42,16 @@ public class Application {
                 chiffres.contains(c.substring(3));
     }
 
-    private static boolean isSemanticValid(String c, Coord cR, String couleur, ArrayList<Coord> cTile){
+    private static boolean isSemanticValid(String c, Coord cR, String couleur, ArrayList<IPiece> enemies){
         getCoordFromString(c);
         String couleurOpp = couleur.equals("BLANC") ? "NOIR" : "BLANC";
-        if(!cTile.isEmpty() && !cTile.contains(cF))
+
+        ArrayList<IPiece> checkingPieces = getAllCheckingPiece(cR, enemies); //un roi peut etre mis en echec par 2 pieces
+        ArrayList<Coord> checkingTiles = getAllCheckingTiles(cR, checkingPieces);
+        if(!checkingPieces.isEmpty() && !checkingTiles.contains(cF))
             return false;
+
+
         IPiece p = Echiquier.getPiece(cS);
         return p.getCouleur().equals(couleur) &&
                 !Regle.isPiecePinned(p, cR, couleurOpp) &&
@@ -71,6 +75,7 @@ public class Application {
         Echiquier e = new Echiquier(new FabriquePiece(),"tcfdrfct/p1pppppp/P7/8/2p5/8/1P1PPPPP/TCFDRFCT");
         String actif = "BLANC";
         String passif = "NOIR";
+        String message = "Les "+ passif + "S ont perdu";
 
         @SuppressWarnings("resource")
         Scanner sc = new Scanner(System.in);
@@ -78,10 +83,19 @@ public class Application {
         while(true) {
             String usersLine = getUsersLine(sc);
             Coord cR = locateKing(actif);
-            ArrayList<Coord> checkingTile = Regle.getAllCheckingTiles(cR, getPieceFromColor(passif));
+
+            ArrayList<IPiece> piecesActif = getPieceFromColor(actif);
+            ArrayList<IPiece> piecesPassif = getPieceFromColor(passif);
+
+            if(isStaleMate(piecesActif, cR, passif)){
+                message = "EGALITE PAR PAT !";
+                break;
+            }
+
             while(true){
                 try{
-                    if(isInputValid(usersLine) && (isSemanticValid(usersLine, cR, actif, checkingTile) ||
+                    if(isInputValid(usersLine) &&
+                            (isSemanticValid(usersLine, cR, actif, piecesPassif) ||
                             Regle.priseEnPassant(lastCS,lastCF,cS,cF)))
                         break;
                 }catch(StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException ignored){}
@@ -96,7 +110,7 @@ public class Application {
             saveCoord();
             System.out.println(e.toString());
 
-            if(Regle.checkForMate(passif, locateKing(passif), getPieceFromColor(actif)))
+            if(Regle.checkForMate(passif, locateKing(passif), piecesActif))
                 break;
 
             String tmp=actif;
