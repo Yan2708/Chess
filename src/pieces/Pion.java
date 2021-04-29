@@ -34,7 +34,7 @@ public class Pion extends Piece{
     public boolean estPossible(int ligne, int colonne) {
         int varX = this.getLigne()-ligne;
         int varY = this.getColonne()-colonne;
-        int mouvement =getCouleur().equals("NOIR")?-1:1;
+        int mouvement = getCouleur().equals("NOIR")?-1:1;
         return(varY >= -1 && varY <= 1 && varX == mouvement) || (!FirstMove && varX == 2*mouvement && varY == 0);
     }
 
