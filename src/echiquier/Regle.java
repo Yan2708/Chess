@@ -112,7 +112,7 @@ public class Regle {
         Coord cS = new Coord(p.getLigne(), p.getColonne());
 
         if(p.getPieceType().equals("ROI")   ||
-                !isStraightPath(cS, cR)     ||
+                !Coord.isStraightPath(cS, cR)     ||
                 !voieLibre(p, cR))
             return false;
 

@@ -40,10 +40,10 @@ public class Utils {
     public static ArrayList<Coord> getPath(Coord cS, Coord cF){
         ArrayList<Coord> tile = new ArrayList<>();
         Coord cClone = new Coord(cS.getX(), cS.getY());
-        if(!isStraightPath(cS, cF))        //  si le chemin n'est pas verticale ou horizontale
+        if(!Coord.isStraightPath(cS, cF))        //  si le chemin n'est pas verticale ou horizontale
             return tile;            //  il y a pas de chemin de case attaqué.
 
-        Coord pM = getPrimaryMove(cS, cF);
+        Coord pM = Coord.getPrimaryMove(cS, cF);
 
         while(!cClone.equals(cF)) {
             tile.add(new Coord(cClone.getX(), cClone.getY()));
@@ -67,12 +67,12 @@ public class Utils {
         for(IPiece p : pieces){
             Coord cS = new Coord(p.getLigne(), p.getColonne());
 
-            if(!isStraightPath(cS, c))
+            if(!Coord.isStraightPath(cS, c))
                 continue;
 
             // en partant de la piece attaquante on prend toutes les cases jusqu'aux limites
             // en passant pas le roi.
-            Coord cP = getPrimaryMove(cS, c);
+            Coord cP = Coord.getPrimaryMove(cS, c);
             coords.addAll(getPathToBorder(cS, cP));
         }
         return coords;
@@ -167,7 +167,6 @@ public class Utils {
 
         if(getPningPiece(cS, cR, couleur) == null)
             return moves;
-
         assert pningPiece != null;
         ArrayList<Coord> path = getPath(cS, new Coord(pningPiece.getLigne(), pningPiece.getColonne()));
 
@@ -185,7 +184,7 @@ public class Utils {
      * @return          la pièce qui cloue ou rien
      */
     public static IPiece getPningPiece(Coord cS, Coord cR, String couleur){
-        ArrayList<Coord> pathToBorder = getPathToBorder(cS, getPrimaryMove(cS, cR).inverse());
+        ArrayList<Coord> pathToBorder = getPathToBorder(cS, Coord.getPrimaryMove(cS, cR).inverse());
         IPiece piece;
         for(Coord c : pathToBorder){
             piece = getPiece(c);

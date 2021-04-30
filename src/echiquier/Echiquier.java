@@ -88,6 +88,7 @@ public class Echiquier {
      * @param cF        la coordonnée d'arrivée
      */
     public void deplacer(Coord cS, Coord cF){
+        assert(horsLimite(cS) && horsLimite(cF));
         IPiece p = getPiece(cS);
         changePiece(cS, fabrique.getPiece('V', cS.getX(), cS.getY()));
         changePiece(cF, p);
@@ -120,7 +121,6 @@ public class Echiquier {
         return pieces;
     }
 
-
     /** Renvoie la pièce aux coordonnées
      *
      * @param c             les coordonnées
@@ -137,10 +137,10 @@ public class Echiquier {
      * */
     public static boolean voieLibre(IPiece p, Coord c){
         Coord cS = new Coord(p.getLigne(), p.getColonne());
-        if(!isStraightPath(cS, c))
+        if(!Coord.isStraightPath(cS, c))
             return true;
 
-        Coord pM = getPrimaryMove(cS, c);
+        Coord pM = Coord.getPrimaryMove(cS, c);
         // on applique le mouvement primaire une premiere fois
         // pour ne pas tester sur la case de la piece
         cS.Add(pM);
@@ -153,37 +153,7 @@ public class Echiquier {
         return true;
     }
 
-    /** Renvoie si le chemin est droit ou non
-     *
-     * @param cS                coordonnées de depart
-     * @param cF                coordonnées d'arrivé
-     * @return                  le chemin est horizontale, verticale ou diagonale
-     */
-    public static boolean isStraightPath(Coord cS, Coord cF){
-        int difX = abs(cS.getX() - cF.getX());
-        int difY = abs(cS.getY() - cF.getY());
-        return (difX == 0 ||
-                difY == 0 ||
-                difX == difY);
-    }
 
-
-    /** Renvoie le mouvement primaire entre deux points.
-     * EST(1,0),NORD_EST(1,1),NORD(0,1),NORD_OUEST(-1,1),OUEST (-1,0),SUD_OUEST(-1,-1),SUD(0,-1),SUD_EST(1,-1)
-     *
-     * @param cS                    coordonnées de la case de depart
-     * @param cF                    coordonnées de la case d'arrivé
-     * @return                      le mouvement primaire dans un tableau
-     * */
-    public static Coord getPrimaryMove(Coord cS, Coord cF){
-        int x = (cF.getX() - cS.getX());
-        int y = (cF.getY() - cS.getY());
-        if(abs(x)>1)
-            x=x/ abs(x);
-        if(abs(y)>1)
-            y=y/ abs(y);
-        return new Coord(x,y);
-    }
 
     /** Vérifie si une case aux coordonnées est vide
      *
