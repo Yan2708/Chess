@@ -84,8 +84,9 @@ public class Echiquier {
      * -    que la voie soit libre (sans obstacle)
      * -    que la case d'arrivé ne soit pas le roi ou un pièce de même couleur
      *
-     *
-     * */
+     * @param cS        la coordonnée de départ
+     * @param cF        la coordonnée d'arrivée
+     */
     public void deplacer(Coord cS, Coord cF){
         IPiece p = getPiece(cS);
         changePiece(cS, fabrique.getPiece('V', cS.getX(), cS.getY()));
@@ -93,6 +94,11 @@ public class Echiquier {
         p.newPos(cF.getX(), cF.getY());
     }
 
+    /** change une pièce sur l'échiquier
+     *
+     * @param c     la coordonnée sur l'échiquier
+     * @param p     la piece remplaçante
+     */
     public static void changePiece(Coord c, IPiece p){
         echiquier[c.getX()][c.getY()] = p;
     }
@@ -222,12 +228,17 @@ public class Echiquier {
         throw new RoiIntrouvableException();
     }
 
+    /** vérifie si des pions peuvent être promus
+     *
+     * @param couleur   la couleur des pièces à vérifier
+     */
     public void checkForPromote(String couleur){
         int x = couleur.equals("BLANC") ? 0 : 7;
         for(IPiece p : echiquier[x])
             if(p.getPieceType().equals("PION")){
                 int y = p.getColonne();
-                echiquier[x][y] = fabrique.getPiece('D', x, y);
+                char type = p.getCouleur().equals("NOIR")?'d':'D';
+                echiquier[x][y] = fabrique.getPiece(type, x, y);
             }
 
     }

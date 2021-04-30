@@ -13,17 +13,24 @@ import static echiquier.Regle.*;
 
 public class Application {
 
-    private static final String LETTRES = "ABCDEFGH";
-    private static final String CHIFFRES = "12345678";
+    private static final String LETTRES = "ABCDEFGH"; // les lettres de l'echiquier
+    private static final String CHIFFRES = "12345678";  // les chiffres de l'echiquier
     private static Coord cS, cF; //, lastCF, lastCS;
-    private static String actif, passif;
+    private static String actif, passif; // les différents joueurs
 
-
+    /** Conversion d'un char représentant une partie de coordonnée en int
+     *
+     * @param c le char
+     * @return  le chiffre correspondant
+     */
     private static int getIntFromChar(char c){
         return Character.isDigit(c) ? abs(c - 56) : Character.toUpperCase(c) - 64;
     }
 
-
+    /** converti un coup en coordonnées
+     *
+     * @param c le coup
+     */
     private static void getCoordFromString(String c){
         cS = new Coord(getIntFromChar(c.charAt(1)), getIntFromChar(c.charAt(0)) - 1);
         cF = new Coord(getIntFromChar(c.charAt(3)), getIntFromChar(c.charAt(2)) - 1);
@@ -34,6 +41,11 @@ public class Application {
 //        lastCF = new Coord(cF.getX(), cF.getY());
 //    }
 
+    /** Vérifie qu'une entrée est valide syntaxiquement
+     *
+     * @param c l'entrée
+     * @return  si l'entrée est valide
+     */
     private static boolean isInputValid(String c){
         return  c.length() == 4 &&
                 LETTRES.contains(c.substring(0,1).toUpperCase())   &&
@@ -42,6 +54,13 @@ public class Application {
                 CHIFFRES.contains(c.substring(3));
     }
 
+    /** Vérifie qu'une entrée est une coup jouable
+     *
+     * @param c         l'entrée
+     * @param cR        la position du roi
+     * @param enemies   les pièces ennemies
+     * @return          si l'entrée est un coup légal ou non
+     */
     private static boolean isSemanticValid(String c, Coord cR, ArrayList<IPiece> enemies){
         getCoordFromString(c);
 //        String couleurOpp = couleur.equals("BLANC") ? "NOIR" : "BLANC";
@@ -63,8 +82,9 @@ public class Application {
 
     /**Récupère l'entrée de l'uttilisateur, son coup.
      * Cette méthode utilise la classe Scanner qui couplé à un flux comme system.in
-     * permet d'extraire les informations données qui sont ensuite retourné dans un String
+     * permet d'extraire les informations données qui sont ensuite retournées dans un String
      *
+     * @param sc            le scanner
      * @return              un String contenant les coups du joue
      */
     private static String getUsersLine(Scanner sc) {
@@ -77,7 +97,6 @@ public class Application {
         Echiquier e = new Echiquier(new FabriquePiece(), "R7/D7/8/8/8/8/7r/4d7");
         actif = "BLANC";
         passif = "NOIR";
-        String message = "Les "+ passif + "S ont perdu";
 
         @SuppressWarnings("resource")
         Scanner sc = new Scanner(System.in);
@@ -89,7 +108,7 @@ public class Application {
             ArrayList<IPiece> piecesPassif = getPieceFromColor(passif);
 
             if(isStaleMate(piecesPassif, piecesActif, passif, cR)){
-                message = "EGALITE PAR PAT !";
+                System.out.println("EGALITE PAR PAT !");
                 break;
             }
 

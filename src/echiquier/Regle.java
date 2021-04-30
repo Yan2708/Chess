@@ -83,11 +83,11 @@ public class Regle {
 
     /** Verifie si une piece peut s'interposer entre la piece qui met en echec le roi et le roi.
      *  Cette piece doit valider 3 conditions :
-     *  elle ne doit pas etre le roi, le coup doit etre valide et la piece ne doit pas etre cloué.
+     *  elle ne doit pas etre le roi, le coup doit etre valide et la piece ne doit pas etre clouée.
      *
-     * @param couleur       la couleur allié
+     * @param enemies       les pièces ennemies
+     * @param couleur       la couleur alliée
      * @param cR            les coordonnées du roi
-     * AFAIRE
      * @return              une piece peut etre posée dans le chemin
      */
     private static boolean isBlocked(ArrayList<IPiece> enemies, String couleur, Coord cR){
@@ -123,12 +123,12 @@ public class Regle {
     /** verifie avec les coordonnée du roi si celui-ci est attaquée par les pieces adverses.
      *
      * @param cR            les coordonnées du roi
-     * @param pieces        les pièces présente sur l'échiquier
+     * @param pieces        les pièces présentes sur l'échiquier
      * @return              si une pièce(s) menace(s) le roi
      */
     public static boolean checkIfCheck(Coord cR, ArrayList<IPiece> pieces){
         for(IPiece p : pieces)
-            // la coordonnées est attaqué par une piece adverse
+            // la coordonnée est attaquée par une piece adverse
             if(isCheck(cR, p))
                 return true;
 

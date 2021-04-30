@@ -93,7 +93,14 @@ public class Utils {
     }
 
 
-
+    /** Retourne toutes les coordonnées possibles pour une pièce
+     *
+     * @param p         la pièce
+     * @param cR        la position du roi
+     * @param couleur   la couleur de l'ennemi
+     * @param pieces    les pièces ennemies
+     * @return          les coordonnées de déplacement possibles d'une pièce
+     */
     public static ArrayList<Coord> getAllMoves(IPiece p, Coord cR, String couleur, ArrayList<IPiece> pieces){
         Coord cS = new Coord(p.getLigne(), p.getColonne());
         ArrayList<Coord> allMoves = new ArrayList<>();
@@ -124,6 +131,13 @@ public class Utils {
         return allMoves;
     }
 
+    /** Retourne les déplacements possibles d'une pièce pour défendre son roi
+     *
+     * @param p                 la pièce
+     * @param cR                la position du roi
+     * @param checkingPiece     les pièces ennemies
+     * @return                  les coordonnées possibles de la pièce pour défendre son roi
+     */
     public static ArrayList<Coord> allMovesDefendingCheck(IPiece p, Coord cR, ArrayList<IPiece> checkingPiece){
         ArrayList<Coord> moves = new ArrayList<>();
 
@@ -139,6 +153,14 @@ public class Utils {
         return moves;
     }
 
+    /** Retourne les coordonnées de déplacement possibles pour une pièce clouée
+     *
+     * @param p         la pièce clouée
+     * @param cS        les coordonnées de la pièce
+     * @param cR        les coordonnées du roi
+     * @param couleur   la couleur des ennemis
+     * @return          la liste des coordonnées
+     */
     private static ArrayList<Coord> allMovesFromPin(IPiece p, Coord cS, Coord cR, String couleur){
         ArrayList<Coord> moves = new ArrayList<>();
         IPiece pningPiece = getPningPiece(cS, cR, couleur);
@@ -146,6 +168,7 @@ public class Utils {
         if(getPningPiece(cS, cR, couleur) == null)
             return moves;
 
+        assert pningPiece != null;
         ArrayList<Coord> path = getPath(cS, new Coord(pningPiece.getLigne(), pningPiece.getColonne()));
 
         for(Coord c : path)
@@ -154,9 +177,16 @@ public class Utils {
         return moves;
     }
 
+    /** Retourne la pièce susceptible d'attaquer le roi si la pièce clouée n'est plus là
+     *
+     * @param cS        la position de la pièce
+     * @param cR        la position du roi
+     * @param couleur   la couleur ennemie
+     * @return          la pièce qui cloue ou rien
+     */
     public static IPiece getPningPiece(Coord cS, Coord cR, String couleur){
         ArrayList<Coord> pathToBorder = getPathToBorder(cS, getPrimaryMove(cS, cR).inverse());
-        IPiece piece = null;
+        IPiece piece;
         for(Coord c : pathToBorder){
             piece = getPiece(c);
 
@@ -165,9 +195,8 @@ public class Utils {
                     piece.estPossible(cR.getX(), cR.getY()))    // et le roi juste apres.
 
                 return piece;
-            piece = null;
         }
-        return piece;
+        return null;
     }
 
 }
