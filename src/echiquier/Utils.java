@@ -105,9 +105,12 @@ public class Utils {
         Coord cS = new Coord(p.getLigne(), p.getColonne());
         ArrayList<Coord> allMoves = new ArrayList<>();
 
-        if(isPiecePinned(p, cR, couleur)) {
+        if(isPiecePinned(p, cR, couleur))
             return allMovesFromPin(p, cS, cR, couleur);
-        }
+
+
+        if(!p.getPieceType().equals("ROI") && checkIfCheck(cR, pieces))
+            return allMovesDefendingCheck(p, cR, getAllCheckingPiece(cR, pieces));
 
         for (int x = 0; x < LIGNE; x++) {
             for (int y = 0; y < COLONNE; y++) {

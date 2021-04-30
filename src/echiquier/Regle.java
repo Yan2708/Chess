@@ -127,12 +127,7 @@ public class Regle {
      * @return              si une pièce(s) menace(s) le roi
      */
     public static boolean checkIfCheck(Coord cR, ArrayList<IPiece> pieces){
-        for(IPiece p : pieces)
-            // la coordonnée est attaquée par une piece adverse
-            if(isCheck(cR, p))
-                return true;
-
-        return false;
+        return !getAllCheckingPiece(cR, pieces).isEmpty();
     }
 
     /** Retourne si le roi est mit en echec par une pièce ou non

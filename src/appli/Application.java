@@ -94,7 +94,7 @@ public class Application {
 
     public static void main(String[] args) throws RoiIntrouvableException {
 
-        Echiquier e = new Echiquier(new FabriquePiece(), "R7/D7/8/8/8/8/7r/4d7");
+        Echiquier e = new Echiquier(new FabriquePiece());
         actif = "BLANC";
         passif = "NOIR";
 
