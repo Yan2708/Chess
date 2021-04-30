@@ -45,13 +45,6 @@ public abstract class Piece implements IPiece
     /**
      * {@inheritDoc}
      */
-    public IPiece changeToVide(int x,int y){
-        return new Vide(x, y, Couleur.VIDE);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public String getCouleur(){
         return this.couleur.toString();
     }

@@ -47,11 +47,4 @@ public interface IPiece {
      */
     void newPos(int ligne, int colonne);
 
-    /** Renvoie une Pièce vide à la position indiquée
-     *
-     * @param x         la coordonnée en x
-     * @param y         la coordonnée en y
-     * @return          la pièce vide
-     */
-    IPiece changeToVide(int x,int y);
 }

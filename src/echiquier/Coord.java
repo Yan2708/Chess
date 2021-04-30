@@ -47,9 +47,10 @@ public class Coord {
     /** Inverse les valeurs de la coordonnée
      *
      */
-    public void inverse(){
-        this.x = -(x);
-        this.y = -(y);
+    public Coord inverse(){
+         this.x = -(x);
+         this.y = -(y);
+        return this;
     }
 
     /** Méthode de comparaison d'une coordonnée à un objet

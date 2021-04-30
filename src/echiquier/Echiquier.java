@@ -23,13 +23,7 @@ public class Echiquier {
     /** l'échiquier est représenté par un tableau 2d de pieces*/
     private static IPiece[][] echiquier;
 
-    /** Getter de l'échiquier
-     *
-     * @return              l'echiquier
-     * */
-    public IPiece[][] getEchiquier(){
-        return echiquier;
-    }
+    private IFabriquePiece fabrique;
 
     /** constructeur de l'échiquier
      *
@@ -38,6 +32,8 @@ public class Echiquier {
      * */
     public Echiquier(IFabriquePiece fabrique, String fen) {
         echiquier = new IPiece[LIGNE][COLONNE ];
+        this.fabrique = fabrique;
+
         String[] splittedFen = fen.split("/");  //  le fen est divisé pour n'avoir qu'un tableau de ligne
 
         for(int lig = 0, idx = 0; lig < LIGNE ; lig++, idx++) {
@@ -92,17 +88,13 @@ public class Echiquier {
      * */
     public void deplacer(Coord cS, Coord cF){
         IPiece p = getPiece(cS);
-        changePiece(cS, p.changeToVide(cS.getX(), cS.getY()));
+        changePiece(cS, fabrique.getPiece('V', cS.getX(), cS.getY()));
         changePiece(cF, p);
         p.newPos(cF.getX(), cF.getY());
     }
 
     public static void changePiece(Coord c, IPiece p){
         echiquier[c.getX()][c.getY()] = p;
-    }
-
-    public static void promote(Coord c, FabriquePiece f,char type){
-        changePiece(c,f.getPiece(type,c.getX(),c.getY()));
     }
 
     /** Renvoie toutes une liste comportant toutes les pieces de l'echiquier
@@ -229,6 +221,17 @@ public class Echiquier {
                     return new Coord(p.getLigne(),p.getColonne());
         throw new RoiIntrouvableException();
     }
+
+    public void checkForPromote(String couleur){
+        int x = couleur.equals("BLANC") ? 0 : 7;
+        for(IPiece p : echiquier[x])
+            if(p.getPieceType().equals("PION")){
+                int y = p.getColonne();
+                echiquier[x][y] = fabrique.getPiece('D', x, y);
+            }
+
+    }
+
 
     /** Créer une chaîne de caractères comportant l'ensemble de l'échiquier.
      *
