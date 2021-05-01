@@ -9,10 +9,10 @@ public enum PieceType {
     DAME,
     ROI;
 
-    /** Retourne le type de pièce selon la pièce demandée
-     *
-     * @param c         le caractère représentant la pièce
-     * @return          le type de pièce
+    /**
+     * Retourne le type de pièce selon la pièce demandée
+     * @param c le caractère représentant la pièce
+     * @return le type de pièce
      */
     public static PieceType getInstance(char c)  {
         switch(c){

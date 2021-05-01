@@ -4,8 +4,8 @@ import static pieces.PieceType.VIDE;
 
 public class Vide extends Piece{
 
-    /** Constructeur d'une pièce vide
-     *
+    /**
+     * Constructeur d'une pièce vide
      * @see Piece#Piece(int, int, Couleur, PieceType)
      */
     public Vide(int ligne, int colonne, Couleur c) {

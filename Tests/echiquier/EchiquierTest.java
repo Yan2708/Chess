@@ -11,13 +11,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EchiquierTest {
 
+    /** test le renvoie de pieces selon la couleur donnée*/
     @Test
     void TestgetPieceFromColor(){
         Echiquier e = new Echiquier(new FabriquePiece(),"RRRRR3/R1R5/rrrrrrRr/8/8/r7/5R2/8");
         ArrayList<IPiece> noir =getPieceFromColor("NOIR");
         ArrayList<IPiece> blanc =getPieceFromColor("BLANC");
-        assertEquals(noir.size(), 8);
-        assertEquals(blanc.size(), 9);
+        assertEquals(noir.size(), 8);   //il y a 8 roi noir dans la fen
+        assertEquals(blanc.size(), 9);  //9 roi blanc dans la fen
         for (IPiece p : noir) {
             assertEquals(p.getPieceType(), "ROI");
         }
@@ -26,6 +27,7 @@ class EchiquierTest {
         }
     }
 
+    /** test la verification pour deux coords si le chemin n'a pas d'obstacle*/
     @Test
     void TestVoieLibre(){
         Echiquier e = new Echiquier(new FabriquePiece(),"r7/1T6/8/8/R7/8/8/8");
@@ -35,7 +37,7 @@ class EchiquierTest {
         assertFalse(voieLibre(getPiece(new Coord(0,0) ),new Coord(7,7)));
     }
 
-
+    /** test si l'arrivé d'une piece vers une coordonné est valide (couleur differente) */
     @Test
     void TestIsFinishValid(){
         Echiquier e = new Echiquier(new FabriquePiece(),"r7/RT6/8/8/8/8/8/8");
@@ -49,8 +51,9 @@ class EchiquierTest {
         assertTrue(isFinishValid(getPiece(new Coord(1,0)),new Coord(2,1)));
     }
 
+    /** test la localisation du roi*/
     @Test
-    void testLocateKing() throws RoiIntrouvableException {
+    void testLocateKing() {
         Echiquier e = new Echiquier(new FabriquePiece(),"r7/RT6/8/8/8/8/8/8");
         assertEquals(new Coord(0, 0), locateKing("NOIR"));
         assertEquals(new Coord(1, 0), locateKing("BLANC"));
@@ -58,6 +61,7 @@ class EchiquierTest {
         assertEquals(new Coord(5, 6), locateKing("NOIR"));
     }
 
+    /** test la detection de promotion et la promotion des pions en dame*/
     @Test
     void testCheckForPromote(){
         Echiquier e = new Echiquier(new FabriquePiece(),"p2P3T/RT6/8/8/PPPPPPpp/8/8/rrrrpPpc");
@@ -93,6 +97,4 @@ class EchiquierTest {
 //        Echiquier e = new Echiquier(new FabriquePiece());
 //        Coord cR = locateKing("BLANC");
 //    }
-
-
 }

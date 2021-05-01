@@ -12,12 +12,12 @@ public abstract class Piece implements IPiece
     //Le type de pièce
     private final PieceType type;
 
-    /** Constructeur d'une pièce
-     *
-     * @param ligne          la position en x de la pièce
-     * @param colonne        la position en y de la pièce
-     * @param c              la couleur de la pièce
-     * @param pT             le type de pièce
+    /**
+     * Constructeur d'une pièce
+     * @param ligne la position en x de la pièce
+     * @param colonne la position en y de la pièce
+     * @param c la couleur de la pièce
+     * @param pT le type de pièce
      */
     public Piece(int ligne, int colonne, Couleur c, PieceType pT) {
         newPos(ligne,colonne);
@@ -32,10 +32,10 @@ public abstract class Piece implements IPiece
         setPos(ligne,colonne);
     }
 
-    /** Met les nouvelles coordonnées de la pièce
-     *
-     * @param ligne         la nouvelle coordonnée en x
-     * @param colonne       la nouvelle coordonnée en y
+    /**
+     * Met les nouvelles coordonnées de la pièce
+     * @param ligne la nouvelle coordonnée en x
+     * @param colonne la nouvelle coordonnée en y
      */
     public void setPos(int ligne, int colonne){
         this.ligne = ligne;
@@ -54,9 +54,9 @@ public abstract class Piece implements IPiece
      */
     public abstract boolean estPossible(int ligne, int colonne);
 
-    /** Renvoie le symbole de la pièce
-     *
-     * @return          le symbole de la pièce
+    /**
+     * Renvoie le symbole de la pièce
+     * @return le symbole de la pièce
      */
     public abstract String getSymbole();
 

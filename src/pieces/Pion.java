@@ -11,7 +11,8 @@ public class Pion extends Piece{
 
     private int forward;
 
-    /** Constructeur d'un pion
+    /**
+     * Constructeur d'un pion
      * @see Piece#Piece(int, int, Couleur, PieceType)
      */
     public Pion(int ligne, int colonne, Couleur c) {

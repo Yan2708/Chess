@@ -1,7 +1,5 @@
 package echiquier;
 
-import com.sun.org.apache.xalan.internal.xsltc.dom.ArrayNodeListIterator;
-
 import static echiquier.Echiquier.*;
 import static echiquier.Regle.*;
 
@@ -11,37 +9,36 @@ import static echiquier.Echiquier.horsLimite;
 
 public class Utils {
 
-    /** Renvoie une liste de coordonnées allant d'une position donnée à la limite de l'echiquier.
-     *
-     * @param cS            coord d'arrivé
-     * @param cP            mouvement primaire
-     * @return              les coordonnées
+    /**
+     * Renvoie une liste de coordonnées allant d'une position donnée à la limite de l'echiquier.
+     * @param cS oord d'arrivé
+     * @param cP mouvement primaire
+     * @return les coordonnées
      */
     public static ArrayList<Coord> getPathToBorder(Coord cS, Coord cP) {
         ArrayList<Coord> tile = new ArrayList<>();
         Coord cClone = new Coord(cS.getX(), cS.getY());   // clone pour manipuler
 
         // on applique le mouvement primaire tant que la limite de l'echiquier n'est pas atteinte
-        cClone.Add(cP);
         while (horsLimite(cClone)){
             Coord c = new Coord(cClone.getX(), cClone.getY());
-            tile.add(c);
-            cClone.Add(cP);
+            tile.add(c);        //add = ajout dans l'arraylist
+            cClone.Add(cP);     //add = addition de coordonnées avec un mvnt primaire
         }
         return tile;
     }
 
-    /** Renvoie une liste de coordonnées de case entre la piece qui met le roi en echec et le roi.
-     *
-     * @param cS        la coordonnée de départ
-     * @param cF        la coordonnée d'arrivée
-     * @return          les coordonnées de la demi-droite entre la piece qui le met en echec et le roi
+    /**
+     * Renvoie le chemin de coordonnées entre deux coordonnées (Une liste de coord).
+     * @param cS la coordonnée de départ
+     * @param cF la coordonnée d'arrivée
+     * @return les coordonnées de la droite entre les deux coords.
      */
     public static ArrayList<Coord> getPath(Coord cS, Coord cF){
         ArrayList<Coord> tile = new ArrayList<>();
         Coord cClone = new Coord(cS.getX(), cS.getY());
         if(!Coord.isStraightPath(cS, cF))        //  si le chemin n'est pas verticale ou horizontale
-            return tile;            //  il y a pas de chemin de case attaqué.
+            return tile;                        //  il y a pas de chemin de case attaqué.
 
         Coord pM = Coord.getPrimaryMove(cS, cF);
 
@@ -50,58 +47,63 @@ public class Utils {
             cClone.Add(pM);
         }
 
-        tile.add(cClone);   //pour avoir la case d'arriver
+        tile.add(cClone);   //dernier ajout pour avoir la case d'arriver
 
         return tile;
     }
 
-    /** Renvoie un liste de coordonnées definissant le chemin entre un piece attaquant
-     * le roi et la limite de l'echiquier en passant par le roi.
-     *
-     * @param c        les coordonnées du roi
-     * @param pieces    les  pieces qui mettent le roi en echec
-     * @return          les cases passant par les pieces attaquantes et le roi jusqu'a la limite de l'echiquier
+    /**
+     * Renvoie un liste contenant tout les chemins entre les pieces attaquantes
+     * et le roi jusqu'aux limites de l'echiquier.
+     * Cela permet de retirer ces cases au mouvement possible du roi par exemple.
+     * @param cR les coordonnées du roi
+     * @param pieces les  pieces attaquant la coordonnée
+     * @return les cases passant par les pieces attaquantes et le roi jusqu'a la limite de l'echiquier
+     * @see Utils#getAllMoves(IPiece, Coord, String, ArrayList) exemple d'usage
      */
-    public static ArrayList<Coord> getAllAttackedPath(Coord c, ArrayList<IPiece> pieces){
+    public static ArrayList<Coord> getAllAttackedPath(Coord cR, ArrayList<IPiece> pieces){
         ArrayList<Coord> coords = new ArrayList<>();
         for(IPiece p : pieces){
             Coord cS = new Coord(p.getLigne(), p.getColonne());
 
-            if(!Coord.isStraightPath(cS, c))
+            if(!Coord.isStraightPath(cS, cR))
                 continue;
 
             // en partant de la piece attaquante on prend toutes les cases jusqu'aux limites
             // en passant pas le roi.
-            Coord cP = Coord.getPrimaryMove(cS, c);
+            Coord cP = Coord.getPrimaryMove(cS, cR);
             coords.addAll(getPathToBorder(cS, cP));
         }
         return coords;
     }
 
-    /** Retourne toutes les pièces mettant en echec le roi
-     *
-     * @param c         les coordonnées du roi
-     * @param pieces    les pièces enemies
-     * @return          une liste des pièces mettant le roi en echec
+    /**
+     * Retourne toutes les pièces attaquant une coordonnées.
+     * @param c la coordonnée
+     * @param pieces les pièces enemies
+     * @return une liste des pièces attaquantes
      */
-    public static ArrayList<IPiece> getAllCheckingPiece(Coord c, ArrayList<IPiece> pieces){
+    public static ArrayList<IPiece> getAllAttackingPiece(Coord c, ArrayList<IPiece> pieces){
         ArrayList<IPiece> cPiece = new ArrayList<>();
         for(IPiece p : pieces)
-            if(isCheck(c, p))
+            if(canBeAttacked(c, p))
                 cPiece.add(p);
         return cPiece;
     }
 
 
-    /** Retourne toutes les coordonnées possibles pour une pièce
-     *
-     * @param p         la pièce
-     * @param cR        la position du roi
-     * @param couleur   la couleur de l'ennemi
-     * @param pieces    les pièces ennemies
-     * @return          les coordonnées de déplacement possibles d'une pièce
+    /**
+     * Retourne toutes les coordonnées possibles pour une pièce
+     * le traitement peut etre different selon l'etat de la partie et de la piece:
+     * si une piece est cloué celle-ci peut toujours se deplacer tant qu'elle est cloué.
+     * si le roi est en echec les mouvements d'une pieces ne peut que bloqué cette attaque.
+     * @param p la pièce
+     * @param cR la position du roi
+     * @param couleur la couleur de l'ennemi
+     * @param ennemies les pièces ennemies
+     * @return les coordonnées de déplacement possibles d'une pièce
      */
-    public static ArrayList<Coord> getAllMoves(IPiece p, Coord cR, String couleur, ArrayList<IPiece> pieces){
+    public static ArrayList<Coord> getAllMoves(IPiece p, Coord cR, String couleur, ArrayList<IPiece> ennemies){
         Coord cS = new Coord(p.getLigne(), p.getColonne());
         ArrayList<Coord> allMoves = new ArrayList<>();
 
@@ -109,8 +111,26 @@ public class Utils {
             return allMovesFromPin(p, cS, cR, couleur);
 
 
-        if(!p.getPieceType().equals("ROI") && checkIfCheck(cR, pieces))
-            return allMovesDefendingCheck(p, cR, getAllCheckingPiece(cR, pieces));
+        if(!p.getPieceType().equals("ROI") && isAttacked(cR, ennemies))
+            return allMovesDefendingCheck(p, cR, getAllAttackingPiece(cR, ennemies));
+
+        allMoves = allClassicMoves(p, cS, ennemies);
+
+        if(p.getPieceType().equals("ROI"))
+            allMoves.removeIf(getAllAttackedPath(cR, ennemies)::contains);    //les cases attaqués sont retirés
+
+        return allMoves;
+    }
+
+    /**
+     * renvoie la liste de toutes les coordonnées atteignable dans l'echiquier par une piece donnée.
+     * @param p la piece
+     * @param cS les coordonnées de la piece
+     * @param ennemies les pieces ennemies
+     * @return la liste des coordonnées atteignable
+     */
+    private static ArrayList<Coord> allClassicMoves(IPiece p, Coord cS, ArrayList<IPiece> ennemies){
+        ArrayList<Coord> allClassicMoves = new ArrayList<>();
 
         for (int x = 0; x < LIGNE; x++) {
             for (int y = 0; y < COLONNE; y++) {
@@ -120,35 +140,38 @@ public class Utils {
                 Coord c = new Coord(x, y);
                 if(isCoupValid(c, p)) {
 
-                    if(p.getPieceType().equals("ROI") && checkIfCheck(c, pieces))
-                        continue;
-
-                    allMoves.add(c);
+                    if(p.getPieceType().equals("ROI") && isAttacked(c, ennemies))   //si la piece est un roi et que
+                        continue;                                                   //la coordonnées est attaqué
+                    //le coup le est invalide
+                    allClassicMoves.add(c);
                 }
             }
         }
-
-        if(p.getPieceType().equals("ROI"))
-            allMoves.removeIf(getAllAttackedPath(cR, pieces)::contains);
-
-        return allMoves;
+        return allClassicMoves;
     }
 
-    /** Retourne les déplacements possibles d'une pièce pour défendre son roi
-     *
-     * @param p                 la pièce
-     * @param cR                la position du roi
-     * @param checkingPiece     les pièces ennemies
-     * @return                  les coordonnées possibles de la pièce pour défendre son roi
+    /**
+     * Retourne les déplacements possibles d'une pièce pour défendre son roi
+     * @param p la pièce
+     * @param cR la position du roi
+     * @param ennemies les pièces ennemies
+     * @return les coordonnées possibles de la pièce pour défendre son roi
      */
-    public static ArrayList<Coord> allMovesDefendingCheck(IPiece p, Coord cR, ArrayList<IPiece> checkingPiece){
+    public static ArrayList<Coord> allMovesDefendingCheck(IPiece p, Coord cR, ArrayList<IPiece> ennemies){
         ArrayList<Coord> moves = new ArrayList<>();
 
-        if(checkingPiece.size() != 1 || p.getPieceType().equals("ROI"))
-            return moves;
+        if(ennemies.size() != 1 || p.getPieceType().equals("ROI"))     //s'il y a plusieurs piece attaquante
+            return moves;                                                   //une piece ne peut pas defendre
 
-        IPiece chkP = checkingPiece.get(0);
-        ArrayList<Coord> path = getPath(cR, new Coord(chkP.getLigne(), chkP.getColonne()));
+        IPiece chkP = ennemies.get(0);
+        Coord cF = new Coord(chkP.getLigne(), chkP.getColonne());
+        ArrayList<Coord> path = getPath(cR, cF); //le chemin entre le roi
+                                                // et la piece attaquante
+
+        if(isCoupValid(cF, p)) {    //dans le cas ou un cavalier venait a mettre le roi en echec et mat,
+            moves.add(cF);          //on regarde s'il est possible de le prendre sans passer par "path"
+            path.remove(cF);        //car le chemin entre un cavalier et une piece n'est jamais
+        }                           //droit.
 
         for(Coord c : path)
             if(isCoupValid(c, p))
@@ -156,21 +179,21 @@ public class Utils {
         return moves;
     }
 
-    /** Retourne les coordonnées de déplacement possibles pour une pièce clouée
-     *
-     * @param p         la pièce clouée
-     * @param cS        les coordonnées de la pièce
-     * @param cR        les coordonnées du roi
-     * @param couleur   la couleur des ennemis
-     * @return          la liste des coordonnées
+    /**
+     * Retourne les coordonnées de déplacement possibles pour une pièce clouée
+     * @param p la pièce clouée
+     * @param cS les coordonnées de la pièce
+     * @param cR les coordonnées du roi
+     * @param couleur la couleur des ennemis
+     * @return la liste des coordonnées
      */
     private static ArrayList<Coord> allMovesFromPin(IPiece p, Coord cS, Coord cR, String couleur){
         ArrayList<Coord> moves = new ArrayList<>();
-        IPiece pningPiece = getPningPiece(cS, cR, couleur);
+        IPiece pningPiece = getPningPiece(cS, cR, couleur); //la piece clouante
 
         if(getPningPiece(cS, cR, couleur) == null)
             return moves;
-        assert pningPiece != null;
+
         ArrayList<Coord> path = getPath(cS, new Coord(pningPiece.getLigne(), pningPiece.getColonne()));
 
         for(Coord c : path)
@@ -179,26 +202,25 @@ public class Utils {
         return moves;
     }
 
-    /** Retourne la pièce susceptible d'attaquer le roi si la pièce clouée n'est plus là
-     *
-     * @param cS        la position de la pièce
-     * @param cR        la position du roi
-     * @param couleur   la couleur ennemie
-     * @return          la pièce qui cloue ou rien
+    /**
+     * Retourne la pièce susceptible d'attaquer le roi si la pièce clouée n'est plus là
+     * @param cS la position de la pièce
+     * @param cR la position du roi
+     * @param couleur la couleur ennemie
+     * @return la pièce qui cloue ou rien
      */
     public static IPiece getPningPiece(Coord cS, Coord cR, String couleur){
         ArrayList<Coord> pathToBorder = getPathToBorder(cS, Coord.getPrimaryMove(cS, cR).inverse());
-        IPiece piece;
         for(Coord c : pathToBorder){
-            piece = getPiece(c);
+            IPiece piece = getPiece(c);
 
-            if(piece.getCouleur().equals(couleur) &&        // si dans ce chemin il y a une piece
-                    isCoupValid(cS, piece) &&                   // suceptible d'attaquer la piece qui defend
+            if(piece.getCouleur().equals(couleur) &&            // si dans ce chemin il y a une piece
+                    isCoupValid(cS, piece) &&                   // si la piece peut prendre la piece clouée
                     piece.estPossible(cR.getX(), cR.getY()))    // et le roi juste apres.
 
                 return piece;
         }
-        return null;
+        return null;    //aucune piece clouante
     }
 
 }

@@ -5,8 +5,8 @@ import static pieces.PieceType.CAVALIER;
 
 public class Cavalier extends Piece{
 
-    /** Constructeur d'un cavalier
-     *
+    /**
+     * Constructeur d'un cavalier
      * @see Piece#Piece(int, int, Couleur, PieceType)
      */
     public Cavalier(int ligne, int colonne, Couleur c) {

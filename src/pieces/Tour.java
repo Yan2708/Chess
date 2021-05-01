@@ -4,8 +4,8 @@ import static java.lang.Math.abs;
 import static pieces.PieceType.TOUR;
 
 public class Tour extends Piece{
-    /** Constructeur d'une tour
-     *
+    /**
+     * Constructeur d'une tour
      * @see Piece#Piece(int, int, Couleur, PieceType)
      */
     public Tour(int ligne, int colonne, Couleur c) {
