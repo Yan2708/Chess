@@ -2,17 +2,22 @@ package echiquier;
 
 import static java.lang.Math.abs;
 
-/**permet de manipuler des coordonnées (x,y)
+/**
+ * permet de manipuler des coordonnées (x,y)
  * notation :
  * cS = cStart ----> coordonnées de depart
- * cF = cFinal ----> coordonnées d'arrivé */
+ * cF = cFinal ----> coordonnées d'arrivé
+ * cR = CRoi ----> coordonnées du roi
+ * etc...
+ */
 public class Coord {
 
-
+    /* X represente les lignes et y les colonnes d'un tableau 2d
+     */
     private int x,y;
 
-    /** Constructeur de coordonnée
-     *
+    /**
+     * Constructeur de coordonnée
      * @param x la coordonnée en x
      * @param y la coordonnée en y
      */
@@ -21,34 +26,34 @@ public class Coord {
         this.y = y;
     }
 
-    /** Getter de x
-     *
+    /**
+     * Getter de x
      * @return x
      */
     public int getX() {
         return x;
     }
 
-    /** Getter de y
-     *
+    /**
+     * Getter de y
      * @return y
      */
     public int getY() {
         return y;
     }
 
-    /** Ajoute les valeurs d'une coordonnée à une autre
-     *
-     * @param c             la coordonnée a ajouter (mouvement primaire)
+    /**
+     * Ajoute les valeurs d'une coordonnée à une autre
+     * @param c la coordonnée a ajouter (mouvement primaire)
      */
     public void Add(Coord c){
         this.x += c.x;
         this.y += c.y;
     }
 
-    /** Inverse les valeurs de la coordonnée
-     *
-     * @return      la coordonnée inversée
+    /**
+     * Inverse les valeurs de la coordonnée
+     * @return la coordonnée inversée
      */
     public Coord inverse(){
          this.x = -(x);
@@ -56,11 +61,11 @@ public class Coord {
         return this;
     }
 
-    /** Renvoie si le chemin est droit ou non
-     *
-     * @param cS                coordonnées de depart
-     * @param cF                coordonnées d'arrivé
-     * @return                  le chemin est horizontale, verticale ou diagonale
+    /**
+     * Renvoie si le chemin est droit ou non
+     * @param cS coordonnées de depart
+     * @param cF coordonnées d'arrivé
+     * @return le chemin est horizontale, verticale ou diagonale
      */
     public static boolean isStraightPath(Coord cS, Coord cF){
         int difX = abs(cS.getX() - cF.getX());
@@ -71,12 +76,12 @@ public class Coord {
     }
 
 
-    /** Renvoie le mouvement primaire entre deux points.
+    /**
+     * Renvoie le mouvement primaire entre deux points.
      * EST(1,0),NORD_EST(1,1),NORD(0,1),NORD_OUEST(-1,1),OUEST (-1,0),SUD_OUEST(-1,-1),SUD(0,-1),SUD_EST(1,-1)
-     *
-     * @param cS                    coordonnées de la case de depart
-     * @param cF                    coordonnées de la case d'arrivé
-     * @return                      le mouvement primaire dans un tableau
+     * @param cS coordonnées de la case de depart
+     * @param cF coordonnées de la case d'arrivé
+     * @return le mouvement primaire dans un tableau
      * */
     public static Coord getPrimaryMove(Coord cS, Coord cF){
         int x = (cF.getX() - cS.getX());
@@ -89,8 +94,12 @@ public class Coord {
     }
 
 
-    /** Méthode de comparaison d'une coordonnée à un objet
-     *
+    /**
+     * Méthode de comparaison d'une coordonnée à un objet.
+     * lorsque des methodes comme Contains compare deux objets elle compare les adresses
+     * de ces objets en memoire. Dans notre cas deux coordonnées peuvent etre identique
+     * sans avoir la meme adresse, alors on redefinie la method Equals pour que ces methodes
+     * n'uttilise pas la methode Equals par defaut.
      * @param o l'objet avec laquelle on veut comparer
      * @return si les objets sont identiques
      */

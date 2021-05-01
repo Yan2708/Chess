@@ -4,8 +4,8 @@ import static java.lang.Math.abs;
 import static pieces.PieceType.DAME;
 
 public class Dame  extends Piece{
-    /** Constructeur d'une dame
-     *
+    /**
+     * Constructeur d'une dame
      * @see Piece#Piece(int, int, Couleur, PieceType)
      */
     public Dame(int ligne, int colonne, Couleur c) {

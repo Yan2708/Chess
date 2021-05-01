@@ -2,7 +2,6 @@ package appli;
 
 import echiquier.*;
 import pieces.*;
-import static echiquier.Utils.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -13,147 +12,97 @@ import static echiquier.Regle.*;
 
 public class Application {
 
-    private static final String LETTRES = "ABCDEFGH"; // les lettres de l'echiquier
-    private static final String CHIFFRES = "12345678";  // les chiffres de l'echiquier
-    private static Coord cS, cF; //, lastCF, lastCS;
-    private static String actif, passif; // les différents joueurs
+    private static Joueur p1, p2;
 
-    /** Conversion d'un char représentant une partie de coordonnée en int
-     *
-     * @param c le char
-     * @return  le chiffre correspondant
-     */
-    private static int getIntFromChar(char c){
-        return Character.isDigit(c) ? abs(c - 56) : Character.toUpperCase(c) - 64;
-    }
-
-    /** converti un coup en coordonnées
-     *
-     * @param c le coup
-     */
-    private static void getCoordFromString(String c){
-        cS = new Coord(getIntFromChar(c.charAt(1)), getIntFromChar(c.charAt(0)) - 1);
-        cF = new Coord(getIntFromChar(c.charAt(3)), getIntFromChar(c.charAt(2)) - 1);
-    }
-
-//    private  static void saveCoord(){
-//        lastCS = new Coord(cS.getX(), cS.getY());
-//        lastCF = new Coord(cF.getX(), cF.getY());
-//    }
-
-    /** Vérifie qu'une entrée est valide syntaxiquement
-     *
-     * @param c l'entrée
-     * @return  si l'entrée est valide
-     */
-    private static boolean isInputValid(String c){
-        return  c.length() == 4 &&
-                LETTRES.contains(c.substring(0,1).toUpperCase())   &&
-                CHIFFRES.contains(c.substring(1,2))  &&
-                LETTRES.contains(c.substring(2,3).toUpperCase())   &&
-                CHIFFRES.contains(c.substring(3));
-    }
-
-    /** Vérifie qu'une entrée est une coup jouable
-     *
-     * @param c         l'entrée
-     * @param cR        la position du roi
-     * @param enemies   les pièces ennemies
-     * @return          si l'entrée est un coup légal ou non
-     */
-    private static boolean isSemanticValid(String c, Coord cR, ArrayList<IPiece> enemies){
-        getCoordFromString(c);
-//        String couleurOpp = couleur.equals("BLANC") ? "NOIR" : "BLANC";
-//
-//        ArrayList<IPiece> checkingPieces = getAllCheckingPiece(cR, enemies); //un roi peut etre mis en echec par 2 pieces
-//        ArrayList<Coord> checkingTiles = getAllCheckingTiles(cR, checkingPieces);
-//        if(!checkingPieces.isEmpty() && !checkingTiles.contains(cF))
-//            return false;
-//
-//
-//        IPiece p = Echiquier.getPiece(cS);
-//        return p.getCouleur().equals(couleur) &&
-//                !Regle.isPiecePinned(p, cR, couleurOpp) &&
-//                Regle.isCoupValid(cF, p);
-        IPiece p = getPiece(cS);
-        return p.getCouleur().equals(actif) &&
-                getAllMoves(p, cR, passif, enemies).contains(cF);
-    }
-
-    /**Récupère l'entrée de l'uttilisateur, son coup.
-     * Cette méthode utilise la classe Scanner qui couplé à un flux comme system.in
-     * permet d'extraire les informations données qui sont ensuite retournées dans un String
-     *
-     * @param sc            le scanner
-     * @return              un String contenant les coups du joue
-     */
-    private static String getUsersLine(Scanner sc) {
-        System.out.print("> ");
+    //private static String actif, passif; // les différents joueurs
+    private static String getMode(Scanner sc){
+        System.out.print("mode de jeux : \n" +
+                "- Player vs Player (pp) \n" +
+                "- Plaver vs Ia (pi) \n" +
+                "- Ia vs Ia (ii) \n");
         return sc.nextLine();
     }
 
-    public static void main(String[] args) throws RoiIntrouvableException {
+    private static boolean isValid(String mode){
+        switch (mode) {
+            case "pp":
+            case "pi":
+            case "ii":
+                return true;
+            default:return false;
+        }
+    }
 
-        Echiquier e = new Echiquier(new FabriquePiece(), "R7/D7/8/8/8/8/7r/4d7");
-        actif = "BLANC";
-        passif = "NOIR";
+    private static void fabriqueJoueur(String mode){
+        switch (mode) {
+            case "pp":  p1 = new Joueur("BLANC");
+                        p2 = new Joueur("NOIR");
+                        break;
+            case "pi":  p1 = new Joueur("BLANC");
+                        p2 = new IA("NOIR");
+                        break;
+            case "ii":  p1 = new IA("BLANC");
+                        p2 = new IA("NOIR");
+                        break;
+        }
+    }
 
+    public static void main(String[] args) {
+
+        Echiquier e = new Echiquier(new FabriquePiece());
         @SuppressWarnings("resource")
         Scanner sc = new Scanner(System.in);
+        String mode = getMode(sc);
+        while(!isValid(mode)){
+            System.out.println("#");
+            mode = getMode(sc);
+        }
+
+        fabriqueJoueur(mode);
+
+        Joueur actif = p1;
+        Joueur passif = p2;
+
         System.out.println(e.toString());
+
         while(true) {
-            Coord cR = locateKing(actif);
+            actif.pause();
 
-            ArrayList<IPiece> piecesActif = getPieceFromColor(actif);
-            ArrayList<IPiece> piecesPassif = getPieceFromColor(passif);
+            String couleurActif = actif.getCouleur();
+            String couleurPassif = passif.getCouleur();
 
-            if(isStaleMate(piecesPassif, piecesActif, passif, cR)){
+            Coord cR = locateKing(couleurActif);
+
+            ArrayList<IPiece> piecesActif = getPieceFromColor(couleurActif);
+            ArrayList<IPiece> piecesPassif = getPieceFromColor(couleurPassif);
+
+            if(isStaleMate(piecesPassif, piecesActif, couleurPassif, cR)){
                 System.out.println("EGALITE PAR PAT !");
                 break;
             }
 
-            String usersLine = getUsersLine(sc);
+            String usersLine = actif.getCoup(sc, piecesActif, piecesPassif, cR);
 
-//            while(true){
-//                try{
-//                    if(isInputValid(usersLine) &&
-//                            (isSemanticValid(usersLine, cR, actif, piecesPassif))) //||
-//                            //Regle.priseEnPassant(lastCS,lastCF,cS,cF)))
-//                        break;
-//                }catch(StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException ignored){}
-//                System.out.print("#");
-//                usersLine = getUsersLine(sc);
-//            }
-
-//            if(Regle.priseEnPassant(lastCS,lastCF,cS,cF))
-//                Echiquier.changePiece(lastCF,getPiece(lastCF).changeToVide(lastCF.getX(), lastCF.getY()));
-
-
-            while(isInputValid(usersLine) ? !isSemanticValid(usersLine, cR, piecesPassif) : true){
+            while(!actif.isInputValid(usersLine) || !actif.isSemanticValid(usersLine, cR, piecesPassif)){
                 System.out.print("#");
-                usersLine = getUsersLine(sc);
+                usersLine = actif.getCoup(sc, piecesActif, piecesPassif, cR);
             }
 
+            e.deplacer(actif.getcS(), actif.getcF());
 
-            e.deplacer(cS, cF);
-
-            e.checkForPromote(actif);
+            e.checkForPromote(couleurActif);
 
             //saveCoord();
             System.out.println(e.toString());
 
-            if(Regle.checkForMate(passif, locateKing(passif), piecesActif))
+            if(Regle.checkForMate(couleurPassif, locateKing(couleurPassif), piecesActif))
                 break;
 
-            String tmp=actif;
-            actif=passif;
-            passif=tmp;
-
+            Joueur tmp = actif;
+            actif = passif;
+            passif = tmp;
         }
         System.out.println("Les "+ passif + "S ont perdu");
         sc.close();
     }
-
-
-
 }

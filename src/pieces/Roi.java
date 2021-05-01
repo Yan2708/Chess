@@ -5,8 +5,8 @@ import static pieces.PieceType.ROI;
 
 public class Roi extends Piece{
 
-    /** Constructeur d'un roi
-     *
+    /**
+     * Constructeur d'un roi
      * @see Piece#Piece(int, int, Couleur, PieceType)
      */
     public Roi(int ligne, int colonne, Couleur c) {

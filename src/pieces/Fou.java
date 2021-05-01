@@ -5,9 +5,9 @@ import static pieces.PieceType.FOU;
 
 public class Fou extends Piece{
 
-    /** Constructeur d'un fou
-     *
-     * @see         Piece#Piece(int, int, Couleur, PieceType)
+    /**
+     * Constructeur d'un fou
+     * @see Piece#Piece(int, int, Couleur, PieceType)
      */
     public Fou(int ligne, int colonne, Couleur c) {
         super(ligne, colonne,c, FOU);
