@@ -64,6 +64,46 @@ public class Application {
         return false;
     }
 
+    private static boolean forfeit(Joueur actif,Scanner sc){
+        if(actif.getClass().getSimpleName().equals("IA"))
+            return false;
+        System.out.println("Voulez vous abandonner? O/N");
+        String s = sc.nextLine();
+        while(!s.toUpperCase(Locale.ROOT).equals("O") && !s.toUpperCase(Locale.ROOT).equals("N")){
+            s=sc.nextLine();
+        }
+        if(s.toUpperCase(Locale.ROOT).equals("O")) {
+            message="Les " + actif.getCouleur() + "S déclarent forfait";
+            return true;
+        }
+        return false;
+    }
+
+    private static void switchJoueur(){
+        Joueur tmp = actif;
+        actif = passif;
+        passif = tmp;
+        ///
+        couleurActif = actif.getCouleur();
+        couleurPassif = passif.getCouleur();
+    }
+
+    private static boolean partieContinue(ArrayList<IPiece> ennemies, ArrayList<IPiece> allys, Coord cR){
+        if(isStaleMate(ennemies, allys, couleurPassif, cR)) {
+            message = "Egalité par pat";
+            return true;
+        }
+        if(Regle.checkForMate(couleurActif, cR, ennemies)){
+            message="Les "+ actif.getCouleur() + "S ont perdu";
+            return true;
+        }
+        if(Regle.impossibleMat(ennemies,allys)){
+            message = "NULLE";
+            return true;
+        }
+        return false;
+    }
+
     private static void switchJoueur(){
         Joueur tmp = actif;
         actif = passif;
