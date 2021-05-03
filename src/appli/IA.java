@@ -2,13 +2,13 @@ package appli;
 
 import echiquier.Coord;
 import echiquier.IPiece;
+import echiquier.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 
-import static echiquier.Utils.getAllMoves;
 
 public class IA extends Joueur {
 
@@ -32,13 +32,12 @@ public class IA extends Joueur {
 
         HashMap<IPiece, ArrayList<Coord>> allPossibleMoves = new HashMap<>();
         for(IPiece p : allys){
-            allPossibleMoves.put(p, getAllMoves(p, cR, couleurPassif, enemies));
+            allPossibleMoves.put(p, Utils.getAllMoves(p, cR, couleurPassif, enemies));
         }
 
         Random rand = new Random();
 
         IPiece choosenP = allys.get(rand.nextInt(allys.size()));
-        ArrayList<Coord> moves = allPossibleMoves.get(choosenP);
 
         while(allPossibleMoves.get(choosenP).isEmpty())
             choosenP = allys.get(rand.nextInt(allys.size()));
@@ -55,8 +54,8 @@ public class IA extends Joueur {
     @Override
     public void pause() {
         try {
-            Thread.sleep(2000);
-        } catch (Exception e) {
+            Thread.sleep(200);
+        } catch (Exception ignored) {
         }
     }
 }

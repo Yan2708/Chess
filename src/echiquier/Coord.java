@@ -110,4 +110,22 @@ public class Coord {
         Coord coord = (Coord) o;
         return x == coord.x && y == coord.y;
     }
+
+    /**
+     * revoie le clone d'une coordonnée
+     * @return le clone
+     */
+    @Override
+    public Coord clone() {
+        return new Coord(this.x, this.y);
+    }
+
+    /**
+     * renvoie les coordonnées d'une piece
+     * @param p la piece
+     * @return sa coordonnées
+     */
+    public static Coord coordFromPiece(IPiece p){
+        return new Coord(p.getLigne(), p.getColonne());
+    }
 }
