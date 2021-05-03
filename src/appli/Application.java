@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import static echiquier.Echiquier.*;
-import static java.lang.Math.abs;
 import static echiquier.Regle.*;
 
 public class Application {
@@ -19,7 +18,8 @@ public class Application {
         System.out.print("mode de jeux : \n" +
                 "- Player vs Player (pp) \n" +
                 "- Plaver vs Ia (pi) \n" +
-                "- Ia vs Ia (ii) \n");
+                "- Ia vs Ia (ii) \n" +
+                ">");
         return sc.nextLine();
     }
 
@@ -66,7 +66,7 @@ public class Application {
         System.out.println(e.toString());
 
         while(true) {
-            actif.pause();
+            //actif.pause();
 
             String couleurActif = actif.getCouleur();
             String couleurPassif = passif.getCouleur();
@@ -102,7 +102,7 @@ public class Application {
             actif = passif;
             passif = tmp;
         }
-        System.out.println("Les "+ passif + "S ont perdu");
+        System.out.println("Les "+ passif.getCouleur() + "S ont perdu");
         sc.close();
     }
 }

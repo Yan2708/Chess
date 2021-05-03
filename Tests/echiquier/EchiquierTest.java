@@ -15,6 +15,7 @@ class EchiquierTest {
     @Test
     void TestgetPieceFromColor(){
         Echiquier e = new Echiquier(new FabriquePiece(),"RRRRR3/R1R5/rrrrrrRr/8/8/r7/5R2/8");
+        System.out.println(e);
         ArrayList<IPiece> noir =getPieceFromColor("NOIR");
         ArrayList<IPiece> blanc =getPieceFromColor("BLANC");
         assertEquals(noir.size(), 8);   //il y a 8 roi noir dans la fen
@@ -31,6 +32,7 @@ class EchiquierTest {
     @Test
     void TestVoieLibre(){
         Echiquier e = new Echiquier(new FabriquePiece(),"r7/1T6/8/8/R7/8/8/8");
+        System.out.println(e);
         assertTrue(voieLibre(getPiece(new Coord(0,0) ),new Coord(4,0)));
         assertTrue(voieLibre(getPiece(new Coord(0,0) ),new Coord(1,1)));
         assertFalse(voieLibre(getPiece(new Coord(0,0) ),new Coord(7,0)));
@@ -41,6 +43,7 @@ class EchiquierTest {
     @Test
     void TestIsFinishValid(){
         Echiquier e = new Echiquier(new FabriquePiece(),"r7/RT6/8/8/8/8/8/8");
+        System.out.println(e);
         assertTrue(isFinishValid(getPiece(new Coord(0,0)),new Coord(0,1)));
         assertTrue(isFinishValid(getPiece(new Coord(0,0)),new Coord(1,1)));
         assertFalse(isFinishValid(getPiece(new Coord(0,0)),new Coord(1,0)));
@@ -55,6 +58,7 @@ class EchiquierTest {
     @Test
     void testLocateKing() {
         Echiquier e = new Echiquier(new FabriquePiece(),"r7/RT6/8/8/8/8/8/8");
+        System.out.println(e);
         assertEquals(new Coord(0, 0), locateKing("NOIR"));
         assertEquals(new Coord(1, 0), locateKing("BLANC"));
         e.deplacer(new Coord(0, 0),new Coord(5,6));
@@ -94,7 +98,7 @@ class EchiquierTest {
 //
 //    @Test
 //    void testRoiIntrouvable() throws RoiIntrouvableException {
-//        Echiquier e = new Echiquier(new FabriquePiece());
+//        Echiquier e = new Echiquier(new FabriquePiece(), "8/8/8/8/8/8/8/ppppppppppppppppppppppppppp");
 //        Coord cR = locateKing("BLANC");
 //    }
 }

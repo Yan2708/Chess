@@ -1,7 +1,6 @@
 package echiquier;
 
 
-import static echiquier.Utils.*;
 import static echiquier.Echiquier.*;
 import static java.lang.Math.abs;
 
@@ -14,21 +13,33 @@ public class Regle {
      * Renvoie si le mouvement d'une piece vers une coordonnée est valide.
      * un coup est valide si : le mouvement est possible pour la piece
      * le chemin entre la piece et l'arrivé n'a pas d'obstacle
-     * et que la case d'arrivé peut acceuillir la piece.
+     * et que la case d'arrivé peut accueillir la piece.
      * @param c la coordonnée d'arrivée
      * @param p la coordonnée de la piece
      * @return si le déplacement est possible
      */
     public static boolean isCoupValid(Coord c, IPiece p){
-        //on divise les conditions pour la lisibilité.
-        boolean possible = p.estPossible(c.getX(),c.getY()) && voieLibre(p, c) && isFinishValid(p, c);
+        return p.estPossible(c.getX(),c.getY()) && voieLibre(p, c) && isFinishValid(p, c) &&
+                ifPawnCheck(c, p, true);
+    }
 
-        boolean isPawn = p.getPieceType().equals("PION");                       //le traitement d'un pion est different
-        boolean isDiag = priseEnDiag(p, c);                                     //si le coup est diagonale, alors
-        String color = getPiece(c).getCouleur();                                //il doit prendre un piece.
+    /**
+     * si la piece est un pion verifie si le mouvement est valide
+     * @param c la coordonnée d'arrivée
+     * @param p la coordonnée de la piece
+     * @param passiveMode la verification peut avoir deux mode :
+     *                    - le passif = le pion peut avancer ou faire une prise diagonale
+     *                    - l'agressif = le pion ne peut que faire des prise diagonale
+     * @return si le déplacement est possible
+     * @see #isCoupValid(Coord, IPiece)
+     * @see #canBeAttacked(Coord, IPiece)
+     */
+    private static boolean ifPawnCheck(Coord c, IPiece p, boolean passiveMode){
+        boolean isPawn = p.getPieceType().equals("PION");
+        boolean isDiag = priseEnDiag(p, c);
+        String color = getPiece(c).getCouleur();
         boolean isEnemy = !color.equals(p.getCouleur()) && !color.equals("VIDE");
-
-        return possible && (!isPawn || (!isDiag || isEnemy));
+        return !isPawn || (isDiag ? isEnemy : passiveMode);
     }
 
     /**
@@ -49,23 +60,22 @@ public class Regle {
      * la seconde partie verifie si le roi peut s'echapper de l'echec.
      * @param couleur la couleur du roi
      * @param cR les coordonnées du roi
-     * @param pieces toutes les pieces de l'enemi
+     * @param ennemies toutes les pieces de l'ennemi
      * @return si le roi est en échec et mat
      */
-    public static boolean checkForMate(String couleur, Coord cR, ArrayList<IPiece> pieces){
-        ArrayList<IPiece> checkingPieces = getAllAttackingPiece(cR, pieces); //un roi peut etre mis en echec par 2 pieces
+    public static boolean checkForMate(String couleur, Coord cR, ArrayList<IPiece> ennemies){
+        if(!isAttacked(cR, ennemies)) return false;  //le roi n'est pas en echec
 
-        if(checkingPieces.isEmpty()) return false;
-
+        ArrayList<IPiece> ckgPieces = Utils.getAllAttackingPiece(cR, ennemies);
         //si une piece met le roi en echec alors il est possible de defendre avec une autre piece.
-        if(!(checkingPieces.size() > 1) &&
-                isBlocked(checkingPieces, couleur, cR))
+        if(!(ckgPieces.size() > 1) &&
+                isBlocked(ennemies, couleur, cR))
             return false;
 
         //verifie si chaque mouvement possible du roi est sans danger
-        ArrayList<Coord> kingsMoves = getAllMoves(getPiece(cR), cR, couleur, pieces);
+        ArrayList<Coord> kingsMoves = Utils.getAllMoves(getPiece(cR), cR, couleur, ennemies);
         for(Coord c : kingsMoves)
-            if(!isAttacked(c, pieces))
+            if(!isAttacked(c, ennemies))
                 return false;
 
         return true;
@@ -79,13 +89,15 @@ public class Regle {
      * @param couleur la couleur alliée
      * @param cR les coordonnées du roi
      * @return une piece peut etre posée dans le chemin
+     * @see Utils#getAllMoves(IPiece, Coord, String, ArrayList) 
      */
     private static boolean isBlocked(ArrayList<IPiece> enemies, String couleur, Coord cR){
+        String oppsColor = couleur.equals("BLANC") ? "NOIR" : "BLANC";  //la couleur opposé
         ArrayList<IPiece> Allys = getPieceFromColor(couleur);  //liste de piece allié
         for(IPiece p : Allys){
-            if(!isPiecePinned(p, cR, couleur.equals("BLANC") ? "NOIR" : "BLANC") && //la piece de doit pas etre cloué
-                    !allMovesDefendingCheck(p, cR, enemies).isEmpty())              //si un move existe entre le roi
-                return true;                                                        //et la piece attaquante
+            if(!isPiecePinned(p, cR, oppsColor) && //la piece de doit pas etre cloué
+                    !Utils.getAllMoves(p, cR, oppsColor, enemies).isEmpty())
+                return true;                                                        
         }
         return false;
     }
@@ -100,16 +112,15 @@ public class Regle {
      * @see Utils#getPningPiece(Coord, Coord, String)
      */
     public static boolean isPiecePinned(IPiece p, Coord cR, String couleur){
-        Coord cS = new Coord(p.getLigne(), p.getColonne());
+        Coord cS = Coord.coordFromPiece(p);
 
         if(p.getPieceType().equals("ROI")       ||      //un piece cloué ne peut pas etre le roi
                 !Coord.isStraightPath(cS, cR)   ||
                 !voieLibre(p, cR))
             return false;
 
-        return !(getPningPiece(cS, cR, couleur) == null);   //s'il n'y a pas de piece clouante
+        return !(Utils.getPningPiece(cS, cR, couleur) == null);   //s'il n'y a pas de piece clouante
     }
-
 
     /**
      * verifie avec les coordonnée du roi si celui-ci est attaquée par les pieces adverses.
@@ -119,20 +130,21 @@ public class Regle {
      * @see Utils#getAllAttackingPiece(Coord, ArrayList)
      */
     public static boolean isAttacked(Coord cR, ArrayList<IPiece> pieces){
-        return !getAllAttackingPiece(cR, pieces).isEmpty();
+        return !Utils.getAllAttackingPiece(cR, pieces).isEmpty();
     }
 
     /**
      * Retourne si une coordonnée peut etre attaqué par une pièce ou non
      * @param c coordonnée d'arrivée
-     * @param p la pièce en question
-     * @return si le roi est en echec
+     * @param p la pièce attaquante
+     * @return la case peut etre attaquée
      */
     public static boolean canBeAttacked(Coord c, IPiece p){
         // l'arrivé n'est pas testé car ce n'est pas le but de cette methode.
-        return p.estPossible(c.getX(), c.getY()) && voieLibre(p, c);
+        // /!\ ne pas confondre avec isCoupValid ou l'arrivé est testé
+        return p.estPossible(c.getX(),c.getY()) && voieLibre(p, c) &&
+                ifPawnCheck(c, p, false);
     }
-
 
     /**
      * Verifie si il y a une egalité par pat dans l'etat actuel de l'echiquier.
@@ -151,7 +163,7 @@ public class Regle {
             return false;
 
         for(IPiece p: allys)
-            allPossibleMoves.addAll(getAllMoves(p, cR, couleur, ennemies));
+            allPossibleMoves.addAll(Utils.getAllMoves(p, cR, couleur, ennemies));
 
         return allPossibleMoves.isEmpty();
     }

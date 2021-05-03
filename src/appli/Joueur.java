@@ -2,6 +2,7 @@ package appli;
 
 import echiquier.Coord;
 import echiquier.IPiece;
+import echiquier.Utils;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -65,7 +66,7 @@ public class Joueur {
 
         IPiece p = getPiece(cS);
         return p.getCouleur().equals(couleur) &&
-                getAllMoves(p, cR, couleurPassif, enemies).contains(cF);
+                Utils.getAllMoves(p, cR, couleurPassif, enemies).contains(cF);
     }
 
     /**
@@ -92,5 +93,6 @@ public class Joueur {
         return cF;
     }
 
-    public void pause() { }
+    public void pause() {
+    }
 }

@@ -21,7 +21,7 @@ public class Echiquier {
     /* la fabrique de piece est sauvegardé en attribut pour pouvoir l'utiliser en dehors du constructeur */
     private final IFabriquePiece fabrique;
 
-    /* l'echiquier doit etre composer de deux Rois (blanc et noir) */
+    /* l'échiquier doit etre composer de deux Rois (blanc et noir) */
     static class RoiIntrouvableException extends Exception{}
 
     /**
@@ -50,7 +50,7 @@ public class Echiquier {
     private void fillBoard(IFabriquePiece fabrique, String fen) throws ArrayIndexOutOfBoundsException{
         String[] splittedFen = fen.split("/");  //  le fen est divisé pour n'avoir qu'un tableau de ligne
 
-        for (int lig = 0, idx = 0; lig < LIGNE; lig++, idx++) {
+        for (int lig = 0, idx = 0; idx < splittedFen.length; lig++, idx++) {
             String s = splittedFen[idx];
 
             // Si la sequence possede un nombre il faut la modifier pour quelle soit lisible par la suite
@@ -58,7 +58,7 @@ public class Echiquier {
             // https://stackoverflow.com/a/18590949
             String sequence = (s.matches(".*\\d.*")) ? ReformatFenSequence(s) : s;
 
-            for (int col = 0, cpt = 0; col < COLONNE; col++, cpt++)
+            for (int col = 0, cpt = 0; cpt < sequence.length(); col++, cpt++)
                 echiquier[lig][col] = fabrique.getPiece(sequence.charAt(cpt), lig, col);
         }
     }
@@ -99,7 +99,7 @@ public class Echiquier {
      * @param cF la coordonnée d'arrivée
      */
     public void deplacer(Coord cS, Coord cF){
-        assert(horsLimite(cS) && horsLimite(cF));
+        assert(!inBound(cS) && !inBound(cF));
         IPiece p = getPiece(cS);
         changePiece(cS, fabrique.getPiece('V', cS.getX(), cS.getY()));  //piece Vide à cStart
         changePiece(cF, p);
@@ -146,7 +146,7 @@ public class Echiquier {
      * @param p la pièce à deplacer
      */
     public static boolean voieLibre(IPiece p, Coord c){
-        Coord cS = new Coord(p.getLigne(), p.getColonne());
+        Coord cS = Coord.coordFromPiece(p);
         if(!Coord.isStraightPath(cS, c))        //si le chemin n'est pas verticale ou horizontale
             return true;                        //il ne peut pas avoir d'obstacle
 
@@ -172,7 +172,6 @@ public class Echiquier {
         return echiquier[c.getX()][c.getY()].getPieceType().equals("VIDE");
     }
 
-
     /**
      * Vérifie si la l'arrivé d'une piece sur une case est valide.
      * @param c coordonnées de la case
@@ -188,7 +187,7 @@ public class Echiquier {
      * @param c la coordonnée
      * @return si c est en dehors ou non
      */
-    public static boolean horsLimite(Coord c){
+    public static boolean inBound(Coord c){
         int x = c.getX(), y = c.getY();
         return (x >= 0 && x < LIGNE) && (y >= 0 && y < COLONNE);
     }
@@ -202,7 +201,7 @@ public class Echiquier {
         for(IPiece[] ligne : echiquier)
             for(IPiece p : ligne)
                 if(p.getPieceType().equals("ROI") && p.getCouleur().equals(couleur))
-                    return new Coord(p.getLigne(),p.getColonne());
+                    return Coord.coordFromPiece(p);
         return null;
     }
 
