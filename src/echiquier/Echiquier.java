@@ -141,26 +141,28 @@ public class Echiquier {
     }
 
     /**
-     * Vérifie si le chemin entre 2 points n'a pas d'obstacle (pas l'arrivée)
-     * @param c coordonnées de la case d'arrivé
+     * Vérifie si le chemin entre 2 points n'a pas d'obstacle (pas l'arrivé* @param cF coordonnées de la case d'arrivé
      * @param p la pièce à deplacer
      */
-    public static boolean voieLibre(IPiece p, Coord c){
+    public static boolean voieLibre(IPiece p, Coord cF){
         Coord cS = Coord.coordFromPiece(p);
-        if(!Coord.isStraightPath(cS, c))        //si le chemin n'est pas verticale ou horizontale
-            return true;                        //il ne peut pas avoir d'obstacle
-
-        Coord pM = Coord.getPrimaryMove(cS, c);
-        // on applique le mouvement primaire une premiere fois
-        // pour ne pas tester sur la case de la piece
-        cS.Add(pM);
-
-        while(!cS.equals(c)) {
-            if (!estVide(cS))
-                return false;
-            cS.Add(pM);
-        }
-        return true;
+//        if(!Coord.isStraightPath(cS, c))        //si le chemin n'est pas verticale ou horizontale
+//            return true;                        //il ne peut pas avoir d'obstacle
+//
+//        Coord pM = Coord.getPrimaryMove(cS, c);
+//        // on applique le mouvement primaire une premiere fois
+//        // pour ne pas tester sur la case de la piece
+//        cS.Add(pM);
+//
+//        while(!cS.equals(c)) {
+//            if (!estVide(cS))
+//                return false;
+//            cS.Add(pM);
+//        }
+//        return true;
+        ArrayList<Coord> path = Utils.getPath(cS, cF);
+        path.removeIf(c -> c.equals(cF) || c.equals(cS) || estVide(c));
+        return path.isEmpty();
     }
 
     /**
