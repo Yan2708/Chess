@@ -78,7 +78,7 @@ public class Joueur {
      * @return un String contenant les coups du joue
      */
     public String getCoup(Scanner sc, ArrayList<IPiece> allys, ArrayList<IPiece> ennemies, Coord cR) {
-        System.out.print(couleur + "joue > ");
+        System.out.print("Les " + couleur + "S jouent > ");
         return sc.nextLine();
     }
 

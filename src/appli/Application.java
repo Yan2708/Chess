@@ -4,6 +4,7 @@ import echiquier.*;
 import pieces.*;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 import static echiquier.Echiquier.*;
@@ -88,31 +89,6 @@ public class Application {
         couleurPassif = passif.getCouleur();
     }
 
-    private static boolean partieContinue(ArrayList<IPiece> ennemies, ArrayList<IPiece> allys, Coord cR){
-        if(isStaleMate(ennemies, allys, couleurPassif, cR)) {
-            message = "Egalité par pat";
-            return true;
-        }
-        if(Regle.checkForMate(couleurActif, cR, ennemies)){
-            message="Les "+ actif.getCouleur() + "S ont perdu";
-            return true;
-        }
-        if(Regle.impossibleMat(ennemies,allys)){
-            message = "NULLE";
-            return true;
-        }
-        return false;
-    }
-
-    private static void switchJoueur(){
-        Joueur tmp = actif;
-        actif = passif;
-        passif = tmp;
-        ///
-        couleurActif = actif.getCouleur();
-        couleurPassif = passif.getCouleur();
-    }
-
     public static void main(String[] args) {
 
         Echiquier e = new Echiquier(new FabriquePiece());
@@ -132,15 +108,16 @@ public class Application {
         couleurPassif = p2.getCouleur();
 
         System.out.println(e.toString());
-
         while(true) {
-            //actif.pause();
+//            actif.pause();
             Coord cR = locateKing(couleurActif);
 
             ArrayList<IPiece> piecesActif = getPieceFromColor(couleurActif);
             ArrayList<IPiece> piecesPassif = getPieceFromColor(couleurPassif);
 
             if(partieContinue(piecesPassif, piecesActif, cR))
+                break;
+            if(forfeit(actif,sc))
                 break;
 
             String usersLine = actif.getCoup(sc, piecesActif, piecesPassif, cR);
