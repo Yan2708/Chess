@@ -195,4 +195,14 @@ class ReglesTest {
         Coord cR = locateKing("BLANC");
         assertTrue(isStaleMate(ennemies, allys, "NOIR", cR));
     }
+
+    @Test
+    void test() {
+        Echiquier e = new Echiquier(new FabriquePiece(), "1d3r2/2D2P2/t1P4D/1C6/4F3/3Rp2c/p4CT1/8");
+        System.out.println(e.toString());
+        ArrayList<IPiece> pieces = getPieceFromColor("BLANC");
+        Coord cR = locateKing("NOIR");
+        assertTrue(checkForMate("NOIR",cR, pieces));
+    }
+
 }

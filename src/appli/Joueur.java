@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import static echiquier.Echiquier.getPiece;
-import static echiquier.Utils.getAllMoves;
 import static java.lang.Math.abs;
 
 public class Joueur {
@@ -73,12 +72,13 @@ public class Joueur {
     /**
      * Récupère l'entrée de l'uttilisateur, son coup.
      * @param sc le scanner
-     * @param ennemies les pieces ennemies
-     * @param cR la coordonnée du roi
+     * @param allys
+     * @param enemies
+     * @param cR
      * @return un String contenant les coups du joue
      */
-    public String getCoup(Scanner sc, ArrayList<IPiece> allys, ArrayList<IPiece> ennemies, Coord cR) {
-        System.out.print("Les " + couleur + "S jouent > ");
+    public String getCoup(Scanner sc, ArrayList<IPiece> allys, ArrayList<IPiece> enemies, Coord cR) {
+        System.out.print("> ");
         return sc.nextLine();
     }
 
@@ -98,4 +98,17 @@ public class Joueur {
     }
 
     public void show(){}
+
+    public boolean validDraw(Scanner sc){
+        System.out.print("les " +couleur +"s, acceptez vous la nulle ? (O/N) : > ");
+        String answer = sc.nextLine();
+        while(true){
+            switch (answer){
+                case "O":return true;
+                case "N":return false;
+            }
+            System.out.println("#>");
+            answer = sc.nextLine();
+        }
+    }
 }

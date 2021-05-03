@@ -19,27 +19,10 @@ public class Regle {
      * @return si le déplacement est possible
      */
     public static boolean isCoupValid(Coord c, IPiece p){
-        return p.estPossible(c.getX(),c.getY()) && voieLibre(p, c) && isFinishValid(p, c) &&
-                ifPawnCheck(c, p, true);
-    }
-
-    /**
-     * si la piece est un pion verifie si le mouvement est valide
-     * @param c la coordonnée d'arrivée
-     * @param p la coordonnée de la piece
-     * @param passiveMode la verification peut avoir deux mode :
-     *                    - le passif = le pion peut avancer ou faire une prise diagonale
-     *                    - l'agressif = le pion ne peut que faire des prise diagonale
-     * @return si le déplacement est possible
-     * @see #isCoupValid(Coord, IPiece)
-     * @see #canBeAttacked(Coord, IPiece)
-     */
-    private static boolean ifPawnCheck(Coord c, IPiece p, boolean passiveMode){
-        boolean isPawn = p.getPieceType().equals("PION");
-        boolean isDiag = priseEnDiag(p, c);
         String color = getPiece(c).getCouleur();
-        boolean isEnemy = !color.equals(p.getCouleur()) && !color.equals("VIDE");
-        return !isPawn || (isDiag ? isEnemy : passiveMode);
+        return p.estPossible(c.getX(),c.getY()) && voieLibre(p, c) && isFinishValid(p, c) &&
+                (!p.getPieceType().equals("PION") ||
+                        (!priseEnDiag(p, c) || !color.equals(p.getCouleur()) && !color.equals("VIDE")));       // de couleur adverse.
     }
 
     /**
@@ -142,8 +125,8 @@ public class Regle {
     public static boolean canBeAttacked(Coord c, IPiece p){
         // l'arrivé n'est pas testé car ce n'est pas le but de cette methode.
         // /!\ ne pas confondre avec isCoupValid ou l'arrivé est testé
-        return p.estPossible(c.getX(),c.getY()) && voieLibre(p, c) &&
-                ifPawnCheck(c, p, false);
+        return p.estPossible(c.getX(), c.getY()) && voieLibre(p, c) &&
+                (!p.getPieceType().equals("PION") || priseEnDiag(p, c));
     }
 
     /**
@@ -179,6 +162,7 @@ public class Regle {
         ArrayList<IPiece> allPieces = new ArrayList<>(ennemies);
         allPieces.addAll(allys);
         allPieces.removeIf(p -> p.getPieceType().equals("ROI"));
+
         //"King and bishop vs. king and bishop of the same color as the opponent's bishop"
         if(allPieces.size()==2){
             IPiece p1 = allPieces.get(0);

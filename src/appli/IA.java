@@ -61,6 +61,11 @@ public class IA extends Joueur {
 
     @Override
     public void show(){
-        System.out.println(getCouleur() + " joue > " + cS.toString() + cF.toString());
+        System.out.println("> " + cS.toString() + cF.toString());
+    }
+
+    @Override
+    public boolean validDraw(Scanner sc) {
+        return true;
     }
 }

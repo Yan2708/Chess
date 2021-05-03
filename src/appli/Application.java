@@ -4,7 +4,6 @@ import echiquier.*;
 import pieces.*;
 
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Scanner;
 
 import static echiquier.Echiquier.*;
@@ -13,16 +12,36 @@ import static echiquier.Regle.*;
 public class Application {
 
     private static Joueur p1, p2, actif, passif;
-    private static String message, couleurActif, couleurPassif;
+    private static String usersLine, message, couleurActif, couleurPassif;
+    private static final String DISPLAY = "mode de jeux : \n" +
+                                    "- Player vs Player (\"pp\") \n" +
+                                    "- Plaver vs Ia (\"pi\") \n" +
+                                    "- Ia vs Ia (\"ii\") \n\n" +
+                                    "Règles : \n" +
+                                    "- pour proposer un match nul : \"nulle\" \n" +
+                                    "- pour abandonner : \"abandon\"";
 
     //private static String actif, passif; // les différents joueurs
     private static String getMode(Scanner sc){
-        System.out.print("mode de jeux : \n" +
-                "- Player vs Player (pp) \n" +
-                "- Plaver vs Ia (pi) \n" +
-                "- Ia vs Ia (ii) \n" +
-                ">");
+        System.out.print("Votre mode : > ");
         return sc.nextLine();
+    }
+
+    private static boolean finish(String coup, Scanner sc){
+        switch (coup){
+            case"nulle":
+                if(passif.validDraw(sc)){
+                    message = "match nul par accord !";
+                    return true;
+                }
+                System.out.print("votre demande de nulle n'a pas été accepté, jouez : > ");
+                usersLine = sc.nextLine();
+                return false;
+            case"abandon" :
+                message = "les " + couleurPassif + "s gagnent par forfait !";
+                return true;
+            default: return false;
+        }
     }
 
     private static boolean isValid(String mode){
@@ -65,21 +84,6 @@ public class Application {
         return false;
     }
 
-    private static boolean forfeit(Joueur actif,Scanner sc){
-        if(actif.getClass().getSimpleName().equals("IA"))
-            return false;
-        System.out.println("Voulez vous abandonner? O/N");
-        String s = sc.nextLine();
-        while(!s.toUpperCase(Locale.ROOT).equals("O") && !s.toUpperCase(Locale.ROOT).equals("N")){
-            s=sc.nextLine();
-        }
-        if(s.toUpperCase(Locale.ROOT).equals("O")) {
-            message="Les " + actif.getCouleur() + "S déclarent forfait";
-            return true;
-        }
-        return false;
-    }
-
     private static void switchJoueur(){
         Joueur tmp = actif;
         actif = passif;
@@ -92,6 +96,9 @@ public class Application {
     public static void main(String[] args) {
 
         Echiquier e = new Echiquier(new FabriquePiece());
+
+        System.out.println(DISPLAY);
+
         @SuppressWarnings("resource")
         Scanner sc = new Scanner(System.in);
         String mode = getMode(sc);
@@ -109,7 +116,7 @@ public class Application {
 
         System.out.println(e.toString());
         while(true) {
-//            actif.pause();
+            //actif.pause();
             Coord cR = locateKing(couleurActif);
 
             ArrayList<IPiece> piecesActif = getPieceFromColor(couleurActif);
@@ -117,10 +124,12 @@ public class Application {
 
             if(partieContinue(piecesPassif, piecesActif, cR))
                 break;
-            if(forfeit(actif,sc))
-                break;
 
-            String usersLine = actif.getCoup(sc, piecesActif, piecesPassif, cR);
+            System.out.print(couleurActif + " joue ");
+            usersLine = actif.getCoup(sc, piecesActif, piecesPassif, cR);
+
+            if(finish(usersLine, sc))
+                break;
 
             while(!actif.isInputValid(usersLine) || !actif.isSemanticValid(usersLine, cR, piecesPassif)){
                 System.out.print("#");

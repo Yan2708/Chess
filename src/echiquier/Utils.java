@@ -82,6 +82,7 @@ public class Utils {
     private static ArrayList<Coord> kingsMoves(IPiece roi, ArrayList<IPiece> ennemies){
         ArrayList<Coord> moves = allClassicMoves(roi);
         ArrayList<Coord> behindKings = behindKing(Coord.coordFromPiece(roi), ennemies);
+        //moves.removeIf(c -> isAttacked(c, ennemies) || behindKings.contains(c));
         moves.removeIf(c -> isAttacked(c, ennemies) || behindKings.contains(c));
         return moves;
     }
@@ -95,7 +96,7 @@ public class Utils {
     private static ArrayList<Coord> behindKing(Coord cR, ArrayList<IPiece> ennemies){
         ArrayList<Coord> coords = new ArrayList<>();
         for(IPiece p : ennemies) {
-            if(p.getPieceType().equals("PION") || Coord.isStraightPath(cR, Coord.coordFromPiece(p))) continue;
+            if(p.getPieceType().equals("PION") || !Coord.isStraightPath(cR, Coord.coordFromPiece(p))) continue;
             if(canBeAttacked(cR, p)) {
                 Coord cClone = cR.clone();
                 cClone.Add(Coord.getPrimaryMove(Coord.coordFromPiece(p), cR));
