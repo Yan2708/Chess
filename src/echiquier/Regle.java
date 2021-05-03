@@ -168,4 +168,40 @@ public class Regle {
         return allPossibleMoves.isEmpty();
     }
 
+    /**
+     * verifie si le materiel present sur l'echiquier est suffisant pour continuer une partie.
+     * https://www.chess.com/terms/draw-chess#:~:text=A%20draw%20occurs%20in%20chess,player%20wins%20half%20a%20point.
+     * @param ennemies      les pieces ennemies
+     * @param allys         les pieces alliées
+     * @return              si le matériel des joueurs est insuffisant pour mettre l'un l'autre en echec et mat
+     */
+    public static boolean impossibleMat(ArrayList<IPiece> ennemies, ArrayList<IPiece> allys){
+        ArrayList<IPiece> allPieces = new ArrayList<>(ennemies);
+        allPieces.addAll(allys);
+        allPieces.removeIf(p -> p.getPieceType().equals("ROI"));
+        //"King and bishop vs. king and bishop of the same color as the opponent's bishop"
+        if(allPieces.size()==2){
+            IPiece p1 = allPieces.get(0);
+            IPiece p2 = allPieces.get(1);
+            if(p1.getPieceType().equals("FOU")
+                    && p2.getPieceType().equals("FOU")
+                    && p1.getCouleur().equals(p2.getCouleur())){
+                int diffXYp1 = abs(p1.getLigne() - p1.getColonne());
+                int diffXYp2 = abs(p2.getLigne() - p2.getColonne());
+                return !(diffXYp1 % 2 == diffXYp2 % 2);
+            }
+            return false;
+        }
+
+        if(allPieces.size()==1) {
+            switch (allPieces.get(0).getPieceType()){
+                case "FOU" :                            //"King and bishop vs. king"
+                case "CAVALIER":                        //"King and knight vs. king"
+                    return true;
+                default:return false;
+            }
+        }
+        return allPieces.isEmpty(); //"King vs. king"
+    }
+
 }

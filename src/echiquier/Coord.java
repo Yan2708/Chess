@@ -128,4 +128,9 @@ public class Coord {
     public static Coord coordFromPiece(IPiece p){
         return new Coord(p.getLigne(), p.getColonne());
     }
+
+    @Override
+    public String toString(){
+        return (char)(y + 97)+""+abs(x - 8);
+    }
 }

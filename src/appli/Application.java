@@ -90,19 +90,15 @@ public class Application {
 
             e.deplacer(actif.getcS(), actif.getcF());
 
+            actif.show();
+
             e.checkForPromote(couleurActif);
 
-            //saveCoord();
             System.out.println(e.toString());
 
-            if(Regle.checkForMate(couleurPassif, locateKing(couleurPassif), piecesActif))
-                break;
-
-            Joueur tmp = actif;
-            actif = passif;
-            passif = tmp;
+            switchJoueur();
         }
-        System.out.println("Les "+ passif.getCouleur() + "S ont perdu");
+        System.out.println(message);
         sc.close();
     }
 }

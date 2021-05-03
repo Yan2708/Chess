@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import static echiquier.Coord.isStraightPath;
 import static echiquier.Echiquier.*;
+import static echiquier.Regle.isStaleMate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EchiquierTest {
@@ -64,6 +65,15 @@ class EchiquierTest {
         e.deplacer(new Coord(0, 0),new Coord(5,6));
         assertEquals(new Coord(5, 6), locateKing("NOIR"));
     }
+
+    @Test
+    void test() {
+        Echiquier e = new Echiquier(new FabriquePiece(),"7t/t2r4/2d4P/4d3/5T2/1P6/p4F2/1R2D2F");
+        System.out.println(e);
+        assertTrue(Regle.checkForMate("BLANC",locateKing("BLANC"),getPieceFromColor("NOIR")));
+        assertFalse(isStaleMate(getPieceFromColor("NOIR"), getPieceFromColor("BLANC"), "NOIR", locateKing("BLANC")));
+    }
+
 
     /** test la detection de promotion et la promotion des pions en dame*/
     @Test
