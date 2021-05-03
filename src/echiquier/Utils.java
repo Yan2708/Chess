@@ -95,6 +95,7 @@ public class Utils {
     private static ArrayList<Coord> behindKing(Coord cR, ArrayList<IPiece> ennemies){
         ArrayList<Coord> coords = new ArrayList<>();
         for(IPiece p : ennemies) {
+            if(p.getPieceType().equals("PION") || Coord.isStraightPath(cR, Coord.coordFromPiece(p))) continue;
             if(canBeAttacked(cR, p)) {
                 Coord cClone = cR.clone();
                 cClone.Add(Coord.getPrimaryMove(Coord.coordFromPiece(p), cR));

@@ -11,7 +11,8 @@ import static echiquier.Regle.*;
 
 public class Application {
 
-    private static Joueur p1, p2;
+    private static Joueur p1, p2, actif, passif;
+    private static String message, couleurActif, couleurPassif;
 
     //private static String actif, passif; // les différents joueurs
     private static String getMode(Scanner sc){
@@ -47,6 +48,31 @@ public class Application {
         }
     }
 
+    private static boolean partieContinue(ArrayList<IPiece> ennemies, ArrayList<IPiece> allys, Coord cR){
+        if(isStaleMate(ennemies, allys, couleurPassif, cR)) {
+            message = "Egalité par pat";
+            return true;
+        }
+        if(Regle.checkForMate(couleurActif, cR, ennemies)){
+            message="Les "+ actif.getCouleur() + "S ont perdu";
+            return true;
+        }
+        if(Regle.impossibleMat(ennemies,allys)){
+            message = "NULLE";
+            return true;
+        }
+        return false;
+    }
+
+    private static void switchJoueur(){
+        Joueur tmp = actif;
+        actif = passif;
+        passif = tmp;
+        ///
+        couleurActif = actif.getCouleur();
+        couleurPassif = passif.getCouleur();
+    }
+
     public static void main(String[] args) {
 
         Echiquier e = new Echiquier(new FabriquePiece());
@@ -60,26 +86,22 @@ public class Application {
 
         fabriqueJoueur(mode);
 
-        Joueur actif = p1;
-        Joueur passif = p2;
+        actif = p1;
+        passif = p2;
+        couleurActif = p1.getCouleur();
+        couleurPassif = p2.getCouleur();
 
         System.out.println(e.toString());
 
         while(true) {
             //actif.pause();
-
-            String couleurActif = actif.getCouleur();
-            String couleurPassif = passif.getCouleur();
-
             Coord cR = locateKing(couleurActif);
 
             ArrayList<IPiece> piecesActif = getPieceFromColor(couleurActif);
             ArrayList<IPiece> piecesPassif = getPieceFromColor(couleurPassif);
 
-            if(isStaleMate(piecesPassif, piecesActif, couleurPassif, cR)){
-                System.out.println("EGALITE PAR PAT !");
+            if(partieContinue(piecesPassif, piecesActif, cR))
                 break;
-            }
 
             String usersLine = actif.getCoup(sc, piecesActif, piecesPassif, cR);
 

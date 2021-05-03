@@ -21,14 +21,6 @@ public class Joueur {
     public Joueur(String couleur){
         this.couleur = couleur;
     }
-    /**
-     * Conversion d'un char représentant une partie de coordonnée en int
-     * @param c le char
-     * @return le chiffre correspondant
-     */
-    private int getIntFromChar(char c){
-        return Character.isDigit(c) ? abs(c - 56) : Character.toUpperCase(c) - 64;
-    }
 
     /**
      * converti un coup en coordonnées
@@ -37,6 +29,15 @@ public class Joueur {
     private void getCoordFromString(String c){
         cS = new Coord(getIntFromChar(c.charAt(1)), getIntFromChar(c.charAt(0)) - 1);
         cF = new Coord(getIntFromChar(c.charAt(3)), getIntFromChar(c.charAt(2)) - 1);
+    }
+
+    /**
+     * Conversion d'un char représentant une partie de coordonnée en int
+     * @param c le char
+     * @return le chiffre correspondant
+     */
+    public static int getIntFromChar(char c){
+        return Character.isDigit(c) ? abs(c - 56) : Character.toUpperCase(c) - 64;
     }
 
     /**
@@ -76,8 +77,8 @@ public class Joueur {
      * @param cR la coordonnée du roi
      * @return un String contenant les coups du joue
      */
-    public String getCoup(Scanner sc, ArrayList<IPiece> allys, ArrayList<IPiece> enemies, Coord cR) {
-        System.out.print("> ");
+    public String getCoup(Scanner sc, ArrayList<IPiece> allys, ArrayList<IPiece> ennemies, Coord cR) {
+        System.out.print(couleur + "joue > ");
         return sc.nextLine();
     }
 
@@ -95,4 +96,6 @@ public class Joueur {
 
     public void pause() {
     }
+
+    public void show(){}
 }

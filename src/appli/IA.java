@@ -58,4 +58,9 @@ public class IA extends Joueur {
         } catch (Exception ignored) {
         }
     }
+
+    @Override
+    public void show(){
+        System.out.println(getCouleur() + " joue > " + cS.toString() + cF.toString());
+    }
 }
