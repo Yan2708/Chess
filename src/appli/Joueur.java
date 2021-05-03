@@ -72,8 +72,8 @@ public class Joueur {
     /**
      * Récupère l'entrée de l'uttilisateur, son coup.
      * @param sc le scanner
-     * @param enemies
-     * @param cR
+     * @param ennemies les pieces ennemies
+     * @param cR la coordonnée du roi
      * @return un String contenant les coups du joue
      */
     public String getCoup(Scanner sc, ArrayList<IPiece> allys, ArrayList<IPiece> enemies, Coord cR) {
