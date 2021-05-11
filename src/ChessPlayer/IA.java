@@ -1,8 +1,9 @@
-package appli;
+package ChessPlayer;
 
-import echiquier.Coord;
+
+import coordonnee.Coord;
+import echiquier.Couleur;
 import echiquier.IPiece;
-import echiquier.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,9 +11,11 @@ import java.util.Random;
 import java.util.Scanner;
 
 
+
+
 public class IA extends Joueur {
 
-    public IA(String couleur) {
+    public IA(Couleur couleur) {
         super(couleur);
     }
 
@@ -28,11 +31,10 @@ public class IA extends Joueur {
 
     @Override
     public String getCoup(Scanner sc, ArrayList<IPiece> allys, ArrayList<IPiece> enemies, Coord cR) {
-        String couleurPassif = getCouleur().equals("BLANC") ? "NOIR" : "BLANC";
 
         HashMap<IPiece, ArrayList<Coord>> allPossibleMoves = new HashMap<>();
         for(IPiece p : allys){
-            allPossibleMoves.put(p, Utils.getAllMoves(p, cR, couleurPassif, enemies));
+            allPossibleMoves.put(p, p.getAllMoves(cR, enemies));
         }
 
         Random rand = new Random();
@@ -43,7 +45,7 @@ public class IA extends Joueur {
             choosenP = allys.get(rand.nextInt(allys.size()));
 
 
-        cS = new Coord(choosenP.getLigne(), choosenP.getColonne());
+        cS = choosenP.getCoord();
 
         ArrayList<Coord> allMoves = allPossibleMoves.get(choosenP);
         cF = allMoves.get(rand.nextInt(allMoves.size()));

@@ -1,26 +1,17 @@
 package echiquier;
 
+import coordonnee.Coord;
+
+import java.util.ArrayList;
+
 public interface IPiece {
 
     /**
      * Pour une position donnée, calcule si le déplacement est possible pour la pièce
-     * @param ligne la coordonnée en x de la position voulue
-     * @param colonne la coordonnée en y de la position voulue
-     * @return si le deplacement est possible pour la pièce ou non
+     *
+     * @param c@return si le deplacement est possible pour la pièce ou non
      */
-    boolean estPossible(int ligne, int colonne);
-
-    /**
-     * Getter de la colonne de la pièce
-     * @return la colonne de la pièce
-     */
-    int getColonne();
-
-    /**
-     * Getter de la ligne de la pièce
-     * @return la ligne de la pièce
-     */
-    int getLigne();
+    boolean estPossible(Coord c);
 
     /**
      * Renvoie le bon caractère selon la couleur de la pièce (BLANC en MAJUSCULE, NOIR en minuscule)
@@ -32,7 +23,7 @@ public interface IPiece {
      * Renvoie la couleur de la pièce
      * @return la couleur de la pièce
      */
-    String getCouleur();
+    Couleur getCouleur();
 
     /**
      * Getter du type de la pièce
@@ -42,9 +33,22 @@ public interface IPiece {
 
     /**
      * Met à jour la position de la pièce selon la position donnée en paramètre
-     * @param ligne la nouvelle coordonnée en x
-     * @param colonne la nouvelle coordonnée en y
      */
-    void newPos(int ligne, int colonne);
+    void newPos(Coord c);
 
+    Coord getCoord();
+
+    boolean isCoupValid(Coord cF);
+
+    boolean estSensible();
+
+    boolean estVide();
+
+    boolean isPromotable();
+
+    boolean peutAttaquer(Coord c);
+
+    ArrayList<Coord> getAllMoves(Coord cR, ArrayList<IPiece> ennemies);
+
+    boolean canHoldEndGame();
 }

@@ -1,4 +1,6 @@
-package echiquier;
+package coordonnee;
+
+import echiquier.IPiece;
 
 import static java.lang.Math.abs;
 
@@ -14,7 +16,7 @@ public class Coord {
 
     /* X represente les lignes et y les colonnes d'un tableau 2d
      */
-    private int x,y;
+    public int x,y; // A DEMANDER SI C'EST CORRECT
 
     /**
      * Constructeur de coordonnée
@@ -27,26 +29,10 @@ public class Coord {
     }
 
     /**
-     * Getter de x
-     * @return x
-     */
-    public int getX() {
-        return x;
-    }
-
-    /**
-     * Getter de y
-     * @return y
-     */
-    public int getY() {
-        return y;
-    }
-
-    /**
      * Ajoute les valeurs d'une coordonnée à une autre
      * @param c la coordonnée a ajouter (mouvement primaire)
      */
-    public void Add(Coord c){
+    public void add(Coord c){
         this.x += c.x;
         this.y += c.y;
     }
@@ -68,13 +54,12 @@ public class Coord {
      * @return le chemin est horizontale, verticale ou diagonale
      */
     public static boolean isStraightPath(Coord cS, Coord cF){
-        int difX = abs(cS.getX() - cF.getX());
-        int difY = abs(cS.getY() - cF.getY());
+        int difX = abs(cS.x - cF.x);
+        int difY = abs(cS.y - cF.y);
         return (difX == 0 ||
                 difY == 0 ||
                 difX == difY);
     }
-
 
     /**
      * Renvoie le mouvement primaire entre deux points.
@@ -84,15 +69,14 @@ public class Coord {
      * @return le mouvement primaire dans un tableau
      * */
     public static Coord getPrimaryMove(Coord cS, Coord cF){
-        int x = (cF.getX() - cS.getX());
-        int y = (cF.getY() - cS.getY());
+        int x = (cF.x - cS.x);
+        int y = (cF.y - cS.y);
         if(abs(x)>1)
             x=x/ abs(x);
         if(abs(y)>1)
             y=y/ abs(y);
         return new Coord(x,y);
     }
-
 
     /**
      * Méthode de comparaison d'une coordonnée à un objet.
@@ -126,7 +110,7 @@ public class Coord {
      * @return sa coordonnées
      */
     public static Coord coordFromPiece(IPiece p){
-        return new Coord(p.getLigne(), p.getColonne());
+        return p.getCoord();
     }
 
     @Override

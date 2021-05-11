@@ -1,13 +1,14 @@
 package echiquier;
 
+import coordonnee.Coord;
 import org.junit.jupiter.api.Test;
 import pieces.FabriquePiece;
+import static echiquier.Couleur.*;
+
 
 import java.util.ArrayList;
 
-import static echiquier.Coord.isStraightPath;
 import static echiquier.Echiquier.*;
-import static echiquier.Regle.isStaleMate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EchiquierTest {
@@ -17,8 +18,8 @@ class EchiquierTest {
     void TestgetPieceFromColor(){
         Echiquier e = new Echiquier(new FabriquePiece(),"RRRRR3/R1R5/rrrrrrRr/8/8/r7/5R2/8");
         System.out.println(e);
-        ArrayList<IPiece> noir =getPieceFromColor("NOIR");
-        ArrayList<IPiece> blanc =getPieceFromColor("BLANC");
+        ArrayList<IPiece> noir =getPieceFromColor(NOIR);
+        ArrayList<IPiece> blanc =getPieceFromColor(BLANC);
         assertEquals(noir.size(), 8);   //il y a 8 roi noir dans la fen
         assertEquals(blanc.size(), 9);  //9 roi blanc dans la fen
         for (IPiece p : noir) {
@@ -34,10 +35,10 @@ class EchiquierTest {
     void TestVoieLibre(){
         Echiquier e = new Echiquier(new FabriquePiece(),"r7/1T6/8/8/R7/8/8/8");
         System.out.println(e);
-        assertTrue(voieLibre(getPiece(new Coord(0,0) ),new Coord(4,0)));
-        assertTrue(voieLibre(getPiece(new Coord(0,0) ),new Coord(1,1)));
-        assertFalse(voieLibre(getPiece(new Coord(0,0) ),new Coord(7,0)));
-        assertFalse(voieLibre(getPiece(new Coord(0,0) ),new Coord(7,7)));
+        assertTrue(Regle.voieLibre(getPiece(new Coord(0,0) ),new Coord(4,0)));
+        assertTrue(Regle.voieLibre(getPiece(new Coord(0,0) ),new Coord(1,1)));
+        assertFalse(Regle.voieLibre(getPiece(new Coord(0,0) ),new Coord(7,0)));
+        assertFalse(Regle.voieLibre(getPiece(new Coord(0,0) ),new Coord(7,7)));
     }
 
     /** test si l'arrivé d'une piece vers une coordonné est valide (couleur differente) */
@@ -45,14 +46,14 @@ class EchiquierTest {
     void TestIsFinishValid(){
         Echiquier e = new Echiquier(new FabriquePiece(),"r7/RT6/8/8/8/8/8/8");
         System.out.println(e);
-        assertTrue(isFinishValid(getPiece(new Coord(0,0)),new Coord(0,1)));
-        assertTrue(isFinishValid(getPiece(new Coord(0,0)),new Coord(1,1)));
-        assertFalse(isFinishValid(getPiece(new Coord(0,0)),new Coord(1,0)));
+        assertTrue(Regle.isFinishValid(getPiece(new Coord(0,0)),new Coord(0,1)));
+        assertTrue(Regle.isFinishValid(getPiece(new Coord(0,0)),new Coord(1,1)));
+        assertFalse(Regle.isFinishValid(getPiece(new Coord(0,0)),new Coord(1,0)));
 
-        assertFalse(isFinishValid(getPiece(new Coord(1,0)),new Coord(0,0)));
-        assertFalse(isFinishValid(getPiece(new Coord(1,0)),new Coord(1,1)));
-        assertTrue(isFinishValid(getPiece(new Coord(1,0)),new Coord(0,1)));
-        assertTrue(isFinishValid(getPiece(new Coord(1,0)),new Coord(2,1)));
+        assertFalse(Regle.isFinishValid(getPiece(new Coord(1,0)),new Coord(0,0)));
+        assertFalse(Regle.isFinishValid(getPiece(new Coord(1,0)),new Coord(1,1)));
+        assertTrue(Regle.isFinishValid(getPiece(new Coord(1,0)),new Coord(0,1)));
+        assertTrue(Regle.isFinishValid(getPiece(new Coord(1,0)),new Coord(2,1)));
     }
 
     /** test la localisation du roi*/
@@ -60,35 +61,26 @@ class EchiquierTest {
     void testLocateKing() {
         Echiquier e = new Echiquier(new FabriquePiece(),"r7/RT6/8/8/8/8/8/8");
         System.out.println(e);
-        assertEquals(new Coord(0, 0), locateKing("NOIR"));
-        assertEquals(new Coord(1, 0), locateKing("BLANC"));
+        assertEquals(new Coord(0, 0), locateSensiblePiece(NOIR));
+        assertEquals(new Coord(1, 0), locateSensiblePiece(BLANC));
         e.deplacer(new Coord(0, 0),new Coord(5,6));
-        assertEquals(new Coord(5, 6), locateKing("NOIR"));
+        assertEquals(new Coord(5, 6), locateSensiblePiece(NOIR));
     }
-
-    @Test
-    void test() {
-        Echiquier e = new Echiquier(new FabriquePiece(),"7t/t2r4/2d4P/4d3/5T2/1P6/p4F2/1R2D2F");
-        System.out.println(e);
-        assertTrue(Regle.checkForMate("BLANC",locateKing("BLANC"),getPieceFromColor("NOIR")));
-        assertFalse(isStaleMate(getPieceFromColor("NOIR"), getPieceFromColor("BLANC"), "NOIR", locateKing("BLANC")));
-    }
-
 
     /** test la detection de promotion et la promotion des pions en dame*/
     @Test
     void testCheckForPromote(){
         Echiquier e = new Echiquier(new FabriquePiece(),"p2P3T/RT6/8/8/PPPPPPpp/8/8/rrrrpPpc");
-        e.checkForPromote("NOIR");
-        e.checkForPromote("BLANC");
+        e.checkForPromote(NOIR);
+        e.checkForPromote(BLANC);
        System.out.println(e.toString());
         int cpt=0;
-        for(IPiece p : getPieceFromColor("NOIR"))
+        for(IPiece p : getPieceFromColor(NOIR))
             if(p.getPieceType().equals("DAME"))
                 cpt++;
         assertEquals(3,cpt);
         cpt=0;
-        for(IPiece p : getPieceFromColor("BLANC"))
+        for(IPiece p : getPieceFromColor(BLANC))
             if(p.getPieceType().equals("DAME"))
                 cpt++;
         assertEquals(2,cpt);

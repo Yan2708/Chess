@@ -1,6 +1,9 @@
 package echiquier;
 
+import coordonnee.Coord;
+
 import java.util.ArrayList;
+import static echiquier.Couleur.*;
 
 public class Echiquier {
 
@@ -34,8 +37,7 @@ public class Echiquier {
         this.fabrique = fabrique;
         try{
             fillBoard(fabrique, fen);
-            kingError("BLANC");     //un echiquier doit contenir un roi Blanc
-            kingError("NOIR");      //et un roi Noir
+            kingError();            //un echiquier doit contenir deux rois
         }catch (ArrayIndexOutOfBoundsException | RoiIntrouvableException err){
             fillBoard(fabrique, BasicFen);
         }
@@ -59,7 +61,7 @@ public class Echiquier {
             String sequence = (s.matches(".*\\d.*")) ? ReformatFenSequence(s) : s;
 
             for (int col = 0, cpt = 0; cpt < sequence.length(); col++, cpt++)
-                echiquier[lig][col] = fabrique.getPiece(sequence.charAt(cpt), lig, col);
+                echiquier[lig][col] = fabrique.getPiece(sequence.charAt(cpt), new Coord(lig, col));
         }
     }
 
@@ -101,9 +103,10 @@ public class Echiquier {
     public void deplacer(Coord cS, Coord cF){
         assert(!inBound(cS) && !inBound(cF));
         IPiece p = getPiece(cS);
-        changePiece(cS, fabrique.getPiece('V', cS.getX(), cS.getY()));  //piece Vide à cStart
+        char typeVide = 'V';
+        changePiece(cS, fabrique.getPiece(typeVide, new Coord(cS.x, cS.y)));  //piece Vide à cStart
         changePiece(cF, p);
-        p.newPos(cF.getX(), cF.getY());
+        p.newPos(new Coord(cF.x, cF.y));
     }
 
     /** change une pièce sur l'échiquier
@@ -111,7 +114,7 @@ public class Echiquier {
      * @param p la piece remplaçante
      */
     public static void changePiece(Coord c, IPiece p){
-        echiquier[c.getX()][c.getY()] = p;
+        echiquier[c.x][c.y] = p;
     }
 
     /**
@@ -120,12 +123,11 @@ public class Echiquier {
      * @param couleur la couleur demandée
      * @return la liste de pieces
      */
-    public static ArrayList<IPiece> getPieceFromColor(String couleur){
-        //couleur = (couleur.equals("BLANC")) ? "NOIR" : "BLANC";
+    public static ArrayList<IPiece> getPieceFromColor(Couleur couleur){
         ArrayList<IPiece> pieces = new ArrayList<>();
         for(IPiece[] ligne : echiquier)
             for(IPiece p: ligne){
-                if(couleur.equals(p.getCouleur()))
+                if(Regle.isRightColor(p, couleur))
                     pieces.add(p);
             }
         return pieces;
@@ -137,18 +139,7 @@ public class Echiquier {
      * @return la pièce
      */
     public static IPiece getPiece(Coord c){
-        return echiquier[c.getX()][c.getY()];
-    }
-
-    /**
-     * Vérifie si le chemin entre 2 points n'a pas d'obstacle (pas l'arrivé* @param cF coordonnées de la case d'arrivé
-     * @param p la pièce à deplacer
-     */
-    public static boolean voieLibre(IPiece p, Coord cF){
-        Coord cS = Coord.coordFromPiece(p);
-        ArrayList<Coord> path = Utils.getPath(cS, cF);
-        path.removeIf(c -> c.equals(cF) || c.equals(cS) || estVide(c));
-        return path.isEmpty();
+        return echiquier[c.x][c.y];
     }
 
     /**
@@ -157,17 +148,7 @@ public class Echiquier {
      * @return la case est vide
      */
     public static boolean estVide(Coord c){
-        return echiquier[c.getX()][c.getY()].getPieceType().equals("VIDE");
-    }
-
-    /**
-     * Vérifie si la l'arrivé d'une piece sur une case est valide.
-     * @param c coordonnées de la case
-     * @param p la pièce à deplacer
-     */
-    public static boolean isFinishValid(IPiece p, Coord c){
-        IPiece pA = getPiece(c);
-        return !pA.getCouleur().equals(p.getCouleur()) && !pA.getPieceType().equals("ROI");
+        return echiquier[c.x][c.y].estVide();
     }
 
     /**
@@ -176,7 +157,7 @@ public class Echiquier {
      * @return si c est en dehors ou non
      */
     public static boolean inBound(Coord c){
-        int x = c.getX(), y = c.getY();
+        int x = c.x, y = c.y;
         return (x >= 0 && x < LIGNE) && (y >= 0 && y < COLONNE);
     }
 
@@ -185,21 +166,21 @@ public class Echiquier {
      * @param couleur la couleur du roi (NOIR ou BLANC)
      * @return les coordonnées du roi, null si aucun roi n'a été trouvé
      */
-    public static Coord locateKing(String couleur) {
+    public static Coord locateSensiblePiece(Couleur couleur) {
         for(IPiece[] ligne : echiquier)
             for(IPiece p : ligne)
-                if(p.getPieceType().equals("ROI") && p.getCouleur().equals(couleur))
+                if(p.estSensible() && Regle.isRightColor(p, couleur))
                     return Coord.coordFromPiece(p);
         return null;
     }
 
     /**
      * renvoie une exception si il y a pas de roi de couleur donné dans l'echiquier
-     * @param couleur la couleur des pieces
      * @throws RoiIntrouvableException aucun roi trouvé
      */
-    private static void kingError(String couleur) throws RoiIntrouvableException {
-        if(locateKing(couleur) == null)
+    private static void kingError() throws RoiIntrouvableException {
+        if(locateSensiblePiece(BLANC) == null &&
+            locateSensiblePiece(NOIR) == null)
             throw new RoiIntrouvableException();
     }
 
@@ -209,13 +190,13 @@ public class Echiquier {
      * les limites du tableau.
      * @param couleur la couleur des pièces à vérifier
      */
-    public void checkForPromote(String couleur){
-        int x = couleur.equals("BLANC") ? 0 : 7;
+    public void checkForPromote(Couleur couleur){
+        int x = couleur == BLANC ? 0 : 7;
         for(IPiece p : echiquier[x])        // les pieces de la ligne de fin.
-            if(p.getPieceType().equals("PION")){
-                int y = p.getColonne();
-                char type = p.getCouleur().equals("NOIR")?'d':'D';
-                echiquier[x][y] = fabrique.getPiece(type, x, y);
+            if(p.isPromotable()){
+                int y = p.getCoord().y;
+                char type = x==7?'d':'D';
+                echiquier[x][y] = fabrique.getPiece(type, new Coord(x, y));
             }
 
     }
@@ -227,6 +208,7 @@ public class Echiquier {
     @Override
     public String toString() {
         String SAUT = "    --- --- --- --- --- --- --- ---   \n"; // delimite les lignes
+        //voir la classe Character
         String LETTRE = "     a   b   c   d   e   f   g   h    \n"; // symbolise les colonnes
         int compteur = COLONNE; // compteur de de ligne
         StringBuilder sb = new StringBuilder(LETTRE + SAUT);
@@ -235,7 +217,7 @@ public class Echiquier {
             sb.append(" ").append(compteur).append(" |");
 
             for(IPiece p: ligne)
-                sb.append(" ").append(p.dessiner()).append(" |");
+                    sb.append(" ").append(p.dessiner()).append(" |");
 
             sb.append(" ").append(compteur--).append("\n").append(SAUT);
         }

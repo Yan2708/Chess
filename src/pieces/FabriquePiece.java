@@ -1,5 +1,7 @@
 package pieces;
 
+import coordonnee.Coord;
+import echiquier.Couleur;
 import echiquier.IFabriquePiece;
 import echiquier.IPiece;
 
@@ -8,24 +10,22 @@ public class FabriquePiece implements IFabriquePiece {
     /**
      * {@inheritDoc}
      */
-    public IPiece getPiece(char type, int x, int y) {
-        Couleur c = Character.isUpperCase(type) ? Couleur.BLANC : Couleur.NOIR;
-        PieceType pt;
-        pt = PieceType.getInstance(Character.toUpperCase(type));
-        switch(pt){
-            case FOU:
-                return new Fou(x, y, c);
-            case ROI:
-                return new Roi(x, y, c);
-            case DAME:
-                return new Dame(x, y, c);
-            case PION:
-                return new Pion(x, y, c);
-            case TOUR:
-                return new Tour(x, y, c);
-            case CAVALIER:
-                return new Cavalier(x, y, c);
-            default: return new Vide(x, y, Couleur.VIDE);
+    public IPiece getPiece(char type, Coord c) {
+        Couleur color = Character.isUpperCase(type) ? Couleur.BLANC : Couleur.NOIR;
+        switch(Character.toUpperCase(type)){
+            case 'F':
+                return new Fou(c, color);
+            case 'R':
+                return new Roi(c, color);
+            case 'D':
+                return new Dame(c, color);
+            case 'P':
+                return new Pion(c, color);
+            case 'T':
+                return new Tour(c, color);
+            case 'C':
+                return new Cavalier(c, color);
+            default: return new Vide(c, Couleur.VIDE);
         }
     }
 }

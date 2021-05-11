@@ -1,8 +1,10 @@
-package appli;
+package ChessPlayer;
 
-import echiquier.Coord;
+import coordonnee.Coord;
+import echiquier.Couleur;
 import echiquier.IPiece;
-import echiquier.Utils;
+import echiquier.Regle;
+
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -12,12 +14,12 @@ import static java.lang.Math.abs;
 
 public class Joueur {
 
-    private final String couleur;
+    private final Couleur couleur;
     protected Coord cS, cF; //, lastCF, lastCS;
     private static final String LETTRES = "ABCDEFGH"; // les lettres de l'echiquier
     private static final String CHIFFRES = "12345678";  // les chiffres de l'echiquier
 
-    public Joueur(String couleur){
+    public Joueur(Couleur couleur){
         this.couleur = couleur;
     }
 
@@ -60,13 +62,10 @@ public class Joueur {
      * @return si l'entrée est un coup légal ou non
      */
     public boolean isSemanticValid(String c, Coord cR, ArrayList<IPiece> enemies){
-        String couleurPassif = couleur.equals("BLANC") ? "NOIR" : "BLANC";
-
         getCoordFromString(c);
-
         IPiece p = getPiece(cS);
-        return p.getCouleur().equals(couleur) &&
-                Utils.getAllMoves(p, cR, couleurPassif, enemies).contains(cF);
+        return Regle.isRightColor(p, couleur) &&
+                p.getAllMoves(cR, enemies).contains(cF);
     }
 
     /**
@@ -82,7 +81,7 @@ public class Joueur {
         return sc.nextLine();
     }
 
-    public String getCouleur(){
+    public Couleur getCouleur(){
         return couleur;
     }
 

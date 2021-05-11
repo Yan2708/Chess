@@ -1,7 +1,12 @@
 package appli;
 
+import ChessPlayer.IA;
+import ChessPlayer.Joueur;
+import coordonnee.Coord;
 import echiquier.*;
 import pieces.*;
+import static echiquier.Couleur.*;
+
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -12,7 +17,8 @@ import static echiquier.Regle.*;
 public class Application {
 
     private static Joueur p1, p2, actif, passif;
-    private static String usersLine, message, couleurActif, couleurPassif;
+    private static String usersLine, message;
+    private static Couleur couleurActif, couleurPassif;
     private static final String DISPLAY = "mode de jeux : \n" +
                                     "- Player vs Player (\"pp\") \n" +
                                     "- Plaver vs Ia (\"pi\") \n" +
@@ -56,28 +62,28 @@ public class Application {
 
     private static void fabriqueJoueur(String mode){
         switch (mode) {
-            case "pp":  p1 = new Joueur("BLANC");
-                        p2 = new Joueur("NOIR");
+            case "pp":  p1 = new Joueur(BLANC);
+                        p2 = new Joueur(NOIR);
                         break;
-            case "pi":  p1 = new Joueur("BLANC");
-                        p2 = new IA("NOIR");
+            case "pi":  p1 = new Joueur(BLANC);
+                        p2 = new IA(NOIR);
                         break;
-            case "ii":  p1 = new IA("BLANC");
-                        p2 = new IA("NOIR");
+            case "ii":  p1 = new IA(BLANC);
+                        p2 = new IA(NOIR);
                         break;
         }
     }
 
-    private static boolean partieContinue(ArrayList<IPiece> ennemies, ArrayList<IPiece> allys, Coord cR){
-        if(isStaleMate(ennemies, allys, couleurPassif, cR)) {
+    public static boolean partieEnd(Coord cR, ArrayList<IPiece> allys, ArrayList<IPiece> ennemies){
+        if(isStaleMate(cR, allys, ennemies)) {
             message = "Egalité par pat";
             return true;
         }
-        if(Regle.checkForMate(couleurActif, cR, ennemies)){
+        if(Regle.checkForMate(cR, allys, ennemies)){
             message="Les "+ actif.getCouleur() + "S ont perdu";
             return true;
         }
-        if(Regle.impossibleMat(ennemies,allys)){
+        if(Regle.impossibleMat(allys, ennemies)){
             message = "NULLE";
             return true;
         }
@@ -116,13 +122,13 @@ public class Application {
 
         System.out.println(e.toString());
         while(true) {
-            //actif.pause();
-            Coord cR = locateKing(couleurActif);
+            actif.pause();
+            Coord cR = locateSensiblePiece(couleurActif);
 
             ArrayList<IPiece> piecesActif = getPieceFromColor(couleurActif);
             ArrayList<IPiece> piecesPassif = getPieceFromColor(couleurPassif);
 
-            if(partieContinue(piecesPassif, piecesActif, cR))
+            if(partieEnd(cR, piecesActif, piecesPassif))
                 break;
 
             System.out.print(couleurActif + " joue ");

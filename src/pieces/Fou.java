@@ -1,5 +1,8 @@
 package pieces;
 
+import coordonnee.Coord;
+import echiquier.Couleur;
+
 import static java.lang.Math.abs;
 import static pieces.PieceType.FOU;
 
@@ -7,19 +10,20 @@ public class Fou extends Piece{
 
     /**
      * Constructeur d'un fou
-     * @see Piece#Piece(int, int, Couleur, PieceType)
+     * @see Piece#Piece(Couleur, PieceType, coordonnee.Coord)
      */
-    public Fou(int ligne, int colonne, Couleur c) {
-        super(ligne, colonne,c, FOU);
+    public Fou(Coord coord, Couleur c) {
+        super(c, FOU, coord);
     }
 
     /**
      * {@inheritDoc}
+     * @param c
      */
     @Override
-    public boolean estPossible(int ligne, int colonne) {
-        int varX = abs(this.getLigne()-ligne);
-        int varY = abs(this.getColonne()-colonne);
+    public boolean estPossible(Coord c) {
+        int varX = abs(coord.x-c.x);
+        int varY = abs(coord.y-c.y);
         return (varY >= 1 && varX==varY);
     }
 
@@ -29,5 +33,10 @@ public class Fou extends Piece{
     @Override
     public String getSymbole() {
         return "F";
+    }
+
+    @Override
+    public boolean canHoldEndGame() {
+        return false;
     }
 }
