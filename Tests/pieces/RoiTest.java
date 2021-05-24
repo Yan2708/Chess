@@ -55,4 +55,5 @@ class RoiTest {
         for(String coup : coupPossible)
             assertTrue(coupRoi.contains(new Coord(coup)));
     }
+
 }
