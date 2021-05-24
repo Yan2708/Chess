@@ -4,22 +4,21 @@ import coordonnee.Coord;
 import echiquier.Couleur;
 
 import static java.lang.Math.abs;
-import static pieces.PieceType.CAVALIER;
 
+/**
+ * cavalier ou le cheval dans le jeu d'echec.
+ * Le déplacement du cavalier est original.
+ * Il se déplace en L, c’est-à-dire de deux cases dans une direction
+ * combinées avec une case perpendiculairement.
+ */
 public class Cavalier extends Piece{
 
-    /**
-     * Constructeur d'un cavalier
-     * @see Piece#Piece(Couleur, PieceType, coordonnee.Coord)
-     */
+    /** Constructeur d'un cavalier */
     public Cavalier(Coord coord, Couleur c) {
-        super(c, CAVALIER, coord);
+        super(c, coord);
     }
 
-    /**
-     * {@inheritDoc}
-     * @param c
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean estPossible(Coord c) {
         int varX = abs(coord.x-c.x);
@@ -27,9 +26,7 @@ public class Cavalier extends Piece{
         return (varX==1 && varY==2)||(varX==2 && varY==1);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String getSymbole() {
         return "C";

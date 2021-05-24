@@ -1,5 +1,6 @@
 package coordonnee;
 
+import echiquier.Echiquier;
 import echiquier.IPiece;
 
 import static java.lang.Math.abs;
@@ -14,23 +15,37 @@ import static java.lang.Math.abs;
  */
 public class Coord {
 
-    /* X represente les lignes et y les colonnes d'un tableau 2d
-     */
-    public int x,y; // A DEMANDER SI C'EST CORRECT
+    /* X represente les lignes et y les colonnes d'un tableau 2d */
+    private int x,y; // A DEMANDER SI C'EST CORRECT
 
-    /**
-     * Constructeur de coordonnée
-     * @param x la coordonnée en x
-     * @param y la coordonnée en y
-     */
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    /** Constructeur de coordonnée*/
     public Coord(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
     /**
+     * Constructeur de coordonnée a partir d'une String
+     * "b2" devient (6, 1), les lignes et colonnes sont inversés
+     * - pour arriver d'une lettre majuscule à un chiffre il faut le soustraire par 65
+     * - pour arriver d'un nombre en char a un Int il faut le soustaire par 48, puis l'inverser
+     * selon les lignes de l'echiquier.
+     **/
+    public Coord(String c){
+        this(abs((c.charAt(1) - 48) - Echiquier.LIGNE), Character.toUpperCase(c.charAt(0)) - 65);
+    }
+
+    /**
      * Ajoute les valeurs d'une coordonnée à une autre
-     * @param c la coordonnée a ajouter (mouvement primaire)
+     * @param c la coordonnée a ajouter (souvent un mouvement primaire)
      */
     public void add(Coord c){
         this.x += c.x;
@@ -38,17 +53,8 @@ public class Coord {
     }
 
     /**
-     * Inverse les valeurs de la coordonnée
-     * @return la coordonnée inversée
-     */
-    public Coord inverse(){
-         this.x = -(x);
-         this.y = -(y);
-        return this;
-    }
-
-    /**
      * Renvoie si le chemin est droit ou non
+     * (diagonale, horizontale, verticale)
      * @param cS coordonnées de depart
      * @param cF coordonnées d'arrivé
      * @return le chemin est horizontale, verticale ou diagonale
@@ -82,8 +88,8 @@ public class Coord {
      * Méthode de comparaison d'une coordonnée à un objet.
      * lorsque des methodes comme Contains compare deux objets elle compare les adresses
      * de ces objets en memoire. Dans notre cas deux coordonnées peuvent etre identique
-     * sans avoir la meme adresse, alors on redefinie la method Equals pour que ces methodes
-     * n'uttilise pas la methode Equals par defaut.
+     * sans avoir la meme adresse, alors on redefinie la method Equals pour ne pas
+     * uttiliser celle par defaut.
      * @param o l'objet avec laquelle on veut comparer
      * @return si les objets sont identiques
      */
@@ -95,26 +101,21 @@ public class Coord {
         return x == coord.x && y == coord.y;
     }
 
-    /**
-     * revoie le clone d'une coordonnée
-     * @return le clone
-     */
+    /** revoie le clone d'une coordonnée */
     @Override
     public Coord clone() {
         return new Coord(this.x, this.y);
     }
 
     /**
-     * renvoie les coordonnées d'une piece
-     * @param p la piece
-     * @return sa coordonnées
-     */
-    public static Coord coordFromPiece(IPiece p){
-        return p.getCoord();
-    }
-
+     * la coordonnée en format conventionelle
+     * une coordonnée 0,1 devient "b8" (les lignes et les colonnes sont inversé)
+     * car dans la table Ascii les lettres commenece à la decimal 97
+     * Enfin le numero de ligne est inversé par rapport au ligne d'un tableau
+     * (la ligne 1 du tableau devient la ligne 7 sur l'echiquier, 3 -> 5, 2 -> 6 etc...)
+     * */
     @Override
     public String toString(){
-        return (char)(y + 97)+""+abs(x - 8);
+        return (char)(y + 97)+""+abs(x - Echiquier.LIGNE);
     }
 }

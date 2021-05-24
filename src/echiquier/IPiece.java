@@ -2,53 +2,72 @@ package echiquier;
 
 import coordonnee.Coord;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
+/**
+ * Interface definissant les elements de l'echiquier, ici des pieces.
+ */
 public interface IPiece {
+
+    /** Met à jour la position de la pièce selon la position donnée en paramètre */
+    void newPos(Coord c);
+
+    /** Renvoie la couleur de la pièce */
+    Couleur getCouleur();
 
     /**
      * Pour une position donnée, calcule si le déplacement est possible pour la pièce
-     *
      * @param c@return si le deplacement est possible pour la pièce ou non
      */
     boolean estPossible(Coord c);
 
     /**
-     * Renvoie le bon caractère selon la couleur de la pièce (BLANC en MAJUSCULE, NOIR en minuscule)
+     * Renvoie le type de la pièce avec comme difference BLANC en MAJUSCULE, NOIR en minuscule
      * @return la représentation de la pièce
      */
     String dessiner();
 
-    /**
-     * Renvoie la couleur de la pièce
-     * @return la couleur de la pièce
-     */
-    Couleur getCouleur();
-
-    /**
-     * Getter du type de la pièce
-     * @return le type de la pièce
-     */
-    String getPieceType();
-
-    /**
-     * Met à jour la position de la pièce selon la position donnée en paramètre
-     */
-    void newPos(Coord c);
-
+    /** Renvoie la coordonnée */
     Coord getCoord();
 
-    boolean isCoupValid(Coord cF);
+    /**
+     * Verifie si pour une coordonné d'arrivée la piece peut effectué le deplacement
+     * dans l'echiquier.
+     * verifie si la voie est libre, le deplacement est possible etc...
+     * @param cF coordonné d'arrivée
+     * @param e l'échiquier
+     * @return le coup est valide
+     */
+    boolean isCoupValid(Coord cF, Echiquier e);
 
+    /** Vérifie si la piece est sensible*/
     boolean estSensible();
 
     boolean estVide();
 
-    boolean isPromotable();
+    /** Renvoie la piece chargé de promouvoir la piece a etre promu*/
+    IPiece autoPromote();
 
-    boolean peutAttaquer(Coord c);
+    /**
+     * Verifie si une piece peut se deplacer sur une coordonnée donnée.
+     * à la difference de isCoupValid() cette methode ne verifie pas
+     * si l'arrivé d'une piece vers la coordonnée est correct.
+     * @param c coordonné d'arrivée
+     * @param e L'échiquier
+     * @return  Si la piéce est attaquable
+     */
+    boolean peutAttaquer(Coord c, Echiquier e);
 
-    ArrayList<Coord> getAllMoves(Coord cR, ArrayList<IPiece> ennemies);
+    /**
+     * Renvoie tout les mouvements possible de la piece sur l'echiquier.
+     * @param sC la coordonnée sensible de l'allié
+     * @param ennemies Les pièces enemies
+     * @param e l'echiquier
+     * @return tout les movements possible
+     */
+    LinkedList<Coord> getAllMoves(Coord sC, List<IPiece> ennemies, Echiquier e);
 
+    /** Renvoie la capacité d'une piece a tenir une fin de partie (quand il ne reste qu'elle et les rois)*/
     boolean canHoldEndGame();
 }

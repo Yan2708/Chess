@@ -2,79 +2,63 @@ package pieces;
 
 
 import coordonnee.Coord;
-import echiquier.Couleur;
-import echiquier.IPiece;
-import echiquier.Utils;
-import echiquier.Regle;
+import echiquier.*;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import static echiquier.Couleur.BLANC;
 
+/** {@inheritDoc} */
 public abstract class Piece implements IPiece
 {
-    //Position de la pièce
+    /** Position de la pièce */
     protected Coord coord;
-    //Couleur de la pièce
-    private final Couleur couleur;
-    //Le type de pièce
-    protected final PieceType type;
 
-    /**
-     * Constructeur d'une pièce
-     * @param c la couleur de la pièce
-     * @param pT le type de pièce
-     * @param coord
-     */
-    public Piece(Couleur c, PieceType pT, Coord coord) {
+    /** Couleur de la pièce */
+    private final Couleur couleur;
+
+    /** Constructeur d'une pièce */
+    public Piece(Couleur c, Coord coord) {
         newPos(coord);
         couleur=c;
-        type = pT;
     }
 
     /** {@inheritDoc} */
+    @Override
     public void newPos(Coord coord){
-        setPos(coord);
-    }
-
-    /**
-     * Met les nouvelles coordonnées de la pièce
-     * @param coord la nouvelle coordonnée
-     */
-    public void setPos(Coord coord){
         this.coord = coord;
     }
 
     /** {@inheritDoc} */
-    public Couleur getCouleur(){
+    @Override
+    public final Couleur getCouleur(){
         return this.couleur;
     }
 
     /** {@inheritDoc} */
+    @Override
     public abstract boolean estPossible(Coord c);
 
-    /**
-     * Renvoie le symbole de la pièce
-     * @return le symbole de la pièce
-     */
+    /** Renvoie le symbole de la pièce */
     public abstract String getSymbole();
 
     /** {@inheritDoc} */
-    public String dessiner(){
+    @Override
+    public final String dessiner(){
         return (couleur == BLANC) ? getSymbole() : getSymbole().toLowerCase() ;
     }
 
     /** {@inheritDoc} */
-    public Coord getCoord() {
+    @Override
+    public final Coord getCoord() {
         return coord;
     }
 
     /** {@inheritDoc} */
-    public String getPieceType(){return type.toString();}
-
-    //refaire pour le pion, FAIT
-    public boolean isCoupValid(Coord cF){
-        return this.estPossible(cF) && Regle.voieLibre(this, cF) && Regle.isFinishValid(this, cF);
+    @Override
+    public boolean isCoupValid(Coord cF, Echiquier e){
+        return this.estPossible(cF) && Regle.voieLibre(this, cF, e) && Regle.isFinishValid(this, cF, e);
     }
 
     //refaire pour le roi,
@@ -87,39 +71,43 @@ public abstract class Piece implements IPiece
         return false;
     }
 
-    //refaire pour Pion
-    public boolean isPromotable(){
-        return false;
+    /** {@inheritDoc} */
+    @Override
+    public IPiece autoPromote(){ return this;}
+
+    /** {@inheritDoc} */
+    public boolean peutAttaquer(Coord c, Echiquier e){
+        return estPossible(c) && Regle.voieLibre(this, c, e);
     }
 
-    //refaire pour Pion
-    public boolean peutAttaquer(Coord c){
-        return estPossible(c) && Regle.voieLibre(this, c);
-    }
-
-    //refaire pour ROI
-    public ArrayList<Coord> getAllMoves(Coord cR, ArrayList<IPiece> ennemies){
-        if(isPinned(cR)){
-            return Utils.allMovesFromPin(this, cR, couleur);
+    /** {@inheritDoc} */
+    @Override
+    public LinkedList<Coord> getAllMoves(Coord sC, List<IPiece> ennemies, Echiquier e){
+        if(isPinned(sC, e)){
+            return Utils.allMovesFromPin(this, sC, couleur, e);
         }
 
-        if(Regle.isAttacked(cR, ennemies))
-            return Utils.allMovesDefendingCheck(this, cR, ennemies);
+        if(Regle.isAttacked(sC, ennemies, e))
+            return Utils.allMovesDefendingCheck(this, sC, ennemies, e);
 
-        return Utils.allClassicMoves(this);
+        return e.allClassicMoves(this);
     }
 
-    //refaire pour ROi
-    public boolean isPinned(Coord cR){
-        if(!Coord.isStraightPath(coord, cR)||
-            !Regle.voieLibre(this, cR))
+    /**
+     * Retourne si la pièce est clouée
+     * @param sC la coordonnée sensible de l'allié
+     * @param e l'echiquier
+     * @return si la pièce est clouée ou non
+     */
+    protected boolean isPinned(Coord sC, Echiquier e){
+        if(!Coord.isStraightPath(coord, sC)||
+            !Regle.voieLibre(this, sC, e))
             return false;
 
-        return !(Utils.getPningPiece(coord, cR, couleur) == null);
+        return !(Utils.getPningPiece(coord, sC, couleur, e) == null);
     }
 
     public boolean canHoldEndGame(){
         return true;
     }
-
 }

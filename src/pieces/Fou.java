@@ -4,22 +4,19 @@ import coordonnee.Coord;
 import echiquier.Couleur;
 
 import static java.lang.Math.abs;
-import static pieces.PieceType.FOU;
 
+/**
+ * represente le fou dans les echecs
+ * il se deplace uniquement en diagonale.
+ */
 public class Fou extends Piece{
 
-    /**
-     * Constructeur d'un fou
-     * @see Piece#Piece(Couleur, PieceType, coordonnee.Coord)
-     */
+    /** Constructeur d'un fou */
     public Fou(Coord coord, Couleur c) {
-        super(c, FOU, coord);
+        super(c, coord);
     }
 
-    /**
-     * {@inheritDoc}
-     * @param c
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean estPossible(Coord c) {
         int varX = abs(coord.x-c.x);
@@ -27,9 +24,7 @@ public class Fou extends Piece{
         return (varY >= 1 && varX==varY);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String getSymbole() {
         return "F";

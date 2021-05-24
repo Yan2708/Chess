@@ -1,14 +1,16 @@
 package echiquier;
 
 import coordonnee.Coord;
-import java.util.ArrayList;
+
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import static echiquier.Couleur.*;
 
-
-import static echiquier.Echiquier.inBound;
-
-
+/**
+ * classe regroupant les utilitaires d'un echiquier.
+ */
 public class Utils {
 
     /**
@@ -17,11 +19,11 @@ public class Utils {
      * @param cF la coordonnée d'arrivée
      * @return les coordonnées de la droite entre les deux coords.
      */
-    public static ArrayList<Coord> getPath(Coord cS, Coord cF){
-        ArrayList<Coord> tile = new ArrayList<>(Collections.singletonList(cF));
+    public static LinkedList<Coord> getPath(Coord cS, Coord cF){
+        LinkedList<Coord> tile = new LinkedList<>(Collections.singletonList(cF));
         Coord cClone = cS.clone();
         if(!Coord.isStraightPath(cS, cF))        //  si le chemin n'est pas verticale ou horizontale
-            return tile;                        //  il y a pas de chemin de case attaqué.
+            return tile;                         //  il y a pas de chemin de case attaqué.
 
         Coord pM = Coord.getPrimaryMove(cS, cF);
 
@@ -37,109 +39,93 @@ public class Utils {
      * Retourne toutes les pièces attaquant une coordonnées.
      * @param c la coordonnée
      * @param pieces les pièces enemies
+     * @param e l'echiquier
      * @return une liste des pièces attaquantes
      */
-    public static ArrayList<IPiece> getAllAttackingPiece(Coord c, ArrayList<IPiece> pieces){
-        ArrayList<IPiece> cPiece = new ArrayList<>();
+    public static LinkedList<IPiece> getAllAttackingPiece(Coord c, List<IPiece> pieces, Echiquier e){
+        LinkedList<IPiece> cPiece = new LinkedList<>();
         for(IPiece p : pieces)
-            if(p.peutAttaquer(c))
+            if(p.peutAttaquer(c, e))
                 cPiece.add(p);
         return cPiece;
     }
 
-
     /**
-     * renvoie la liste de toutes les coordonnées atteignable dans l'échiquier par une piece donnée.
-     * @param p la piece
-     * @return la liste des coordonnées atteignable
-     */
-    public static ArrayList<Coord> allClassicMoves(IPiece p){
-        ArrayList<Coord> allClassicMoves = new ArrayList<>();
-        Coord cP = p.getCoord();
-
-        for (int x = 0; x < Echiquier.LIGNE; x++) {
-            for (int y = 0; y < Echiquier.COLONNE; y++) {
-
-                if(x == cP.x && y == cP.y) continue;
-
-                Coord c = new Coord(x, y);
-                if((p.isCoupValid(c)))
-                    allClassicMoves.add(c);
-            }
-        }
-        return allClassicMoves;
-    }
-
-    /**
-     * Retourne les déplacements possibles d'une pièce pour défendre son roi
+     * Retourne les déplacements possibles d'une pièce pour défendre une coordonnée sensible
      * @param p la pièce
-     * @param sC la position du roi
+     * @param sC la coordonnée sensible
      * @param ennemies les pièces ennemies
-     * @return les coordonnées possibles de la pièce pour défendre son roi
+     * @param e l'echiquier
+     * @return les coordonnées possibles de la pièce pour défendre
      */
-    public static ArrayList<Coord> allMovesDefendingCheck(IPiece p, Coord sC, ArrayList<IPiece> ennemies){
-        ArrayList<Coord> moves = new ArrayList<>();
-        ArrayList<IPiece> attackingPiece = getAllAttackingPiece(sC, ennemies);
-
+    public static LinkedList<Coord> allMovesDefendingCheck(IPiece p, Coord sC, List<IPiece> ennemies, Echiquier e){
+        LinkedList<Coord> moves = new LinkedList<>();
+        LinkedList<IPiece> attackingPiece = getAllAttackingPiece(sC, ennemies, e);
 
         if(attackingPiece.size() != 1)     //s'il y a plusieurs piece attaquante
             return moves;                  //une piece ne peut pas defendre
 
-        Coord cF = Coord.coordFromPiece(attackingPiece.get(0));
-        ArrayList<Coord> path = getPath(sC, cF);    //le chemin entre la piece sensible
+        Coord cF = attackingPiece.get(0).getCoord();
+        LinkedList<Coord> path = getPath(sC, cF);    //le chemin entre la piece sensible
                                                     // et la piece attaquante
-        return allValidMovesFromPath(p, path);
+        return allValidMovesFromPath(p, path, e);
     }
 
     /**
      * Retourne les coordonnées de déplacement possibles pour une pièce clouée
      * @param p la pièce clouée
-     * @param sC les coordonnées du roi
+     * @param sC la coordonné sensible qui donne lieu au clouage
      * @param couleur la couleur des ennemis
+     * @param e l'echiquier
      * @return la liste des coordonnées
      */
-    public static ArrayList<Coord> allMovesFromPin(IPiece p, Coord sC, Couleur couleur){
-        ArrayList<Coord> moves = new ArrayList<>();
+    public static LinkedList<Coord> allMovesFromPin(IPiece p, Coord sC, Couleur couleur, Echiquier e){
+        LinkedList<Coord> moves = new LinkedList<>();
         Coord cS = p.getCoord();
-        IPiece pningPiece = getPningPiece(cS, sC, couleur); //la piece clouante
+        IPiece pningPiece = getPningPiece(cS, sC, couleur, e); //la piece clouante
 
         if(pningPiece == null)
             return moves;
 
-        ArrayList<Coord> path = getPath(cS, Coord.coordFromPiece(pningPiece));
-        return allValidMovesFromPath(p, path);
+        List<Coord> path = getPath(cS, pningPiece.getCoord());
+        return allValidMovesFromPath(p, path, e);
     }
 
     /**
-     *
-     * @param p
-     * @param path
-     * @return
+     * Renvoie pour un chemin de coordonnée donné les coordonnées que la piece
+     * peut acceder.
+     * @param p la piece
+     * @param path le chemin
+     * @param e l'echiquier
+     * @return les coordonnées accessible
      */
-    private static ArrayList<Coord> allValidMovesFromPath(IPiece p, ArrayList<Coord> path){
-        ArrayList<Coord> moves = new ArrayList<>();
+    private static LinkedList<Coord> allValidMovesFromPath(IPiece p, List<Coord> path, Echiquier e){
+        LinkedList<Coord> moves = new LinkedList<>();
         for(Coord c : path)
-            if(p.isCoupValid(c))
+            if(p.isCoupValid(c, e))
                 moves.add(c);
         return moves;
     }
 
     /**
-     * Retourne la pièce susceptible d'attaquer le roi si la pièce clouée n'est plus là
+     * Retourne la pièce susceptible d'attaquer une coordonnée sensible,
+     * si pièce testé n'est plus la.
+     * Clouage en francais ou Pin en anglais.
      * @param cS la position de la pièce
-     * @param sC la position du roi
+     * @param sC la coordonnée sensible de l'allié
      * @param couleur la couleur ennemie
+     * @param e l'echiquier
      * @return la pièce qui cloue ou rien
      */
-    public static IPiece getPningPiece(Coord cS, Coord sC, Couleur couleur){
+    public static IPiece getPningPiece(Coord cS, Coord sC, Couleur couleur, Echiquier e){
         Couleur oppositeColor = couleur == BLANC ? NOIR : BLANC;
-        ArrayList<Coord> pathToBorder = getPathToBorder(cS, Coord.getPrimaryMove(sC, cS));
+        List<Coord> pathToBorder = getPathToBorder(cS, Coord.getPrimaryMove(sC, cS));
         for(Coord c : pathToBorder){
-            IPiece piece = Echiquier.getPiece(c);
+            IPiece piece = e.getPiece(c);
 
             if(Regle.isRightColor(piece, oppositeColor) &&            // si dans ce chemin il y a une piece
-                    piece.isCoupValid(cS) &&               // si la piece peut prendre la piece clouée
-                    piece.estPossible(sC))                // et le roi juste apres.
+                    piece.isCoupValid(cS, e) &&                       // si la piece peut prendre la piece clouée
+                    piece.estPossible(sC))                            // et le roi juste apres.
                 return piece;
         }
         return null;    //aucune piece clouante
@@ -147,18 +133,20 @@ public class Utils {
 
     /**
      * Renvoie une liste de coordonnées allant d'une position donnée à la limite de l'echiquier.
-     * @param cS oord d'arrivé
+     * Cette methode fonction grace au mouvement primaire pour retrouver la coordonnée
+     * delimitant la fin de l'echiquier.
+     * @param cS coord d'arrivé
      * @param cP mouvement primaire
      * @return les coordonnées
      */
-    public static ArrayList<Coord> getPathToBorder(Coord cS, Coord cP) {
+    public static LinkedList<Coord> getPathToBorder(Coord cS, Coord cP) {
         Coord cF = cS.clone();   // clone pour manipuler
 
         // on applique le mouvement primaire tant que la limite de l'echiquier n'est pas atteinte
-        while(inBound(cF)){
+        while(Echiquier.inBound(cF)){
             cF.add(cP);     //add = addition de coordonnées avec un mvnt primaire
         }
-        cF.add(cP.inverse());   //on revient d'un en arriere car on est hors limite (boucle while)
+        cF.add(new Coord(-(cP.getX()), -(cP.getY()) ) );   //on revient d'un en arriere car on est hors limite (boucle while)
         return getPath(cS, cF);
     }
 

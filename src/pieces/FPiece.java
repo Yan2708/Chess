@@ -2,10 +2,11 @@ package pieces;
 
 import coordonnee.Coord;
 import echiquier.Couleur;
-import echiquier.IFabriquePiece;
+import echiquier.IFabPiece;
 import echiquier.IPiece;
 
-public class FabriquePiece implements IFabriquePiece {
+/** {@inheritDoc} */
+public class FPiece implements IFabPiece {
 
     /**
      * {@inheritDoc}

@@ -4,21 +4,18 @@ import coordonnee.Coord;
 import echiquier.Couleur;
 
 import static java.lang.Math.abs;
-import static pieces.PieceType.TOUR;
 
+/**
+ * Represente les Tours dans un jeu d'echec.
+ * La tour peut se déplacer horizontalement ou verticalement.
+ */
 public class Tour extends Piece{
-    /**
-     * Constructeur d'une tour
-     * @see Piece#Piece(Couleur, PieceType, coordonnee.Coord)
-     */
+    /** Constructeur d'une tour */
     public Tour(Coord coord, Couleur c) {
-        super(c, TOUR, coord);
+        super(c, coord);
     }
 
-    /**
-     * {@inheritDoc}
-     * @param c
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean estPossible(Coord c) {
         int varX = abs(coord.x-c.x);
@@ -26,9 +23,7 @@ public class Tour extends Piece{
         return (varX > 0 && varY == 0) || (varY > 0 && varX == 0);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String getSymbole() {
         return "T";

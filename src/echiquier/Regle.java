@@ -2,38 +2,46 @@ package echiquier;
 
 
 import coordonnee.Coord;
-import static echiquier.Couleur.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
-
+/**
+ * classe regroupant les regles mis en place par les echecs.
+ * */
 public class Regle {
 
+    /** verifie que la couleur entre 2 pieces est identique*/
     public static boolean areSameColor(IPiece p1, IPiece p2){
         return p1.getCouleur() == p2.getCouleur();
     }
 
+    /** verifie que la couleur d'une piece est celle souhaité*/
     public static boolean isRightColor(IPiece p, Couleur couleur){
         return p.getCouleur() == couleur;
     }
 
+    /** verifie que 2 pieces sont opposés (NOIR vs BLANC)*/
     public static boolean areOpposite(IPiece p1, IPiece p2) {
         return !areSameColor(p1, p2) && !p2.estVide();
     }
 
     /**
      * Verifie si pour une couleur donnée le roi est en echec et mat.
-     * La premiere partie verifie si un piece alliée au roi peut bloquer l'echec
-     * la seconde partie verifie si le roi peut s'echapper de l'echec.
-     * @param sC les coordonnées du roi
-     * @param allys toutes les pieces de l'ennemi
+     * Le roi doit etre en echec et s'il n'y a aucun coup possible
+     * alors la condition est verifié.
+     * @param sC la coordonnée sensible de l'allié
+     * @param allys toutes les pieces alliés
+     * @param ennemies toutes les pieces de l'ennemi
+     * @param e l'echiquier
      * @return si le roi est en échec et mat
      */
-    public static boolean checkForMate(Coord sC, ArrayList<IPiece> allys, ArrayList<IPiece> ennemies){
-        if(!isAttacked(sC, ennemies))
+    public static boolean checkForMate(Coord sC, List<IPiece> allys, List<IPiece> ennemies, Echiquier e){
+        if(!isAttacked(sC, ennemies, e))
             return false;
 
-        return getAllPossibleMoves(sC, allys, ennemies).isEmpty();
+        return getAllPossibleMoves(sC, allys, ennemies, e).isEmpty();
     }
 
     /**
@@ -44,40 +52,45 @@ public class Regle {
      * @param sC les coordonnées du roi
      * @param allys les pieces alliées
      * @param ennemies les pieces ennemies
+     * @param e l'echiquier
      * @return l'egalité par pat est detecté
      */
-    public static boolean isStaleMate(Coord sC, ArrayList<IPiece> allys, ArrayList<IPiece> ennemies){
-        if(isAttacked(sC, ennemies))
+    public static boolean isStaleMate(Coord sC, List<IPiece> allys, List<IPiece> ennemies, Echiquier e){
+        if(isAttacked(sC, ennemies, e))
             return false;
 
-        return getAllPossibleMoves(sC, allys, ennemies).isEmpty();
+        return getAllPossibleMoves(sC, allys, ennemies, e).isEmpty();
     }
 
     /**
-     *
-     * @param sC
-     * @param allys
-     * @param ennemies
-     * @return
+     * Renvoie tout les movemements possibles d'un groupe de piece.
+     * on ne cherche pas a acceder aux mouvement mais a les denombrer
+     * @param sC la coordonnée sensible de l'allié
+     * @param allys les pieces alliées
+     * @param ennemies les pieces ennemies
+     * @param e l'echiquier
+     * @return tout les movemements possibles d'un groupe de piece
      */
-    private static ArrayList<Coord> getAllPossibleMoves(Coord sC, ArrayList<IPiece> allys, ArrayList<IPiece> ennemies){
+    private static ArrayList<Coord> getAllPossibleMoves(Coord sC, List<IPiece> allys, List<IPiece> ennemies,
+                                                        Echiquier e){
         ArrayList<Coord> allPossibleMoves = new ArrayList<>();
 
         for(IPiece p: allys)
-            allPossibleMoves.addAll(p.getAllMoves(sC, ennemies));
+            allPossibleMoves.addAll(p.getAllMoves(sC, ennemies, e));
 
         return allPossibleMoves;
     }
 
     /**
-     * verifie avec les coordonnée du roi si celui-ci est attaquée par les pieces adverses.
+     * verifie avec si la coordonnée sensible est attaquée par les pieces adverses.
      * @param sC les coordonnées du roi
      * @param ennemies les pièces présentes sur l'échiquier
-     * @return si une pièce(s) menace(s) le roi
-     * @see Utils#getAllAttackingPiece(Coord, ArrayList)
+     * @param e l'echiquier
+     * @return si une pièce(s) menace(s) la coordonnée sensible
+     * @see Utils#getAllAttackingPiece(Coord, java.util.List, Echiquier)
      */
-    public static boolean isAttacked(Coord sC, ArrayList<IPiece> ennemies){
-        return !Utils.getAllAttackingPiece(sC, ennemies).isEmpty();
+    public static boolean isAttacked(Coord sC, List<IPiece> ennemies, Echiquier e){
+        return !Utils.getAllAttackingPiece(sC, ennemies, e).isEmpty();
     }
 
     /**
@@ -87,32 +100,37 @@ public class Regle {
      * @param ennemies      les pieces ennemies
      * @return              si le matériel des joueurs est insuffisant pour mettre l'un l'autre en echec et mat
      */
-    public static boolean impossibleMat(ArrayList<IPiece> allys, ArrayList<IPiece> ennemies){
-        ArrayList<IPiece> allPieces = new ArrayList<>(ennemies);
+    public static boolean impossibleMat(List<IPiece> allys, List<IPiece> ennemies){
+        LinkedList<IPiece> allPieces = new LinkedList<>(ennemies);
         allPieces.addAll(allys);
         allPieces.removeIf(p -> !p.canHoldEndGame());
 
-        return allPieces.isEmpty(); //"King vs. king"
+        return allPieces.isEmpty();
     }
 
     /**
-     * Vérifie si le chemin entre 2 points n'a pas d'obstacle (pas l'arrivé* @param cF coordonnées de la case d'arrivé
+     * Vérifie si le chemin entre 2 points n'a pas d'obstacle (pas l'arrivé)
+     * @param cF coordonnées de la case d'arrivé
      * @param p la pièce à deplacer
+     * @param e l'echiquier
+     * @return la voie est libre
      */
-    public static boolean voieLibre(IPiece p, Coord cF){
-        Coord cS = Coord.coordFromPiece(p);
-        ArrayList<Coord> path = Utils.getPath(cS, cF);
-        path.removeIf(c -> c.equals(cF) || c.equals(cS) || Echiquier.estVide(c));
+    public static boolean voieLibre(IPiece p, Coord cF, Echiquier e){
+        Coord cS = p.getCoord();
+        LinkedList<Coord> path = Utils.getPath(cS, cF);
+        path.removeIf(c -> c.equals(cF) || c.equals(cS) || e.estVide(c));
         return path.isEmpty();
     }
 
     /**
      * Vérifie si la l'arrivé d'une piece sur une case est valide.
-     * @param c coordonnées de la case
      * @param p la pièce à deplacer
+     * @param c coordonnées de la case
+     * @param e l'echiquier
+     * @return l'arrivée est valide
      */
-    public static boolean isFinishValid(IPiece p, Coord c){
-        IPiece pA = Echiquier.getPiece(c);
+    public static boolean isFinishValid(IPiece p, Coord c, Echiquier e){
+        IPiece pA = e.getPiece(c);
         return !areSameColor(p, pA) && !pA.estSensible();
     }
 }

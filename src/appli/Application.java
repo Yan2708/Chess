@@ -1,158 +1,122 @@
 package appli;
 
-import ChessPlayer.IA;
-import ChessPlayer.Joueur;
+import Joueur.FabChessJoueur;
+
+import Joueur.chessIHM;
 import coordonnee.Coord;
 import echiquier.*;
 import pieces.*;
+
+import java.util.List;
+
 import static echiquier.Couleur.*;
 
 
-import java.util.ArrayList;
-import java.util.Scanner;
-
-import static echiquier.Echiquier.*;
-import static echiquier.Regle.*;
-
 public class Application {
 
-    private static Joueur p1, p2, actif, passif;
-    private static String usersLine, message;
-    private static Couleur couleurActif, couleurPassif;
-    private static final String DISPLAY = "mode de jeux : \n" +
-                                    "- Player vs Player (\"pp\") \n" +
-                                    "- Plaver vs Ia (\"pi\") \n" +
-                                    "- Ia vs Ia (\"ii\") \n\n" +
-                                    "Règles : \n" +
-                                    "- pour proposer un match nul : \"nulle\" \n" +
-                                    "- pour abandonner : \"abandon\"";
+    /** message de debut de partie*/
+    private static final String START = "mode de jeux : \n" +
+            "- Player vs Player (\"pp\") \n" +
+            "- Plaver vs Ia (\"pi\") \n" +
+            "- Ia vs Ia (\"ii\") \n\n" +
+            "Règles : \n" +
+            "- pour proposer un match nul : \"nulle\" \n" +
+            "- pour abandonner : \"abandon\"";
 
-    //private static String actif, passif; // les différents joueurs
-    private static String getMode(Scanner sc){
-        System.out.print("Votre mode : > ");
-        return sc.nextLine();
-    }
+    /** reference de joueur et de couleur*/
+    private static IChessJoueur actif, passif;
+    private static Couleur cActif, cPassif;
 
-    private static boolean finish(String coup, Scanner sc){
-        switch (coup){
-            case"nulle":
-                if(passif.validDraw(sc)){
-                    message = "match nul par accord !";
-                    return true;
-                }
-                System.out.print("votre demande de nulle n'a pas été accepté, jouez : > ");
-                usersLine = sc.nextLine();
-                return false;
-            case"abandon" :
-                message = "les " + couleurPassif + "s gagnent par forfait !";
-                return true;
-            default: return false;
-        }
-    }
+    /** message de fin de partie*/
+    private static String endGameMessage;
 
-    private static boolean isValid(String mode){
-        switch (mode) {
-            case "pp":
-            case "pi":
-            case "ii":
-                return true;
-            default:return false;
-        }
-    }
+    /** le dernier coup joué*/
+    private static String coup;
 
-    private static void fabriqueJoueur(String mode){
-        switch (mode) {
-            case "pp":  p1 = new Joueur(BLANC);
-                        p2 = new Joueur(NOIR);
-                        break;
-            case "pi":  p1 = new Joueur(BLANC);
-                        p2 = new IA(NOIR);
-                        break;
-            case "ii":  p1 = new IA(BLANC);
-                        p2 = new IA(NOIR);
-                        break;
-        }
-    }
-
-    public static boolean partieEnd(Coord cR, ArrayList<IPiece> allys, ArrayList<IPiece> ennemies){
-        if(isStaleMate(cR, allys, ennemies)) {
-            message = "Egalité par pat";
+    /** regroupement de toutes les conditions de fin de partie dans les echecs*/
+    public static boolean partieEnd(Coord sC, List<IPiece> allys, List<IPiece> ennemies, Echiquier e){
+        if(Regle.isStaleMate(sC, allys, ennemies, e)) {
+            endGameMessage = "Egalité par pat";
             return true;
         }
-        if(Regle.checkForMate(cR, allys, ennemies)){
-            message="Les "+ actif.getCouleur() + "S ont perdu";
+        if(Regle.checkForMate(sC, allys, ennemies, e)){
+            endGameMessage ="Les "+ actif.getCouleur() + "S ont perdu";
             return true;
         }
         if(Regle.impossibleMat(allys, ennemies)){
-            message = "NULLE";
+            endGameMessage = "NULLE";
             return true;
         }
         return false;
     }
 
-    private static void switchJoueur(){
-        Joueur tmp = actif;
+    /** gestion de l'abandon et de la proposition de nulle*/
+    private static boolean isEndByPlayer(Echiquier e, List<IPiece> allys, List<IPiece> enemies, Coord sC){
+        switch (coup){
+            case"nulle":
+                if(passif.acceptDraw()){
+                    endGameMessage = "match nul par accord !";
+                    return true;
+                }
+                System.out.print("votre demande de nulle n'a pas été accepté, jouez : > ");
+                coup = actif.getCoup(e, allys, enemies, sC);
+                return false;
+            case"abandon" :
+                endGameMessage = "les " + cPassif + "s gagnent par forfait !";
+                return true;
+            default: return false;
+        }
+    }
+
+    /** changement de tour, le joueur passif devient actif et pourra jouer*/
+    private static void swithJoueur(){
+        IChessJoueur tmp = actif;
         actif = passif;
         passif = tmp;
-        ///
-        couleurActif = actif.getCouleur();
-        couleurPassif = passif.getCouleur();
+
+        cActif = actif.getCouleur();
+        cPassif = passif.getCouleur();
     }
 
     public static void main(String[] args) {
+        System.out.println(START);
+        String mode = chessIHM.getMode();
+        Echiquier e = new Echiquier(new FPiece(), mode, new FabChessJoueur());
 
-        Echiquier e = new Echiquier(new FabriquePiece());
+        actif = e.getJoueur(BLANC);
+        passif = e.getJoueur(NOIR);
 
-        System.out.println(DISPLAY);
-
-        @SuppressWarnings("resource")
-        Scanner sc = new Scanner(System.in);
-        String mode = getMode(sc);
-        while(!isValid(mode)){
-            System.out.println("#");
-            mode = getMode(sc);
-        }
-
-        fabriqueJoueur(mode);
-
-        actif = p1;
-        passif = p2;
-        couleurActif = p1.getCouleur();
-        couleurPassif = p2.getCouleur();
+        cActif = actif.getCouleur();
+        cPassif = passif.getCouleur();
 
         System.out.println(e.toString());
-        while(true) {
-            actif.pause();
-            Coord cR = locateSensiblePiece(couleurActif);
 
-            ArrayList<IPiece> piecesActif = getPieceFromColor(couleurActif);
-            ArrayList<IPiece> piecesPassif = getPieceFromColor(couleurPassif);
+        while(true){
+            Coord sC = e.locateSensiblePiece(cActif);
+            List<IPiece> piecesActif = e.getPieceFromColor(cActif);
+            List<IPiece> piecesPassif = e.getPieceFromColor(cPassif);
 
-            if(partieEnd(cR, piecesActif, piecesPassif))
+            if(partieEnd(sC, piecesActif, piecesPassif, e))
                 break;
 
-            System.out.print(couleurActif + " joue ");
-            usersLine = actif.getCoup(sc, piecesActif, piecesPassif, cR);
+            System.out.print(cActif + " joue ");
+            coup = actif.getCoup(e, piecesActif, piecesPassif, sC);
 
-            if(finish(usersLine, sc))
+            if(isEndByPlayer(e, piecesActif, piecesPassif, sC))
                 break;
 
-            while(!actif.isInputValid(usersLine) || !actif.isSemanticValid(usersLine, cR, piecesPassif)){
-                System.out.print("#");
-                usersLine = actif.getCoup(sc, piecesActif, piecesPassif, cR);
-            }
+            System.out.println(actif.coupToString(coup));
 
-            e.deplacer(actif.getcS(), actif.getcF());
+            e.deplacer(coup);
 
-            actif.show();
-
-            e.checkForPromote(couleurActif);
+            e.checkForPromote(cActif);
 
             System.out.println(e.toString());
 
-            switchJoueur();
+            swithJoueur();
         }
-        System.out.println(message);
-        sc.close();
+
+        System.out.println(endGameMessage);
     }
+
 }

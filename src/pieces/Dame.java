@@ -4,21 +4,19 @@ import coordonnee.Coord;
 import echiquier.Couleur;
 
 import static java.lang.Math.abs;
-import static pieces.PieceType.DAME;
 
+/**
+ * La dame est la pièce la plus puissante du jeu.
+ * capable de se mouvoir en ligne droite, verticalement, horizontalement,
+ * et diagonalement, sur un nombre quelconque de cases inoccupées.
+ */
 public class Dame  extends Piece{
-    /**
-     * Constructeur d'une dame
-     * @see Piece#Piece(Couleur, PieceType, coordonnee.Coord)
-     */
+    /** Constructeur d'une dame */
     public Dame(Coord coord, Couleur c) {
-        super(c, DAME, coord);
+        super(c, coord);
     }
 
-    /**
-     * {@inheritDoc}
-     * @param c
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean estPossible(Coord c) {
         int varX = abs(coord.x-c.x);
@@ -26,9 +24,7 @@ public class Dame  extends Piece{
         return (varY >= 1 && varY==varX) || (varX > 0 && varY == 0) || (varY > 0 && varX == 0);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String getSymbole() {
         return "D" ;
