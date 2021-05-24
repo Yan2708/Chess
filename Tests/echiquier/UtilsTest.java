@@ -1,7 +1,6 @@
 package echiquier;
 
 import Joueur.FabChessJoueur;
-import coordonnee.Coord;
 import org.junit.jupiter.api.Test;
 import pieces.FabPiece;
 

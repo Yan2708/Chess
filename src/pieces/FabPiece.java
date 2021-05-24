@@ -1,6 +1,6 @@
 package pieces;
 
-import coordonnee.Coord;
+import echiquier.Coord;
 import echiquier.Couleur;
 import echiquier.IFabPiece;
 import echiquier.IPiece;

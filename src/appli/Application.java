@@ -3,7 +3,6 @@ package appli;
 import Joueur.FabChessJoueur;
 
 import Joueur.chessIHM;
-import coordonnee.Coord;
 import echiquier.*;
 import pieces.*;
 

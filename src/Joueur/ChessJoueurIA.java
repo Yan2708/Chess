@@ -1,7 +1,7 @@
 package Joueur;
 
 
-import coordonnee.Coord;
+import echiquier.Coord;
 import echiquier.Couleur;
 import echiquier.Echiquier;
 import echiquier.IPiece;

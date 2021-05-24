@@ -1,12 +1,8 @@
 package echiquier;
 
 import Joueur.FabChessJoueur;
-import coordonnee.Coord;
 import org.junit.jupiter.api.Test;
-import pieces.Dame;
 import pieces.FabPiece;
-import pieces.Roi;
-import pieces.Vide;
 
 import java.util.LinkedList;
 import java.util.List;

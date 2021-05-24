@@ -1,7 +1,4 @@
-package coordonnee;
-
-import echiquier.Echiquier;
-import echiquier.IPiece;
+package echiquier;
 
 import static java.lang.Math.abs;
 

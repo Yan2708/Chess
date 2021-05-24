@@ -1,5 +1,6 @@
 package coordonnee;
 
+import echiquier.Coord;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -3,7 +3,6 @@ package echiquier;
 import Joueur.FabChessJoueur;
 import org.junit.jupiter.api.Test;
 import pieces.FabPiece;
-import coordonnee.Coord;
 
 import java.util.List;
 

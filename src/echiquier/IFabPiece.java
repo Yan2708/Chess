@@ -1,7 +1,5 @@
 package echiquier;
 
-import coordonnee.Coord;
-
 /**
  * fabrique de piece.
  * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam

@@ -1,10 +1,6 @@
 package echiquier;
 
-import coordonnee.Coord;
-
 import java.util.LinkedList;
-
-import static echiquier.Couleur.*;
 
 /**
  * Le corps du projet.
@@ -79,14 +75,14 @@ public class Echiquier {
      */
     private void setJoueur(String mode, IFabChessJoueur fJoueur){
         switch (mode) {
-            case "pi":  j1 = fJoueur.getJoueur('H', BLANC);
-                        j2 = fJoueur.getJoueur('I', NOIR);
+            case "pi":  j1 = fJoueur.getJoueur('H', Couleur.BLANC);
+                        j2 = fJoueur.getJoueur('I', Couleur.NOIR);
                         break;
-            case "ii":  j1 = fJoueur.getJoueur('I', BLANC);
-                        j2 = fJoueur.getJoueur('I', NOIR);
+            case "ii":  j1 = fJoueur.getJoueur('I', Couleur.BLANC);
+                        j2 = fJoueur.getJoueur('I', Couleur.NOIR);
                         break;
-            default:    j1 = fJoueur.getJoueur('H', BLANC);
-                        j2 = fJoueur.getJoueur('H', NOIR);
+            default:    j1 = fJoueur.getJoueur('H', Couleur.BLANC);
+                        j2 = fJoueur.getJoueur('H', Couleur.NOIR);
         }
     }
 
@@ -157,8 +153,6 @@ public class Echiquier {
      * @param cF la coordonnée d'arrivée
      */
     private void deplacer(Coord cS, Coord cF){
-        boolean test1 = inBound(cS);
-        boolean test2 = inBound(cF);
         assert(inBound(cS) && inBound(cF));
         IPiece p = getPiece(cS);
         changePiece(cS, fabrique.getPiece('V', cS));  //piece Vide à la coordonnée de depart
@@ -189,7 +183,7 @@ public class Echiquier {
         LinkedList<IPiece> pieces = new LinkedList<>();
         for(IPiece[] ligne : echiquier)
             for(IPiece p: ligne){
-                if(isRightColor(p, couleur))
+                if(Couleur.isRightColor(p, couleur))
                     pieces.add(p);
             }
         return pieces;
@@ -209,11 +203,7 @@ public class Echiquier {
         }
     }
 
-    /**
-     * Vérifie si une case aux coordonnées est vide
-     * @param c coordonnées de la case
-     * @return la case est vide
-     */
+    /** Vérifie si une case aux coordonnées est vide */
     public boolean estVide(Coord c){
         return echiquier[c.getX()][c.getY()].estVide();
     }
@@ -232,7 +222,7 @@ public class Echiquier {
     public Coord locateSensiblePiece(Couleur couleur) {
         for(IPiece[] ligne : echiquier)
             for(IPiece p : ligne)
-                if(p.estSensible() && isRightColor(p, couleur))
+                if(p.estSensible() && Couleur.isRightColor(p, couleur))
                     return p.getCoord();
         return null;
     }
@@ -242,8 +232,8 @@ public class Echiquier {
      * @throws NoSenSiblePieceException aucun roi trouvé
      */
     private void SensibleError() throws NoSenSiblePieceException {
-        if(locateSensiblePiece(BLANC) == null &&
-            locateSensiblePiece(NOIR) == null)
+        if(locateSensiblePiece(Couleur.BLANC) == null &&
+            locateSensiblePiece(Couleur.NOIR) == null)
             throw new NoSenSiblePieceException();
     }
 
@@ -254,7 +244,7 @@ public class Echiquier {
      * @param couleur la couleur des pièces à vérifier
      */
     public void checkForPromote(Couleur couleur){
-        int x = couleur == BLANC ? 0 : LIGNE - 1, y = 0;
+        int x = couleur == Couleur.BLANC ? 0 : LIGNE - 1, y = 0;
         for (IPiece p : echiquier[x])
             echiquier[x][y++] = p.autoPromote();
     }

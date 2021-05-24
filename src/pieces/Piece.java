@@ -1,7 +1,7 @@
 package pieces;
 
 
-import coordonnee.Coord;
+import echiquier.Coord;
 import echiquier.*;
 
 import java.util.LinkedList;

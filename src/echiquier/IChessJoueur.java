@@ -1,7 +1,5 @@
 package echiquier;
 
-import coordonnee.Coord;
-
 import java.util.List;
 
 /**
