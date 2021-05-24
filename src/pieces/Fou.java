@@ -30,6 +30,7 @@ public class Fou extends Piece{
         return "F";
     }
 
+    /** le fou ne peut pas mater */
     @Override
     public boolean canHoldEndGame() {
         return false;

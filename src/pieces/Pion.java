@@ -22,6 +22,10 @@ import static echiquier.Couleur.*;
  */
 public class Pion extends Piece{
 
+    /** les 2 coordonnées en x possible de départ d'un pion
+     * (pour les test, lorsque la fen est personnalisé, le pion
+     * n'a pas le droit d'avancer sur 2 deux s'il n'est pas a une
+     * position de depart*/
     private static final int START1 = 1, START2 = 6;
 
     /** si la pièce a bougée */
@@ -56,6 +60,10 @@ public class Pion extends Piece{
                 (isFirstMove() && varX == (2*forward) && varY == 0);
     }
 
+    /** Calcule si c'est le premier mouvement du pion
+     *
+     * @return si la pièce a bougée ou non
+     */
     private boolean isFirstMove(){
         int x = this.coord.getX();
         return (x == START1 || x == START2) && firstMove;
@@ -67,6 +75,10 @@ public class Pion extends Piece{
         return "P";
     }
 
+    /**
+     * le pion gère aussi la prise en diagonale
+     * {@inheritDoc}
+     */
     @Override
     public boolean isCoupValid(Coord cF, Echiquier e) {
         IPiece p = e.getPiece(cF);
@@ -85,11 +97,16 @@ public class Pion extends Piece{
         return diffX == 1 && diffY == 1;
     }
 
+    /** le pion est promouvable */
     @Override
     public IPiece autoPromote() {
         return new Dame(this.coord, this.getCouleur());
     }
 
+    /**
+     * gère la prise en diagonale
+     * {@inheritDoc}
+     */
     @Override
     public boolean peutAttaquer(Coord c, Echiquier e) {
         return super.peutAttaquer(c, e) && this.isPriseEnDiag(c);

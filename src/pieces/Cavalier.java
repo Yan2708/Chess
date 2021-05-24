@@ -32,6 +32,7 @@ public class Cavalier extends Piece{
         return "C";
     }
 
+    /** le cavalier ne peut pas mater*/
     @Override
     public boolean canHoldEndGame() {
         return false;

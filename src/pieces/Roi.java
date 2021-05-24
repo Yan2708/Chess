@@ -80,11 +80,13 @@ public class Roi extends Piece{
         return false;
     }
 
+    /** le roi ne peut pas etre cloué */
     @Override
     protected boolean isPinned(Coord sC, Echiquier e) {
         return false;
     }
 
+    /** le roi ne peut pas mater */
     @Override
     public boolean canHoldEndGame() {
         return false;

@@ -61,12 +61,14 @@ public abstract class Piece implements IPiece
         return this.estPossible(cF) && Regle.voieLibre(this, cF, e) && Regle.isFinishValid(this, cF, e);
     }
 
-    //refaire pour le roi,
+    /** {@inheritDoc} */
+    @Override
     public boolean estSensible(){
         return false;
     }
 
-    //refaire pour VIDE
+    /** {@inheritDoc} */
+    @Override
     public boolean estVide(){
         return false;
     }
@@ -107,6 +109,8 @@ public abstract class Piece implements IPiece
         return !(Utils.getPningPiece(coord, sC, couleur, e) == null);
     }
 
+    /** {@inheritDoc} */
+    @Override
     public boolean canHoldEndGame(){
         return true;
     }
