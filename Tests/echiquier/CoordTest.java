@@ -1,4 +1,4 @@
-package coordonnee;
+package echiquier;
 
 import echiquier.Coord;
 import org.junit.jupiter.api.Test;
