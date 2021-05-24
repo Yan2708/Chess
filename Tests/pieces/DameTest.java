@@ -33,7 +33,7 @@ class DameTest {
     void isCoupValid() {
         Dame d = new Dame(new Coord("a8"), Couleur.NOIR);
 
-        Echiquier e = new Echiquier("d3p3/p7/2p5/8/8/8/8/r6R",new FPiece(), new FabChessJoueur());
+        Echiquier e = new Echiquier("d3p3/p7/2p5/8/8/8/8/r6R",new FabPiece(), new FabChessJoueur());
 
         String[] coordPossible = {"b8","c8","d8","b7"};
         for(String coord : coordPossible)
@@ -47,7 +47,7 @@ class DameTest {
 
     @Test
     void getAllMoves() {
-        Echiquier e = new Echiquier("d3p3/p7/2p5/8/8/8/8/r6R",new FPiece(), new FabChessJoueur());
+        Echiquier e = new Echiquier("d3p3/p7/2p5/8/8/8/8/r6R",new FabPiece(), new FabChessJoueur());
 
         String[] coupPossible = {"b8","c8","d8","b7"};
         Coord cR = e.locateSensiblePiece(BLANC);

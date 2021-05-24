@@ -2,7 +2,6 @@ package echiquier;
 
 import coordonnee.Coord;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import static echiquier.Couleur.*;
@@ -133,7 +132,7 @@ public class Echiquier {
     }
 
     /**
-     * renvoie la liste de toutes les coordonnées atteignable dans l'échiquier par une piece donnée.
+     * renvoie la liste de toutes les coordonnées atteignables dans l'échiquier par une piece donnée.
      * @param p la piece
      * @return la liste des coordonnées atteignable
      */
@@ -157,7 +156,9 @@ public class Echiquier {
      * @param cF la coordonnée d'arrivée
      */
     private void deplacer(Coord cS, Coord cF){
-        assert(!inBound(cS) && !inBound(cF));
+        boolean test1 = inBound(cS);
+        boolean test2 = inBound(cF);
+        assert(inBound(cS) && inBound(cF));
         IPiece p = getPiece(cS);
         changePiece(cS, fabrique.getPiece('V', cS));  //piece Vide à la coordonnée de depart
         changePiece(cF, p);
@@ -183,8 +184,8 @@ public class Echiquier {
      * @param couleur la couleur demandée
      * @return la liste de pieces
      */
-    public ArrayList<IPiece> getPieceFromColor(Couleur couleur){
-        ArrayList<IPiece> pieces = new ArrayList<>();
+    public LinkedList<IPiece> getPieceFromColor(Couleur couleur){
+        LinkedList<IPiece> pieces = new LinkedList<>();
         for(IPiece[] ligne : echiquier)
             for(IPiece p: ligne){
                 if(Regle.isRightColor(p, couleur))

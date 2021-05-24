@@ -13,8 +13,8 @@ class FabChessJoueurTest {
         ChessJoueurHumain humain =  new ChessJoueurHumain(Couleur.BLANC);
         ChessJoueurIA ia = new ChessJoueurIA(Couleur.NOIR);
         FabChessJoueur f = new FabChessJoueur();
-        IChessJoueur i = f.getJoueur('P', Couleur.BLANC);
-        assertEquals(i.getClass(), humain.getClass());
+        IChessJoueur i = f.getJoueur('H', Couleur.BLANC);
+        assertEquals(i.getClass(), humain.getClass());  //classe identique
         i=f.getJoueur('I', Couleur.NOIR);
         assertEquals(i.getClass(), ia.getClass());  ///classe identique
     }

@@ -31,7 +31,7 @@ class RoiTest {
     @Test
     void isCoupValid() {
         Roi r = new Roi(new Coord("c6"), NOIR);
-        Echiquier e = new Echiquier("8/1D1p4/2r5/1P1p4/8/8/8/7R",new FPiece(), new FabChessJoueur());
+        Echiquier e = new Echiquier("8/1D1p4/2r5/1P1p4/8/8/8/7R",new FabPiece(), new FabChessJoueur());
 
         String[] coordPossible = {"c5","b5","b6","b7","c7","d6"};
         for(String coord : coordPossible)
@@ -44,7 +44,7 @@ class RoiTest {
 
     @Test
     void getAllMoves() {
-        Echiquier e = new Echiquier("8/1D1p4/2r5/1P1p4/8/8/8/7R",new FPiece(), new FabChessJoueur());
+        Echiquier e = new Echiquier("8/1D1p4/2r5/1P1p4/8/8/8/7R",new FabPiece(), new FabChessJoueur());
 
         String[] coupPossible = {"b7", "d6", "c5"};
         Coord cR = e.locateSensiblePiece(NOIR);

@@ -32,7 +32,7 @@ class CavalierTest {
     @Test
     void isCoupValid() {
         Cavalier c = new Cavalier(new Coord("d5"), Couleur.BLANC);
-        Echiquier e = new Echiquier("8/1D1p4/2r5/3C4/8/8/8/7R",new FPiece(), new FabChessJoueur());
+        Echiquier e = new Echiquier("8/1D1p4/2r5/3C4/8/8/8/7R",new FabPiece(), new FabChessJoueur());
 
         String[] coordPossible = {"b6","c7","e7","f6","f4","e3","c3","b4"};
         for(String coord : coordPossible)
@@ -45,7 +45,7 @@ class CavalierTest {
 
     @Test
     void getAllMoves() {
-        Echiquier e = new Echiquier("r7/1D1p4/2c5/3C4/8/8/8/7R",new FPiece(), new FabChessJoueur());
+        Echiquier e = new Echiquier("r7/1D1p4/2c5/3C4/8/8/8/7R",new FabPiece(), new FabChessJoueur());
 
         String[] coupPossible = {"b6","c7","e7","f6","f4","e3","c3","b4"};
         Coord cR = e.locateSensiblePiece(BLANC);

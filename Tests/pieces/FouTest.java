@@ -34,7 +34,7 @@ class FouTest {
     void isCoupValid() {
         Fou f = new Fou(new Coord("a8"), Couleur.NOIR);
 
-        Echiquier e = new Echiquier("f3p3/p7/8/8/4p3/8/8/r6R",new FPiece(), new FabChessJoueur());
+        Echiquier e = new Echiquier("f3p3/p7/8/8/4p3/8/8/r6R",new FabPiece(), new FabChessJoueur());
         String[] coordPossible = {"b7","c6","d5"};
         for(String coord : coordPossible)
             assertTrue(f.isCoupValid(new Coord(coord),e));
@@ -48,7 +48,7 @@ class FouTest {
 
     @Test
     void getAllMoves() {
-        Echiquier e = new Echiquier("f3p3/p7/8/8/4p3/8/8/r6R",new FPiece(), new FabChessJoueur());
+        Echiquier e = new Echiquier("f3p3/p7/8/8/4p3/8/8/r6R",new FabPiece(), new FabChessJoueur());
 
         String[] coupPossible = {"b7","c6","d5"};
         Coord cR = e.locateSensiblePiece(BLANC);

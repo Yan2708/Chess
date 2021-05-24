@@ -25,7 +25,7 @@ class TourTest {
 
     @Test
     void isCoupValid() {
-        Echiquier e = new Echiquier("T7/8/8/8/8/r6R/8/8",new FPiece(), new FabChessJoueur());
+        Echiquier e = new Echiquier("T7/8/8/8/8/r6R/8/8",new FabPiece(), new FabChessJoueur());
         String[] coupPossible = {"b8, c8, d8, e8, f8, g8, h8"};
         IPiece p = e.getPiece(new Coord("A8"));
         for(String c: coupPossible) {
@@ -35,7 +35,7 @@ class TourTest {
 
     @Test
     void getAllMoves(){
-        Echiquier e = new Echiquier("T7/PPPPPPPP/8/8/8/r6R/8/8",new FPiece(), new FabChessJoueur());
+        Echiquier e = new Echiquier("T7/PPPPPPPP/8/8/8/r6R/8/8",new FabPiece(), new FabChessJoueur());
         String[] coupPossible = {"b8, c8, d8, e8, f8, g8, h8"};
         Coord cR = e.locateSensiblePiece(BLANC);
         List<IPiece> ennemies = e.getPieceFromColor(NOIR);

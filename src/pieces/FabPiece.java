@@ -6,7 +6,7 @@ import echiquier.IFabPiece;
 import echiquier.IPiece;
 
 /** {@inheritDoc} */
-public class FPiece implements IFabPiece {
+public class FabPiece implements IFabPiece {
 
     /**
      * {@inheritDoc}

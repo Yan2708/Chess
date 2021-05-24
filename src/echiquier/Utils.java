@@ -75,14 +75,13 @@ public class Utils {
      * Retourne les coordonnées de déplacement possibles pour une pièce clouée
      * @param p la pièce clouée
      * @param sC la coordonné sensible qui donne lieu au clouage
-     * @param couleur la couleur des ennemis
      * @param e l'echiquier
      * @return la liste des coordonnées
      */
-    public static LinkedList<Coord> allMovesFromPin(IPiece p, Coord sC, Couleur couleur, Echiquier e){
+    public static LinkedList<Coord> allMovesFromPin(IPiece p, Coord sC, Echiquier e){
         LinkedList<Coord> moves = new LinkedList<>();
         Coord cS = p.getCoord();
-        IPiece pningPiece = getPningPiece(cS, sC, couleur, e); //la piece clouante
+        IPiece pningPiece = getPningPiece(cS, sC, p.getCouleur(), e); //la piece clouante
 
         if(pningPiece == null)
             return moves;

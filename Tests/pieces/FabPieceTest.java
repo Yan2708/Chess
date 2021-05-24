@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FPieceTest {
+class FabPieceTest {
 
     @Test
     void getPiece() {
