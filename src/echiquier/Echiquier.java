@@ -60,7 +60,13 @@ public class Echiquier {
     public Echiquier(IFabPiece fabrique, String mode, IFabChessJoueur fJoueur){
         this(fabrique, BasicFen, mode, fJoueur);
     }
-    /* constructeur de l'échiquier avec le mode par default (pour les test)*/
+
+    /** constructeur par defaut d'un echequier */
+    public Echiquier(IFabPiece fabrique, IFabChessJoueur fJoueur){
+        this(fabrique, BasicFen, "pp", fJoueur);
+    }
+
+    /** constructeur de l'échiquier avec le mode par default (pour les test) */
     public Echiquier(String fen, IFabPiece fabrique, IFabChessJoueur fJoueur){
         this(fabrique, fen, "pp",fJoueur);
     }

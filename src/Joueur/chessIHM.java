@@ -3,6 +3,7 @@ package Joueur;
 import coordonnee.Coord;
 import echiquier.*;
 
+
 import java.util.Scanner;
 
 public class chessIHM {
@@ -40,12 +41,12 @@ public class chessIHM {
      * @param e l'echiquier
      * @return  le coup valide
      */
-    public static String getCoup(IChessJoueur j, Echiquier e){
+    public static String getCoup(IChessJoueur j, Coord sC, List<IPiece> ennemies, Echiquier e){
         Scanner sc = new Scanner(System.in);
         String coup = sc.nextLine();
 
         while(!(coup.equals("nulle") || coup.equals("abandon")) &&
-                !(syntaxValid(coup) && semanticValid(coup, j, e))){
+                !(syntaxValid(coup) && semanticValid(coup, j, sC, ennemies, e))){
             System.out.print("#> ");
             coup = sc.nextLine();
         }
@@ -60,7 +61,8 @@ public class chessIHM {
      * @param e     l'echiquier
      * @return      le coup est correcte semantiquement
      */
-    private static boolean semanticValid(String coup, IChessJoueur j, Echiquier e){
+    private static boolean semanticValid(String coup, IChessJoueur j, Coord sC,
+                                         List<IPiece> ennemies, Echiquier e){
         int mid = coup.length() / 2;
         Coord cS = new Coord(coup.substring(0,mid));
         Coord cF = new Coord(coup.substring(mid));
@@ -68,7 +70,7 @@ public class chessIHM {
             return false;
         IPiece p = e.getPiece(cS);
         return Regle.isRightColor(p, j.getCouleur()) &&
-                p.isCoupValid(cF, e);
+                p.getAllMoves(sC, ennemies, e).contains(cF);
     }
 
     /** Si l'input respecte le format d'un coup ("a2a3", b4c2", un pattern identique a chaque coup)*/

@@ -85,11 +85,13 @@ public abstract class Piece implements IPiece
     /** {@inheritDoc} */
     @Override
     public LinkedList<Coord> getAllMoves(Coord sC, List<IPiece> ennemies, Echiquier e){
-        if(isPinned(sC, e)){
-            return Utils.allMovesFromPin(this, sC, couleur, e);
+        boolean sCAttacked = Regle.isAttacked(sC, ennemies, e);
+
+        if(isPinned(sC, e) && ! sCAttacked){
+            return Utils.allMovesFromPin(this, sC, e);
         }
 
-        if(Regle.isAttacked(sC, ennemies, e))
+        if(sCAttacked)
             return Utils.allMovesDefendingCheck(this, sC, ennemies, e);
 
         return e.allClassicMoves(this);

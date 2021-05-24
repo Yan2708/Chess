@@ -16,6 +16,6 @@ class FabChessJoueurTest {
         IChessJoueur i = f.getJoueur('P', Couleur.BLANC);
         assertEquals(i.getClass(), humain.getClass());
         i=f.getJoueur('I', Couleur.NOIR);
-        assertEquals(i.getClass(), ia.getClass());
+        assertEquals(i.getClass(), ia.getClass());  ///classe identique
     }
 }

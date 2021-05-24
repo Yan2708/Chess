@@ -24,8 +24,8 @@ public class ChessJoueurHumain extends ChessJoueur {
      * @see chessIHM
      * */
     @Override
-    public String getCoup(Echiquier e, List<IPiece> allys, List<IPiece> enemies, Coord sC) {
-        return chessIHM.getCoup(this, e);
+    public String getCoup(Echiquier e, List<IPiece> allys, List<IPiece> ennemies, Coord sC) {
+        return chessIHM.getCoup(this, sC, ennemies, e);
     }
 
     /** le coup est deja affiché en invite de commande*/
