@@ -13,6 +13,7 @@ import static java.lang.Math.abs;
  * sC = sensibleCoord ----> coordonnées sensible
  * cP = coordPiece ----> coordonnées de la Piece.
  * etc...
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public class Coord {
 

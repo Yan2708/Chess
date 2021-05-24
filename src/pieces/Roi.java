@@ -17,6 +17,7 @@ import static java.lang.Math.abs;
  * Si le roi d'un joueur est menacé de capture au prochain coup de façon imparable,
  * il est dit échec et mat et le joueur concerné perd la partie.
  * Le roi se déplace d’une case dans n’importe quelle direction.
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public class Roi extends Piece{
 

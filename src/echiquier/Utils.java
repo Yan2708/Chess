@@ -10,6 +10,7 @@ import static echiquier.Couleur.*;
 
 /**
  * classe regroupant les utilitaires d'un echiquier.
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public class Utils {
 
@@ -81,7 +82,7 @@ public class Utils {
     public static LinkedList<Coord> allMovesFromPin(IPiece p, Coord sC, Echiquier e){
         LinkedList<Coord> moves = new LinkedList<>();
         Coord cS = p.getCoord();
-        IPiece pningPiece = getPningPiece(cS, sC, p.getCouleur(), e); //la piece clouante
+        IPiece pningPiece = getPningPiece(cS, sC, e); //la piece clouante
 
         if(pningPiece == null)
             return moves;
@@ -112,17 +113,16 @@ public class Utils {
      * Clouage en francais ou Pin en anglais.
      * @param cS la position de la pièce
      * @param sC la coordonnée sensible de l'allié
-     * @param couleur la couleur ennemie
      * @param e l'echiquier
      * @return la pièce qui cloue ou rien
      */
-    public static IPiece getPningPiece(Coord cS, Coord sC, Couleur couleur, Echiquier e){
-        Couleur oppositeColor = couleur == BLANC ? NOIR : BLANC;
+    public static IPiece getPningPiece(Coord cS, Coord sC, Echiquier e){
+        Couleur oppositeColor = getOpposite(e.getPiece(cS));
         List<Coord> pathToBorder = getPathToBorder(cS, Coord.getPrimaryMove(sC, cS));
         for(Coord c : pathToBorder){
             IPiece piece = e.getPiece(c);
 
-            if(Regle.isRightColor(piece, oppositeColor) &&            // si dans ce chemin il y a une piece
+            if(isRightColor(piece, oppositeColor) &&            // si dans ce chemin il y a une piece
                     piece.isCoupValid(cS, e) &&                       // si la piece peut prendre la piece clouée
                     piece.estPossible(sC))                            // et le roi juste apres.
                 return piece;

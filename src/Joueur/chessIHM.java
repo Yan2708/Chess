@@ -7,6 +7,11 @@ import echiquier.*;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Interface Homme Machine permettant que recuperer les input de l'utilisateur
+ * puis les passer par un multitude de filtre.
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
+ */
 public class chessIHM {
 
     /** Seul 3 modes de jeu sont acceptés.*/
@@ -70,7 +75,7 @@ public class chessIHM {
         if(!Echiquier.inBound(cS) && !Echiquier.inBound(cF))
             return false;
         IPiece p = e.getPiece(cS);
-        return Regle.isRightColor(p, j.getCouleur()) &&
+        return Couleur.isRightColor(p, j.getCouleur()) &&
                 p.getAllMoves(sC, ennemies, e).contains(cF);
     }
 

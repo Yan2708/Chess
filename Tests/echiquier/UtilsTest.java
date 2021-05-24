@@ -83,11 +83,11 @@ class UtilsTest {
         Echiquier e = new Echiquier("3r4/2ppp3/8/F5F1/8/8/8/3D3R", fp, fj);
         Coord sC = e.locateSensiblePiece(NOIR);
         IPiece pion1 = e.getPiece(new Coord("c7"));
-        assertNotNull(Utils.getPningPiece(pion1.getCoord(), sC, NOIR, e));
+        assertNotNull(Utils.getPningPiece(pion1.getCoord(), sC, e));
         IPiece pion2 = e.getPiece(new Coord("d7"));
-        assertNotNull(Utils.getPningPiece(pion2.getCoord(), sC, NOIR, e));
+        assertNotNull(Utils.getPningPiece(pion2.getCoord(), sC, e));
         IPiece pion3 = e.getPiece(new Coord("e7"));
-        assertNotNull(Utils.getPningPiece(pion3.getCoord(), sC, NOIR, e));
+        assertNotNull(Utils.getPningPiece(pion3.getCoord(), sC, e));
     }
 
     @Test

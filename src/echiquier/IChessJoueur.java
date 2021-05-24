@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * interface definissant les joueurs d'un echiquier.
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public interface IChessJoueur {
 

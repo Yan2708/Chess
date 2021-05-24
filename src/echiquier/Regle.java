@@ -9,23 +9,9 @@ import java.util.List;
 
 /**
  * classe regroupant les regles mis en place par les echecs.
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  * */
 public class Regle {
-
-    /** verifie que la couleur entre 2 pieces est identique*/
-    public static boolean areSameColor(IPiece p1, IPiece p2){
-        return p1.getCouleur() == p2.getCouleur();
-    }
-
-    /** verifie que la couleur d'une piece est celle souhaité*/
-    public static boolean isRightColor(IPiece p, Couleur couleur){
-        return p.getCouleur() == couleur;
-    }
-
-    /** verifie que 2 pieces sont opposés (NOIR vs BLANC)*/
-    public static boolean areOpposite(IPiece p1, IPiece p2) {
-        return !areSameColor(p1, p2) && !p2.estVide();
-    }
 
     /**
      * Verifie si pour une couleur donnée le roi est en echec et mat.
@@ -131,6 +117,6 @@ public class Regle {
      */
     public static boolean isFinishValid(IPiece p, Coord c, Echiquier e){
         IPiece pA = e.getPiece(c);
-        return !areSameColor(p, pA) && !pA.estSensible();
+        return !Couleur.areSameColor(p, pA) && !pA.estSensible();
     }
 }

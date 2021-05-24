@@ -4,7 +4,6 @@ import coordonnee.Coord;
 import echiquier.Couleur;
 import echiquier.Echiquier;
 import echiquier.IPiece;
-import echiquier.Regle;
 
 import static java.lang.Math.abs;
 import static echiquier.Couleur.*;
@@ -19,6 +18,7 @@ import static echiquier.Couleur.*;
  * Le pion peut prendre en avançant d'une case en diagonale n'importe
  * quelle pièce adverse qui s'y trouverait.
  * /!\ la prise en passant n'est pas codé
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public class Pion extends Piece{
 
@@ -83,7 +83,7 @@ public class Pion extends Piece{
     public boolean isCoupValid(Coord cF, Echiquier e) {
         IPiece p = e.getPiece(cF);
         return super.isCoupValid(cF, e) &&
-                (isPriseEnDiag(cF) ? Regle.areOpposite(this, p) && !p.estVide() : p.estVide());
+                (isPriseEnDiag(cF) ? areOpposite(this, p) && !p.estVide() : p.estVide());
     }
 
     /**

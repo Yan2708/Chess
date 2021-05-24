@@ -10,6 +10,7 @@ import static echiquier.Couleur.*;
  * Le corps du projet.
  * fonctione grace a la notation Forsyth-Edwards.
  * il doit contenir deux pieces sensible (2 rois par defaut).
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public class Echiquier {
 
@@ -25,7 +26,7 @@ public class Echiquier {
     private static final String BasicFen = "tcfdrfct/pppppppp/8/8/8/8/PPPPPPPP/TCFDRFCT"; //fen generique
 
     /* les joueurs des pieces Noirs et Blances */
-    private IChessJoueur blanc, noir;
+    private IChessJoueur j1, j2;
 
     /* l'échiquier est représenté par un tableau 2d de pieces */
     private IPiece[][] echiquier;
@@ -78,14 +79,14 @@ public class Echiquier {
      */
     private void setJoueur(String mode, IFabChessJoueur fJoueur){
         switch (mode) {
-            case "pi":  blanc = fJoueur.getJoueur('H', BLANC);
-                        noir = fJoueur.getJoueur('I', NOIR);
+            case "pi":  j1 = fJoueur.getJoueur('H', BLANC);
+                        j2 = fJoueur.getJoueur('I', NOIR);
                         break;
-            case "ii":  blanc = fJoueur.getJoueur('I', BLANC);
-                        noir = fJoueur.getJoueur('I', NOIR);
+            case "ii":  j1 = fJoueur.getJoueur('I', BLANC);
+                        j2 = fJoueur.getJoueur('I', NOIR);
                         break;
-            default:    blanc = fJoueur.getJoueur('H', BLANC);
-                        noir = fJoueur.getJoueur('H', NOIR);
+            default:    j1 = fJoueur.getJoueur('H', BLANC);
+                        j2 = fJoueur.getJoueur('H', NOIR);
         }
     }
 
@@ -188,7 +189,7 @@ public class Echiquier {
         LinkedList<IPiece> pieces = new LinkedList<>();
         for(IPiece[] ligne : echiquier)
             for(IPiece p: ligne){
-                if(Regle.isRightColor(p, couleur))
+                if(isRightColor(p, couleur))
                     pieces.add(p);
             }
         return pieces;
@@ -199,8 +200,13 @@ public class Echiquier {
         return echiquier[c.getX()][c.getY()];
     }
 
+    /** renvoie le joueur selon sa couleur */
     public IChessJoueur getJoueur(Couleur c){
-        return c == BLANC ? blanc : noir;
+        switch (c){
+            case BLANC : return j1;
+            case NOIR : return j2;
+            default: return null;
+        }
     }
 
     /**
@@ -226,7 +232,7 @@ public class Echiquier {
     public Coord locateSensiblePiece(Couleur couleur) {
         for(IPiece[] ligne : echiquier)
             for(IPiece p : ligne)
-                if(p.estSensible() && Regle.isRightColor(p, couleur))
+                if(p.estSensible() && isRightColor(p, couleur))
                     return p.getCoord();
         return null;
     }
@@ -253,10 +259,7 @@ public class Echiquier {
             echiquier[x][y++] = p.autoPromote();
     }
 
-    /**
-     * Créer une chaîne de caractères comportant l'ensemble de l'échiquier.
-     * @return la chaîne de caractères
-     */
+    /** Créer une chaîne de caractères comportant l'ensemble de l'échiquier. */
     @Override
     public String toString() {
         String SAUT = "    --- --- --- --- --- --- --- ---   \n"; // delimite les lignes

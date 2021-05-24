@@ -11,7 +11,9 @@ import java.util.List;
 
 import static echiquier.Couleur.*;
 
-
+/**
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
+ */
 public class Application {
 
     /** message de debut de partie*/

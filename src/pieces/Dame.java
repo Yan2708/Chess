@@ -9,6 +9,7 @@ import static java.lang.Math.abs;
  * La dame est la pièce la plus puissante du jeu.
  * capable de se mouvoir en ligne droite, verticalement, horizontalement,
  * et diagonalement, sur un nombre quelconque de cases inoccupées.
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public class Dame  extends Piece{
     /** Constructeur d'une dame */

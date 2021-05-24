@@ -8,6 +8,7 @@ import static java.lang.Math.abs;
 /**
  * Represente les Tours dans un jeu d'echec.
  * La tour peut se déplacer horizontalement ou verticalement.
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public class Tour extends Piece{
     /** Constructeur d'une tour */

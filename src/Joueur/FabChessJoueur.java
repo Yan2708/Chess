@@ -4,7 +4,10 @@ import echiquier.Couleur;
 import echiquier.IFabChessJoueur;
 import echiquier.IChessJoueur;
 
-/** {@inheritDoc} */
+/**
+ * {@inheritDoc}
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
+ */
 public class FabChessJoueur implements IFabChessJoueur {
 
     /**

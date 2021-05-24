@@ -2,6 +2,7 @@ package echiquier;
 
 /**
  * fabrique de joueur
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public interface IFabChessJoueur {
 

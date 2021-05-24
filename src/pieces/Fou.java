@@ -8,6 +8,7 @@ import static java.lang.Math.abs;
 /**
  * represente le fou dans les echecs
  * il se deplace uniquement en diagonale.
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public class Fou extends Piece{
 

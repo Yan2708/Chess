@@ -13,6 +13,7 @@ import java.util.Random;
 /**
  * Cette clase represente une Ia pour les echecs sans intelligence, ces coups sont calculés de facon
  * aléatoire.
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public class ChessJoueurIA extends ChessJoueur {
 

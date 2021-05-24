@@ -8,7 +8,10 @@ import echiquier.IPiece;
 
 import java.util.List;
 
-/** {@inheritDoc} */
+/**
+ * {@inheritDoc}
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
+ * */
 public abstract class ChessJoueur implements IChessJoueur {
     /** la couleur du joueur */
     protected Couleur couleur;

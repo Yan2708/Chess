@@ -9,7 +9,10 @@ import java.util.List;
 
 import static echiquier.Couleur.BLANC;
 
-/** {@inheritDoc} */
+/**
+ * {@inheritDoc}
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
+ * */
 public abstract class Piece implements IPiece
 {
     /** Position de la pièce */
@@ -108,7 +111,7 @@ public abstract class Piece implements IPiece
             !Regle.voieLibre(this, sC, e))
             return false;
 
-        return !(Utils.getPningPiece(coord, sC, couleur, e) == null);
+        return !(Utils.getPningPiece(coord, sC, e) == null);
     }
 
     /** {@inheritDoc} */

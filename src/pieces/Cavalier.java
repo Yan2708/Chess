@@ -10,6 +10,7 @@ import static java.lang.Math.abs;
  * Le déplacement du cavalier est original.
  * Il se déplace en L, c’est-à-dire de deux cases dans une direction
  * combinées avec une case perpendiculairement.
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public class Cavalier extends Piece{
 

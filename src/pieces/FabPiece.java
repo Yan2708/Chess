@@ -5,7 +5,10 @@ import echiquier.Couleur;
 import echiquier.IFabPiece;
 import echiquier.IPiece;
 
-/** {@inheritDoc} */
+/**
+ * {@inheritDoc}
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
+ */
 public class FabPiece implements IFabPiece {
 
     /**

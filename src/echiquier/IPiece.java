@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Interface definissant les elements de l'echiquier, ici des pieces.
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public interface IPiece {
 

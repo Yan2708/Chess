@@ -5,6 +5,7 @@ import echiquier.Couleur;
 
 /**
  * Classe representant les pieces vides.
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public class Vide extends Piece{
 

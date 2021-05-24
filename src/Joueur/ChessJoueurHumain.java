@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Cette classe represente un joueur d'echec Humain.
  * celui-ci s'appuie sur une IHM pour communiquer avec le programme.
+ * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
 public class ChessJoueurHumain extends ChessJoueur {
 
