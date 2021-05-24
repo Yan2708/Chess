@@ -49,7 +49,7 @@ public class Regle {
      * le pat est une regle qui reconnait comme etant une egalité le cas ou le joueur
      * actuel n'a pas de coup possible parmis toutes ces pieces
      * sans que le roi soit en echec.
-     * @param sC les coordonnées du roi
+     * @param sC la coordonnée sensible de l'allié
      * @param allys les pieces alliées
      * @param ennemies les pieces ennemies
      * @param e l'echiquier

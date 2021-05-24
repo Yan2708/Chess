@@ -54,8 +54,8 @@ public class Pion extends Piece{
     /** {@inheritDoc} */
     @Override
     public boolean estPossible(Coord c) {
-        int varX = c.x - coord.x;
-        int varY = abs(coord.y-c.y);
+        int varX = c.getX() - coord.getX();
+        int varY = abs(coord.getY()-c.getY());
         return (varY == 1 || varY == 0) && varX == forward ||
                 (isFirstMove() && varX == (2*forward) && varY == 0);
     }
@@ -92,8 +92,8 @@ public class Pion extends Piece{
      * @return le coup est une prise diagonale
      */
     private boolean isPriseEnDiag(Coord c){
-        int diffX = abs(c.x - coord.x);
-        int diffY = abs(c.y - coord.y);
+        int diffX = abs(c.getX() - coord.getX());
+        int diffY = abs(c.getY() - coord.getY());
         return diffX == 1 && diffY == 1;
     }
 

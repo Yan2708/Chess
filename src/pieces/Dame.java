@@ -19,9 +19,10 @@ public class Dame  extends Piece{
     /** {@inheritDoc} */
     @Override
     public boolean estPossible(Coord c) {
-        int varX = abs(coord.x-c.x);
-        int varY = abs(coord.y-c.y);
-        return (varY >= 1 && varY==varX) || (varX > 0 && varY == 0) || (varY > 0 && varX == 0);
+        int varX = abs(coord.getX()-c.getX());
+        int varY = abs(coord.getY()-c.getY());
+        return (varY >= 1 && varY==varX) || (varX > 0 && varY == 0) ||
+                (varY > 0 && varX == 0);
     }
 
     /** {@inheritDoc} */

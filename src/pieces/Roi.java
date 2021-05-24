@@ -28,8 +28,8 @@ public class Roi extends Piece{
     /** {@inheritDoc} */
     @Override
     public boolean estPossible(Coord c) {
-        int varX = abs(coord.x-c.x);
-        int varY = abs(coord.y-c.y);
+        int varX = abs(coord.getX()-c.getX());
+        int varY = abs(coord.getY()-c.getY());
         if(varX == 0 && varY == 0 ) // si la pièce fait du sur place
             return false;
         // le déplacement est valide seulement si le roi se déplace dans un rayon de une case

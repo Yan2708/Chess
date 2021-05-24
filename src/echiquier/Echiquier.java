@@ -207,7 +207,7 @@ public class Echiquier {
 
     /** Renvoie si une coordonnée est en dehors de l'echiquier ou non */
     public static boolean inBound(Coord c){
-        int x = c.x, y = c.y;
+        int x = c.getX(), y = c.getY();
         return (x >= 0 && x < LIGNE) && (y >= 0 && y < COLONNE);
     }
 

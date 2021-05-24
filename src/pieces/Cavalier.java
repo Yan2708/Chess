@@ -21,8 +21,8 @@ public class Cavalier extends Piece{
     /** {@inheritDoc} */
     @Override
     public boolean estPossible(Coord c) {
-        int varX = abs(coord.x-c.x);
-        int varY = abs(coord.y-c.y);
+        int varX = abs(coord.getX()-c.getX());
+        int varY = abs(coord.getY()-c.getY());
         return (varX==1 && varY==2)||(varX==2 && varY==1);
     }
 

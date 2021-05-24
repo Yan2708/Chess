@@ -10,7 +10,8 @@ import static java.lang.Math.abs;
  * notation :
  * cS = cStart ----> coordonnées de depart
  * cF = cFinal ----> coordonnées d'arrivé
- * cR = CRoi ----> coordonnées du roi
+ * sC = sensibleCoord ----> coordonnées sensible
+ * cP = coordPiece ----> coordonnées de la Piece.
  * etc...
  */
 public class Coord {

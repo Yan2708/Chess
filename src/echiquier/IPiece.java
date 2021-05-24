@@ -44,6 +44,7 @@ public interface IPiece {
     /** Vérifie si la piece est sensible*/
     boolean estSensible();
 
+    /** Vérifie si la case est représenté par une pièce vide */
     boolean estVide();
 
     /** Renvoie la piece chargé de promouvoir la piece a etre promu*/
