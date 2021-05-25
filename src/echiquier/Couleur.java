@@ -30,4 +30,3 @@ public enum Couleur {
         return p1.getCouleur().equals(BLANC) ? NOIR : BLANC;
     }
 }
-
