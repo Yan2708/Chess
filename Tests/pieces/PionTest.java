@@ -30,11 +30,11 @@ class PionTest {
         Pion p2 = new Pion(new Coord("b2"), BLANC);
         String[] coordPossible2 = {"b3","b4","a3","c3"};
         for(String coord : coordPossible2)
-            assertTrue(p.estPossible(new Coord(coord)));
+            assertTrue(p2.estPossible(new Coord(coord)));
 
         String[] coordImpossible2 = {"b5","a4","c4","a1","b1","c1"};
         for(String coord : coordImpossible2)
-            assertFalse(p.estPossible(new Coord(coord)));
+            assertFalse(p2.estPossible(new Coord(coord)));
     }
 
     @Test

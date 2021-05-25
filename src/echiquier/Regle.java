@@ -1,7 +1,5 @@
 package echiquier;
 
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,9 +53,9 @@ public class Regle {
      * @param e l'echiquier
      * @return tout les movemements possibles d'un groupe de piece
      */
-    private static ArrayList<Coord> getAllPossibleMoves(Coord sC, List<IPiece> allys, List<IPiece> ennemies,
-                                                        Echiquier e){
-        ArrayList<Coord> allPossibleMoves = new ArrayList<>();
+    private static LinkedList<Coord> getAllPossibleMoves(Coord sC, List<IPiece> allys, List<IPiece> ennemies,
+                                                         Echiquier e){
+        LinkedList<Coord> allPossibleMoves = new LinkedList<>();
 
         for(IPiece p: allys)
             allPossibleMoves.addAll(p.getAllMoves(sC, ennemies, e));

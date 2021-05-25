@@ -82,7 +82,7 @@ public class Application {
     public static void main(String[] args) {
         System.out.println(START);
         String mode = chessIHM.getMode();
-        Echiquier e = new Echiquier(new FabPiece(), mode, new FabChessJoueur());
+        Echiquier e = new Echiquier(new FabPiece(),mode, new FabChessJoueur());
 
         actif = e.getJoueur(BLANC);
         passif = e.getJoueur(NOIR);

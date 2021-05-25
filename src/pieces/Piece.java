@@ -1,6 +1,5 @@
 package pieces;
 
-
 import echiquier.Coord;
 import echiquier.*;
 

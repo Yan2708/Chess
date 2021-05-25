@@ -12,7 +12,7 @@ import static java.lang.Math.abs;
  * etc...
  * @author Stefan Radovanovic, Yannick Li, Zakaria Sellam
  */
-public class Coord {
+public class Coord implements Cloneable{
 
     /* X represente les lignes et y les colonnes d'un tableau 2d */
     private int x,y; // A DEMANDER SI C'EST CORRECT

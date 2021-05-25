@@ -1,6 +1,5 @@
 package Joueur;
 
-
 import echiquier.Coord;
 import echiquier.Couleur;
 import echiquier.Echiquier;

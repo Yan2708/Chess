@@ -3,7 +3,6 @@ package Joueur;
 import echiquier.Coord;
 import echiquier.*;
 
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -108,5 +107,4 @@ public class chessIHM {
             answer = sc.nextLine();
         }
     }
-
 }

@@ -32,4 +32,3 @@ public class Vide extends Piece{
         return true;
     }
 }
-

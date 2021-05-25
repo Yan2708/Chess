@@ -31,7 +31,10 @@ public class Echiquier {
     private final IFabPiece fabrique;
 
     /* l'échiquier doit etre composer de deux Rois (blanc et noir) */
-    static class NoSenSiblePieceException extends Exception{}
+    static class NoSensiblePieceException extends Exception{}
+
+    /**  */
+    static class NonValidFenException extends Exception{}
 
     /**
      * constructeur de l'échiquier
@@ -47,8 +50,10 @@ public class Echiquier {
         try{
             fillBoard(fPiece, fen);
             SensibleError();            //un echiquier doit contenir deux rois
-        }catch (ArrayIndexOutOfBoundsException | NoSenSiblePieceException err){
-            fillBoard(fPiece, BasicFen);    //un echiquier par defaut est generé
+        }catch (NonValidFenException  err){
+            throw new IllegalArgumentException("La fen n'est pas correct");
+        }catch (NoSensiblePieceException err){
+            throw new IllegalArgumentException("Il manque deux pieces sensible à la fen");
         }
     }
 
@@ -92,19 +97,20 @@ public class Echiquier {
      * @param fen l'enregistrement fen
      * @throws ArrayIndexOutOfBoundsException si la fen n'est pas correct
      */
-    private void fillBoard(IFabPiece fabrique, String fen) throws ArrayIndexOutOfBoundsException{
+    private void fillBoard(IFabPiece fabrique, String fen)
+            throws NonValidFenException {
         String[] splittedFen = fen.split("/");  //  le fen est divisé pour n'avoir qu'un tableau de ligne
 
-        for (int lig = 0, idx = 0; idx < splittedFen.length; lig++, idx++) {
-            String s = splittedFen[idx];
+        for (int lg = 0; lg < splittedFen.length; lg++) {
+            String s = splittedFen[lg];
 
-            // Si la sequence possede un nombre il faut la modifier pour quelle soit lisible par la suite
-            // matches(".*\\d.*") permet de check si une chaine de caractère est composée d'au moins un int.
             // https://stackoverflow.com/a/18590949
             String sequence = (s.matches(".*\\d.*")) ? ReformatFenSequence(s) : s;
 
-            for (int col = 0, cpt = 0; cpt < sequence.length(); col++, cpt++)
-                echiquier[lig][col] = fabrique.getPiece(sequence.charAt(cpt), new Coord(lig, col));
+            if (sequence.length() != LIGNE) throw new NonValidFenException();
+
+            for (int cl = 0; cl < COLONNE; cl++)
+                echiquier[lg][cl] = fabrique.getPiece(sequence.charAt(cl), new Coord(lg, cl));
         }
     }
 
@@ -169,7 +175,7 @@ public class Echiquier {
     }
 
     /** change une pièce sur l'échiquier */
-    public void changePiece(Coord c, IPiece p){
+    private void changePiece(Coord c, IPiece p){
         echiquier[c.getX()][c.getY()] = p;
     }
 
@@ -215,9 +221,9 @@ public class Echiquier {
     }
 
     /**
-     * Recherche une piece sensible (le roi) sur sur l'echiquier
+     * Recherche une piece sensible sur l'echiquier selon la couleur
      * @param couleur la couleur du roi (NOIR ou BLANC)
-     * @return les coordonnées du roi, null si aucun roi n'a été trouvé
+     * @return la coordonnées, null si aucune piece n'a été trouvé
      */
     public Coord locateSensiblePiece(Couleur couleur) {
         for(IPiece[] ligne : echiquier)
@@ -229,18 +235,17 @@ public class Echiquier {
 
     /**
      * renvoie une exception si il y a pas de roi de couleur donné dans l'echiquier
-     * @throws NoSenSiblePieceException aucun roi trouvé
+     * @throws NoSensiblePieceException aucun roi trouvé
      */
-    private void SensibleError() throws NoSenSiblePieceException {
+    private void SensibleError() throws NoSensiblePieceException {
         if(locateSensiblePiece(Couleur.BLANC) == null &&
             locateSensiblePiece(Couleur.NOIR) == null)
-            throw new NoSenSiblePieceException();
+            throw new NoSensiblePieceException();
     }
 
     /**
-     * vérifie si des pions peuvent être promus.
-     * la promotion passe le pion en dame lorsque celui ci a atteint
-     * les limites du tableau.
+     * vérifie si une piece peut etre promu
+     * https://www.apprendre-les-echecs-24h.com/blog/debuter-aux-echecs/promotion-aux-echecs/
      * @param couleur la couleur des pièces à vérifier
      */
     public void checkForPromote(Couleur couleur){
